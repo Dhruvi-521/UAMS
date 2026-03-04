@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/AdminSidebar";
 import { useAuth } from "../context/AuthContext";
 
 const AdminLayout = () => {

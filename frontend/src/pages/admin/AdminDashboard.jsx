@@ -1,5 +1,5 @@
 import React from 'react';
-import './Dashboard.css';
+import './AdminDashboard.css';
 import { 
   Users, UserCheck, BookOpen, FileText, 
   PlusCircle, FilePlus, Send 

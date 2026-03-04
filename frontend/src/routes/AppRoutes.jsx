@@ -9,7 +9,7 @@ import FacultyLayout from "../layouts/FacultyLayout.jsx";
 import StudentLayout from "../layouts/StudentLayout.jsx";
 
 /*Admin Pages*/
-import AdminDashboard from "../pages/admin/Dashboard.jsx";
+import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
 import ManageCourses from "../pages/admin/ManageCourses.jsx";
 import ManageFaculty from "../pages/admin/ManageFaculty.jsx";
 import ManageStudents from "../pages/admin/ManageStudent.jsx";
@@ -19,7 +19,7 @@ import Reports from "../pages/admin/Reports.jsx";
 import Setting from "../pages/admin/Setting.jsx";
  
 /* Faculty Pages*/
-import FacultyDashboard from "../pages/faculty/Dashboard.jsx";
+import FacultyDashboard from "../pages/faculty/FacultyDashboard.jsx";
 import Students from "../pages/faculty/Students.jsx";
 import FacultyCourses from "../pages/faculty/Courses.jsx";
 import Mentoring from '../pages/faculty/Mentoring.jsx';
@@ -28,7 +28,7 @@ import FacultyReports from '../pages/faculty/Reports.jsx';
 import FacultySettings from '../pages/faculty/Settings.jsx';
 
 /* Student Pages*/
-import StudentDashboard from '../pages/student/Dashboard.jsx';
+import StudentDashboard from '../pages/student/StudentDashboard.jsx';
 import StudentMentoring from '../pages/student/Mentoring.jsx';
 import Meterials from '../pages/student/Materials.jsx';
 import StudentGrades from '../pages/student/Grades.jsx';
