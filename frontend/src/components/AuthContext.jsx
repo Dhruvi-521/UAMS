@@ -2,10 +2,8 @@ import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
-export const useAuth = () => useContext(AuthContext);
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // { username, role }
 
   const login = (username, password) => {
     if (username === "Admin" && password === "Admin@123") {
@@ -29,3 +27,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

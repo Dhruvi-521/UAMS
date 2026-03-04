@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
 export default function Login() {
@@ -7,42 +9,56 @@ export default function Login() {
     const [rememberMe, setRememberMe] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const auth = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setError("");
+
+        if (!auth) {
+            setError("Auth not available. Check AuthProvider setup.");
+            return;
+        }
+
         setLoading(true);
-        setTimeout(() => setLoading(false), 2000);
+        setTimeout(() => {
+            const role = auth.login(studentId, password);
+            setLoading(false);
+            if (role === "admin") {
+                navigate("/admin/dashboard");
+            } else if (role === "student") {
+                navigate("/student/dashboard");
+            } else if (role === "faculty") {
+                navigate("/faculty/dashboard");
+            } else {
+                setError("Invalid username or password.");
+            }
+        }, 2000);
     };
 
     return (
         <div className="uams-root">
-
-            {/* ── Page wrapper ── */}
             <div className="uams-container">
-
-                {/* HEADER */}
                 <header className="uams-header">
                     <div className="logo-section">
-                        <img src="src\assets\common\skips_logo.png" />
+                        <img src="src/assets/common/skips_logo.png" alt="logo" />
                     </div>
-
                     <div className="header-divider"></div>
-
                     <div className="portal-info">
                         <div className="portal-title">ACADEMIC MANAGEMENT SYSTEM (UAMS)</div>
                         <div className="portal-subtitle">STUDENT &amp; FACULTY PORTAL</div>
                     </div>
                 </header>
 
-                {/* MAIN */}
                 <main className="uams-main">
                     <div className="login-card">
                         <h2 className="card-title">Welcome to UAMS Portal</h2>
                         <p className="card-desc">Enter your credentials to access your account.</p>
 
                         <form className="login-form" onSubmit={handleSubmit}>
-
-                            {/* Student/Faculty ID */}
                             <div className="input-group">
                                 <span className="input-icon">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#94a3b8" strokeWidth="2">
@@ -60,7 +76,6 @@ export default function Login() {
                                 />
                             </div>
 
-                            {/* Password */}
                             <div className="input-group">
                                 <span className="input-icon">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#94a3b8" strokeWidth="2">
@@ -97,7 +112,12 @@ export default function Login() {
                                 </button>
                             </div>
 
-                            {/* Remember Me */}
+                            {error && (
+                                <p style={{ color: "red", fontSize: "0.85rem", margin: "0 0 8px 0" }}>
+                                    {error}
+                                </p>
+                            )}
+
                             <div className="remember-row">
                                 <label className="remember-label">
                                     <input
@@ -111,7 +131,6 @@ export default function Login() {
                                 </label>
                             </div>
 
-                            {/* Submit */}
                             <button
                                 type="submit"
                                 className={`login-btn${loading ? " loading" : ""}`}
@@ -127,7 +146,6 @@ export default function Login() {
                         </div>
                     </div>
                 </main>
-
             </div>
         </div>
     );

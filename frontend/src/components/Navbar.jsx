@@ -2,7 +2,7 @@
 import skipsLogo from '../assets/common/Skips-logo.png';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
   return (
     <nav className="navbar">
       <div className="nav-brand">
@@ -14,9 +14,10 @@ const Navbar = () => {
           {/* <span className="user-name">Admin</span> */}
           <div className="avatar">👤</div>
         </div>
-        <button className="logout-btn">Logout</button>
+        <button className="logout-btn" onClick={onLogout}>Logout</button>
       </div>
     </nav>
   );
 };
+
 export default Navbar;

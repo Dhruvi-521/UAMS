@@ -1,5 +1,5 @@
 import { MentorIcon, Note03Icon } from 'hugeicons-react';
-import { ChartLine, Cog, LayoutDashboard, Menu, X } from 'lucide-react';
+import { ChartLine, Cog, LayoutDashboard, Menu, X , BookOpenText , ReceiptIndianRupee } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
@@ -30,7 +30,7 @@ const FacultySidebar = () => {
           {isOpen && <span className="link-text">Students</span>}
         </NavLink>
 
-        <NavLink to="/student/courses" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+        <NavLink to="/faculty/courses" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <BookOpenText size={24} className="menu-icon"/>
           {isOpen && <span className="link-text">Courses</span>}
         </NavLink>
@@ -40,7 +40,7 @@ const FacultySidebar = () => {
           {isOpen && <span className="link-text">Mentoring</span>}
         </NavLink>
         
-        <NavLink to="/faculty/leave & payroll" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+        <NavLink to="/faculty/leave-payroll" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
            <Note03Icon size={24} className="menu-icon"/>
           <ReceiptIndianRupee size={24} className="menu-icon"/>
           {isOpen && <span className="link-text">Leave & Payroll</span>}
