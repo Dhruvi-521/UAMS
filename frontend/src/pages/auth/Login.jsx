@@ -69,7 +69,7 @@ export default function Login() {
                                 <input
                                     type="text"
                                     className="uams-input"
-                                    placeholder="Student/Faculty ID"
+                                    placeholder="User ID"
                                     value={studentId}
                                     onChange={(e) => setStudentId(e.target.value)}
                                     autoComplete="username"
@@ -142,7 +142,6 @@ export default function Login() {
 
                         <div className="card-footer">
                             <a href="#forgot" className="footer-link">Forgot Password?</a>
-                            <a href="#request" className="footer-link">Request Access</a>
                         </div>
                     </div>
                 </main>
