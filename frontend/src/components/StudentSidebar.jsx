@@ -1,8 +1,8 @@
-import { BookOpen, LayoutDashboard, Menu, UserRound, Users, X } from 'lucide-react';
+import { Book03Icon, MentorIcon, NoteIcon } from 'hugeicons-react';
+import { BadgeQuestionMark, LayoutDashboard, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
-import { MentorIcon } from 'hugeicons-react';
 
 
 const StudentSidebar = () => {
@@ -25,20 +25,25 @@ const StudentSidebar = () => {
          
           {isOpen && <span className="link-text">Dashboard</span>}
         </NavLink>
-        
-        <NavLink to="/student/courses" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
-          <BookOpenText size={24} className="menu-icon"/>
-          {isOpen && <span className="link-text">Students</span>}
-        </NavLink>
 
         <NavLink to="/student/mentoring" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <MentorIcon size={24} className="menu-icon" />
           {isOpen && <span className="link-text">Mentoring</span>}
         </NavLink>
         
-        <NavLink to="/student/mentoring" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
-          <MentorIcon size={24} className="menu-icon" />
-          {isOpen && <span className="link-text">Mentoring</span>}
+        <NavLink to="/student/Materials" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+          <Book03Icon size={24} className="menu-icon" />
+          {isOpen && <span className="link-text">Materials</span>}
+        </NavLink>
+
+        <NavLink to="/student/grades" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+          <NoteIcon size={24} className="menu-icon" />
+          {isOpen && <span className="link-text">My Grades</span>}
+        </NavLink>
+
+        <NavLink to="/student/help" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+          <BadgeQuestionMark size={24} className="menu-icon" />
+          {isOpen && <span className="link-text">Help</span>}
         </NavLink>
 
 
