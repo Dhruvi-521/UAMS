@@ -46,6 +46,25 @@
   flex-direction: column;
   padding: 0 12px;
   gap: 8px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.menu-links::-webkit-scrollbar {
+  width: 5px; /* Thin scrollbar */
+}
+
+.menu-links::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.menu-links::-webkit-scrollbar-thumb {
+  background: #334155; /* Matches your dark theme */
+  border-radius: 10px;
+}
+
+.menu-links::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6; /* Turns blue when you hover */
 }
 
 .nav-link {

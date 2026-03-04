@@ -11,11 +11,11 @@ function App() {
     <Router>
       <div className="full-page-wrapper">
         {/* 1. Navbar is on top, spanning 100% width */}
-        <Navbar />
+        {/* <Navbar /> */}
 
         <div className="bottom-section">
           {/* 2. Sidebar is on the left, below the navbar */}
-          <Sidebar />
+          {/* <Sidebar /> */}
 
           {/* 3. Page content is on the right of the sidebar */}
           <main className="page-content">

@@ -1,0 +1,498 @@
+/* =============================================
+   SKIPS University – UAMS Login Portal CSS
+   Full-screen Landscape · Zero edge margin
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rajdhani:wght@600;700&display=swap');
+
+/* ── Hard Reset ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+/* ══════════════════════════════
+   ROOT — fills entire viewport, no gaps
+══════════════════════════════ */
+.uams-root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-image: url("src/assets/common/campus.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* background: linear-gradient(160deg, #dbeafe 0%, #eff6ff 40%, #f0f4ff 100%); */
+}
+
+/* ── Background SVG architecture ── */
+.bg-arch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.arch-svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+}
+
+@keyframes floatUp {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-10px);
+    }
+}
+
+/* ── Main container — 100% width/height, no padding ── */
+.uams-container {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* ══════════════════════════════
+   HEADER — flush to all 3 sides
+══════════════════════════════ */
+.uams-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin: 0;
+    padding: 0px  40px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 16px rgba(30, 64, 175, 0.10);
+    border-bottom: 2px solid #dbeafe;
+    flex-shrink: 0;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.logo-skips {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    letter-spacing: 0.08em;
+}
+
+.logo-university {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.header-divider {
+    width: 2px;
+    height: 46px;
+    background: linear-gradient(to bottom, transparent, #94a3b8, transparent);
+    flex-shrink: 0;
+}
+
+.portal-info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.portal-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.portal-subtitle {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ══════════════════════════════
+   MAIN — fills remaining height
+   Card shifted left to leave room for illustration
+══════════════════════════════ */
+.uams-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Login Card ── */
+.login-card {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 18px;
+    box-shadow:
+        0 8px 40px rgba(30, 64, 175, 0.14),
+        0 2px 8px rgba(30, 64, 175, 0.07);
+    padding: 40px 44px 32px;
+    width: 100%;
+    max-width: 400px;
+    min-width: 300px;
+    border: 1px solid rgba(219, 234, 254, 0.9);
+    animation: slideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.card-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1e293b;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.card-desc {
+    font-size: 0.83rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 26px;
+    font-weight: 500;
+}
+
+/* ── Form ── */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ── Input group ── */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.uams-input {
+    width: 100%;
+    height: 46px;
+    padding: 0 42px 0 42px;
+    border: 1.8px solid #dbeafe;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-family: 'Nunito', sans-serif;
+    color: #1e293b;
+    background: #f8faff;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+}
+
+.uams-input::placeholder {
+    color: #94a3b8;
+}
+
+.uams-input:focus {
+    border-color: #3b82f6;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.13);
+}
+
+/* Eye toggle */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+    z-index: 1;
+}
+
+.toggle-password:hover {
+    opacity: 0.7;
+}
+
+/* ── Remember Me ── */
+.remember-row {
+    display: flex;
+    align-items: center;
+    margin-top: -2px;
+}
+
+.remember-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 0.83rem;
+    color: #475569;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.remember-checkbox {
+    display: none;
+}
+
+.checkmark {
+    width: 17px;
+    height: 17px;
+    border: 2px solid #bfdbfe;
+    border-radius: 4px;
+    background: #f8faff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s;
+    position: relative;
+}
+
+.remember-checkbox:checked+.checkmark {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.remember-checkbox:checked+.checkmark::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 9px;
+    border: 2px solid white;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+/* ── Login Button ── */
+.login-btn {
+    margin-top: 4px;
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 60%, #3b82f6 100%);
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 18px rgba(29, 78, 216, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.login-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(29, 78, 216, 0.42);
+}
+
+.login-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.login-btn.loading {
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+/* ── Spinner ── */
+.spinner {
+    width: 22px;
+    height: 22px;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ── Card Footer Links ── */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+}
+
+.footer-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media (max-width: 1024px) {
+    .uams-main {
+        padding-right: 24vw;
+    }
+
+    .students-illustration {
+        width: 26vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .uams-header {
+        padding: 12px 20px;
+    }
+
+    .logo-skips {
+        font-size: 1.4rem;
+    }
+
+    .portal-title {
+        font-size: 0.85rem;
+    }
+
+    .uams-main {
+        padding-right: 0;
+    }
+
+    .students-illustration {
+        width: 190px;
+        min-width: unset;
+    }
+
+    .login-card {
+        padding: 28px 26px 24px;
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .uams-header {
+        padding: 10px 14px;
+        gap: 10px;
+    }
+
+    .header-divider {
+        display: none;
+    }
+
+    .logo-skips {
+        font-size: 1.2rem;
+    }
+
+    .portal-title {
+        font-size: 0.7rem;
+    }
+
+    .portal-subtitle {
+        font-size: 0.58rem;
+    }
+
+    .students-illustration {
+        width: 130px;
+    }
+
+    .login-card {
+        padding: 22px 16px 18px;
+        border-radius: 12px;
+        max-width: 90vw;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+}
