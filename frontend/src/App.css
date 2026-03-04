@@ -1,42 +1,40 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.full-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Prevents the whole page from scrolling */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.bottom-section {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  overflow: hidden; /* Important: prevents child elements from breaking the layout */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.page-content {
+  flex: 1;
+  /* This is the fix: it ensures the content takes the remaining space 
+     and doesn't let the sidebar overlap it */
+  min-width: 0; 
+  padding: 25px;
+  background-color: #f1f5f9;
+  
+  /* Internal scrolling so the Navbar stays fixed at the top */
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 768px) {
+
+  .bottom-section {
+    position: relative;
   }
-  to {
-    transform: rotate(360deg);
+
+  .page-content {
+    width: 100%;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
