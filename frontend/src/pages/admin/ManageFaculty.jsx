@@ -84,7 +84,6 @@ export default function FacultyManagement() {
         <div className="fm-header">
           <div>
             <h1 className="fm-title">Faculty Management</h1>
-            <div className="fm-breadcrumb">Dashboard &gt; <span>Faculty</span></div>
           </div>
           <div className="fm-header-actions">
             <button className="fm-btn-primary"><Plus size={15} /> Add New Faculty</button>
@@ -102,11 +101,10 @@ export default function FacultyManagement() {
             <svg className="fm-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             <input className="fm-search" placeholder="Search by Name, Faculty ID, or Email..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
           </div>
-          <select className="fm-select"><option>Computer Science</option><option>All Departments</option><option>Mathematics</option></select>
-          <select className="fm-select"><option>Professor</option><option>All Designations</option><option>Associate Professor</option></select>
-          <select className="fm-select"><option>AI</option><option>All Specializations</option><option>ML</option></select>
-          <select className="fm-select"><option>2020+</option><option>All Years</option><option>2023</option></select>
-          <button className="fm-apply">Apply Filters</button>
+          <select className="fm-select"><option>All Departments</option><option>Computer Science</option><option>Mathematics</option></select>
+          <select className="fm-select"><option>All Designations</option><option>Professor</option><option>Associate Professor</option></select>
+          <select className="fm-select"><option>All Specializations</option><option>AI</option><option>All Specializations</option><option>ML</option></select>
+          <select className="fm-select"><option>2020+</option><option>2023</option></select>
         </div>
 
         {/* Desktop table */}
