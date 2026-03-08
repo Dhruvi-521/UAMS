@@ -16,6 +16,7 @@ import ManageFaculty from "../pages/admin/ManageFaculty.jsx";
 import ManageStudents from "../pages/admin/ManageStudent.jsx";
 import Payroll from "../pages/admin/Payroll.jsx";
 import Reports from "../pages/admin/Reports.jsx";
+import ReportsAnalysis from "../pages/admin/ReportsAnalysis.jsx";
 import Setting from "../pages/admin/Setting.jsx";
  
 /* Faculty Pages*/
@@ -60,7 +61,8 @@ const InnerRoutes = () => (
       <Route path="courses"   element={<ManageCourses />} />
       <Route path="payroll"   element={<Payroll title="Payroll" />} />
       <Route path="leaves"    element={<Leaves title="Leave" />} />
-      <Route path="reports"   element={<Reports title="Reports" />} />
+      <Route path="reports" element={<ReportsAnalysis />} />
+      <Route path="reports/:reportId" element={<Reports />} />
       <Route path="settings"  element={<Setting title="Settings" />} />
     </Route>
 
