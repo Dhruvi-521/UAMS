@@ -41,7 +41,7 @@ const FacultySidebar = () => {
         </NavLink>
         
         <NavLink to="/faculty/leave-payroll" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
-           <Note03Icon size={24} className="menu-icon"/>
+           {/* <Note03Icon size={24} className="menu-icon"/> */}
           <ReceiptIndianRupee size={24} className="menu-icon"/>
           {isOpen && <span className="link-text">Leave & Payroll</span>}
         </NavLink>
