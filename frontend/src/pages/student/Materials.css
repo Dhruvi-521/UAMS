@@ -1,0 +1,300 @@
+/* ── StudentMaterials.css ── */
+
+/* Reset only within this component's scope */
+.sm-page *,
+.sm-page *::before,
+.sm-page *::after {
+  box-sizing: border-box;
+}
+
+/* ── Page ── */
+.sm-page {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: #f3f4f6;
+  min-height: 100vh;
+  padding: 22px 20px 48px;
+}
+
+/* ── Toolbar ── */
+.sm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+/* shared control shell */
+.sm-ctl {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sm-ctl select,
+.sm-ctl input {
+  font-family: inherit;
+  font-size: 13.5px;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  height: 36px;
+}
+
+.sm-ctl select:focus,
+.sm-ctl input:focus {
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 2.5px rgba(74,144,217,.18);
+}
+
+/* Filter */
+.sm-filter select {
+  padding: 0 28px 0 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  min-width: 60px;
+}
+
+/* Search */
+.sm-search {
+  flex: 1;
+  min-width: 140px;
+}
+
+.sm-search-icon {
+  position: absolute;
+  left: 9px;
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+}
+
+.sm-search input {
+  width: 100%;
+  padding: 0 12px 0 32px;
+}
+
+.sm-search input::placeholder { color: #aaa; }
+
+/* Sort */
+.sm-sort select {
+  padding: 0 28px 0 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  min-width: 170px;
+}
+
+/* Chevron overlay for selects */
+.sm-chevron {
+  position: absolute;
+  right: 8px;
+  font-size: 10px;
+  color: #666;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* View toggle */
+.sm-view-toggle {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sm-view-toggle button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  height: 36px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+}
+
+.sm-view-toggle button:first-child {
+  border-right: 1px solid #ccc;
+}
+
+.sm-view-toggle button.active {
+  background: #eef3fb;
+  color: #4a90d9;
+  font-weight: 600;
+}
+
+.sm-view-toggle button:hover:not(.active) {
+  background: #f5f5f5;
+}
+
+/* ── Grid ── */
+.sm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.sm-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 0;
+  color: #999;
+  font-size: 15px;
+}
+
+/* ── Card ── */
+.sm-card {
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  transition: box-shadow 0.22s ease, transform 0.18s ease;
+  outline: none;
+}
+
+.sm-card:hover {
+  box-shadow: 0 6px 22px rgba(0,0,0,.13);
+  transform: translateY(-3px);
+}
+
+.sm-card:focus-visible {
+  outline: 2px solid #4a90d9;
+  outline-offset: 2px;
+}
+
+/* Banner */
+.sm-banner {
+  position: relative;
+  width: 100%;
+  height: 118px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sm-pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Body */
+.sm-card-body {
+  padding: 13px 15px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.sm-card-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #3a7bd5;
+  text-decoration: none;
+  line-height: 1.42;
+  display: block;
+  transition: color 0.15s;
+}
+
+.sm-card-title:hover { color: #2558a8; text-decoration: underline; }
+
+.sm-card-batch {
+  font-size: 12.5px;
+  color: #555;
+  margin-top: 1px;
+}
+
+/* Progress */
+.sm-progress-wrap { margin-top: 9px; }
+
+.sm-progress-track {
+  height: 6px;
+  background: #eaeaea;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.sm-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.sm-progress-label {
+  display: block;
+  font-size: 11.5px;
+  color: #777;
+  margin-top: 5px;
+}
+
+/* ── List view ── */
+.sm-list-view {
+  grid-template-columns: 1fr;
+}
+
+.sm-list-view .sm-card {
+  flex-direction: row;
+  height: 76px;
+}
+
+.sm-list-view .sm-banner {
+  width: 96px;
+  height: 100%;
+}
+
+.sm-list-view .sm-card-body {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  gap: 14px;
+}
+
+.sm-list-view .sm-progress-wrap {
+  margin-top: 0;
+  min-width: 150px;
+}
+
+.sm-list-view .sm-card-batch { margin-top: 0; }
+
+/* ── Responsive ── */
+@media (max-width: 1199px) {
+  .sm-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .sm-page { padding: 14px 12px 36px; }
+
+  .sm-grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .sm-search { min-width: 100%; order: -1; }
+
+  .sm-sort select { min-width: 140px; }
+
+  .sm-list-view .sm-card { height: auto; flex-direction: column; }
+  .sm-list-view .sm-banner { width: 100%; height: 80px; }
+  .sm-list-view .sm-card-body { flex-direction: column; align-items: flex-start; }
+}
+
+@media (min-width: 1400px) {
+  .sm-grid { grid-template-columns: repeat(4, 1fr); }
+}

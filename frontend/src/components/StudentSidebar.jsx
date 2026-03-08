@@ -12,17 +12,17 @@ const StudentSidebar = () => {
     <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
       <button className="toggle-btn" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <X size={28} /> : <Menu size={28} />}
-        
+
       </button>
 
-      <div className="logo-section">
+      {/* <div className="logo-section">
         {isOpen && <h2 className="logo-text">Welcome Student</h2>}
-      </div>
+      </div> */}
 
       <nav className="menu-links">
         <NavLink to="/student/dashboard" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <LayoutDashboard size={24} className="menu-icon" />
-         
+
           {isOpen && <span className="link-text">Dashboard</span>}
         </NavLink>
 
@@ -30,7 +30,7 @@ const StudentSidebar = () => {
           <MentorIcon size={24} className="menu-icon" />
           {isOpen && <span className="link-text">Mentoring</span>}
         </NavLink>
-        
+
         <NavLink to="/student/Materials" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <Book03Icon size={24} className="menu-icon" />
           {isOpen && <span className="link-text">Materials</span>}

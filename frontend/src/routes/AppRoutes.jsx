@@ -31,7 +31,8 @@ import Students from "../pages/faculty/Students.jsx";
 /* Student Pages*/
 import StudentGrades from '../pages/student/Grades.jsx';
 import StudentHelp from '../pages/student/Help.jsx';
-import Meterials from '../pages/student/Materials.jsx';
+import Materials from '../pages/student/Materials.jsx';
+import MaterialDetails from '../pages/student/MaterialDetails.jsx';
 import StudentMentoring from '../pages/student/Mentoring.jsx';
 import StudentDashboard from '../pages/student/StudentDashboard.jsx';
 
@@ -79,7 +80,8 @@ const InnerRoutes = () => (
     <Route path="/student" element={<ProtectedRoute allowedRole="student"><StudentLayout /></ProtectedRoute>}>
       <Route path="dashboard" element={<StudentDashboard title="Student Dashboard" />} />
       <Route path="mentoring" element={<StudentMentoring title="Mentoring" />} />
-      <Route path="Materials" element={<Meterials title="Materials" />} />
+      <Route path="materials" element={<Materials />} />
+      <Route path="materials/:materialsId" element={<MaterialDetails />} />
       <Route path="grades"    element={<StudentGrades title="My Grades" />} />
       <Route path="help"      element={<StudentHelp title="Help" />} />
     </Route>

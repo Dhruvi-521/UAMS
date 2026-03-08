@@ -14,9 +14,9 @@ const Sidebar = () => {
         
       </button>
 
-      <div className="logo-section">
+      {/* <div className="logo-section">
         {isOpen && <h2 className="logo-text">Welcome Admin</h2>}
-      </div>
+      </div> */}
 
       <nav className="menu-links">
         <NavLink to="/admin/dashboard" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>

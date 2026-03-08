@@ -1,0 +1,322 @@
+/* ── MaterialDetails.css ── */
+
+.md-page *,
+.md-page *::before,
+.md-page *::after {
+  box-sizing: border-box;
+}
+
+/* ── Page ── */
+.md-page {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: #f3f4f6;
+  min-height: 100vh;
+  padding: 22px 24px 52px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Not found ── */
+.md-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  gap: 16px;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #555;
+  font-size: 15px;
+}
+
+/* ── Breadcrumb ── */
+.md-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+
+.md-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #3a7bd5;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px 0;
+  transition: color 0.15s;
+}
+
+.md-back-btn:hover { color: #2558a8; }
+
+.md-sep { color: #c0c0c0; font-size: 14px; }
+
+.md-bc-course { color: #3a7bd5; font-weight: 500; }
+
+.md-bc-current { color: #777; }
+
+/* ── Course Header ── */
+.md-course-header {
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-left: 5px solid #4a90d9;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.md-course-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #222;
+  line-height: 1.38;
+  margin: 0 0 4px;
+}
+
+.md-course-batch {
+  font-size: 12.5px;
+  color: #666;
+  margin: 0;
+}
+
+.md-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  min-width: 170px;
+}
+
+.md-prog-track {
+  width: 170px;
+  height: 7px;
+  background: #e8e8e8;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.md-prog-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s ease;
+}
+
+.md-prog-label {
+  font-size: 11.5px;
+  color: #888;
+}
+
+/* ── Section ── */
+.md-section {
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07);
+}
+
+.md-section-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+/* Rotated › as a collapse chevron */
+.md-section-arrow {
+  font-size: 22px;
+  line-height: 1;
+  color: #444;
+  font-weight: 700;
+  transform: rotate(90deg);
+  display: inline-block;
+}
+
+.md-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2c2c2c;
+  margin: 0;
+}
+
+/* ── Notes List ── */
+.md-notes-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.md-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #aaa;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ── Note Row ── */
+.md-note-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 18px;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 14px;
+  transition: background 0.15s;
+}
+
+.md-note-row:last-child { border-bottom: none; }
+
+.md-note-row:hover { background: #f7fbff; }
+
+/* ── Note Left ── */
+.md-note-left {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── File Icon ── */
+.md-file-icon {
+  width: 42px;
+  height: 50px;
+  background: #2d89e5;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 7px rgba(45,137,229,.28);
+}
+
+.md-file-svg {
+  width: 24px;
+  height: 28px;
+}
+
+/* ── Note Meta ── */
+.md-note-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.md-note-type {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.md-note-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3a7bd5;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s;
+}
+
+.md-note-title:hover { color: #2558a8; text-decoration: underline; }
+
+.md-note-desc {
+  font-size: 11.5px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Note Right ── */
+.md-note-right { flex-shrink: 0; }
+
+/* ── Buttons ── */
+.md-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s, transform 0.12s;
+}
+
+.md-btn:active { transform: translateY(1px); }
+
+.md-btn-done {
+  background: #27ae60;
+  color: #fff;
+}
+
+.md-btn-done:hover { background: #219150; }
+
+.md-btn-download {
+  background: #3a7bd5;
+  color: #fff;
+}
+
+.md-btn-download:hover { background: #2c64bb; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .md-page {
+    padding: 14px 12px 40px;
+  }
+
+  .md-course-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .md-header-right {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .md-prog-track { width: 100%; }
+
+  .md-note-row {
+    padding: 13px 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .md-note-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .md-course-title { font-size: 15px; }
+}
+
+@media (max-width: 380px) {
+  .md-file-icon { width: 36px; height: 44px; }
+
+  .md-btn { padding: 7px 12px; font-size: 12.5px; }
+}
