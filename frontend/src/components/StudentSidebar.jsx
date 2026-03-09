@@ -41,11 +41,11 @@ const StudentSidebar = () => {
           {isOpen && <span className="link-text">My Grades</span>}
         </NavLink>
 
-        <NavLink to="/student/help" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+        <NavLink to="/student/attendance" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <BadgeQuestionMark size={24} className="menu-icon" />
-          {isOpen && <span className="link-text">Help</span>}
+          {isOpen && <span className="link-text">Attendance</span>}
         </NavLink>
-
+        
 
       </nav>
     </div>

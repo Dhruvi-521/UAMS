@@ -1,0 +1,209 @@
+:root {
+    --bg-color: #f8f9fc;
+    --card-bg: #ffffff;
+    --text-main: #33353d;
+    --text-muted: #6e707e;
+    --primary: #4e73df;
+    --success: #1cc88a;
+    --danger: #e74a3b;
+    --shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    color: var(--text-main);
+}
+
+.dashboard-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-title {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e3e6f0;
+}
+
+/* Row 1: Summary */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-card h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--primary);
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+.summary-card.overall {
+    border-left: 5px solid var(--primary);
+}
+
+.summary-card.present {
+    border-left: 5px solid var(--success);
+}
+
+.summary-card.absent {
+    border-left: 5px solid var(--danger);
+}
+
+/* Row 2: Progress Indicators */
+.progress-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.circular-progress {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.inner-circle {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Row 3: Table */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.clickable-row:hover {
+    background-color: #f1f4ff;
+    cursor: pointer;
+}
+
+/* Page 2: History */
+.back-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.history-card {
+    background: white;
+    padding: 1.2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid #ddd;
+}
+
+.history-card.present {
+    border-left-color: var(--success);
+}
+
+.history-card.absent {
+    border-left-color: var(--danger);
+}
+
+.status-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    float: right;
+}
+
+.status-badge.present {
+    background: #e6fffa;
+    color: var(--success);
+}
+
+.status-badge.absent {
+    background: #fff5f5;
+    color: var(--danger);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .progress-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .summary-grid,
+    .progress-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Table to Cards for Mobile */
+    .attendance-table thead {
+        display: none;
+    }
+
+    .attendance-table tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #e3e6f0;
+        border-radius: 8px;
+    }
+
+    .attendance-table td {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: none;
+    }
+
+    .attendance-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+    }
+}

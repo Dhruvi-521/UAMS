@@ -18,7 +18,7 @@ import Payroll from "../pages/admin/Payroll.jsx";
 import Reports from "../pages/admin/Reports.jsx";
 import ReportsAnalysis from "../pages/admin/ReportsAnalysis.jsx";
 import Setting from "../pages/admin/Setting.jsx";
- 
+
 /* Faculty Pages*/
 import FacultyCourses from "../pages/faculty/Courses.jsx";
 import FacultyDashboard from "../pages/faculty/FacultyDashboard.jsx";
@@ -30,7 +30,8 @@ import Students from "../pages/faculty/Students.jsx";
 
 /* Student Pages*/
 import StudentGrades from '../pages/student/Grades.jsx';
-import StudentHelp from '../pages/student/Help.jsx';
+import StudentAttendance from '../pages/student/StudentAttendance.jsx';
+import SubjectAttendanceDetails from '../pages/student/SubjectAttendanceDetails.jsx';
 import Materials from '../pages/student/Materials.jsx';
 import MaterialDetails from '../pages/student/MaterialDetails.jsx';
 import StudentMentoring from '../pages/student/Mentoring.jsx';
@@ -57,24 +58,24 @@ const InnerRoutes = () => (
 
     <Route path="/admin" element={<ProtectedRoute allowedRole="admin"><AdminLayout /></ProtectedRoute>}>
       <Route path="dashboard" element={<AdminDashboard />} />
-      <Route path="students"  element={<ManageStudents />} />
-      <Route path="faculty"   element={<ManageFaculty />} />
-      <Route path="courses"   element={<ManageCourses />} />
-      <Route path="payroll"   element={<Payroll title="Payroll" />} />
-      <Route path="leaves"    element={<Leaves title="Leave" />} />
+      <Route path="students" element={<ManageStudents />} />
+      <Route path="faculty" element={<ManageFaculty />} />
+      <Route path="courses" element={<ManageCourses />} />
+      <Route path="payroll" element={<Payroll title="Payroll" />} />
+      <Route path="leaves" element={<Leaves title="Leave" />} />
       <Route path="reports" element={<ReportsAnalysis />} />
       <Route path="reports/:reportId" element={<Reports />} />
-      <Route path="settings"  element={<Setting title="Settings" />} />
+      <Route path="settings" element={<Setting title="Settings" />} />
     </Route>
 
     <Route path="/faculty" element={<ProtectedRoute allowedRole="faculty"><FacultyLayout /></ProtectedRoute>}>
-      <Route path="dashboard"     element={<FacultyDashboard title="Faculty Dashboard" />} />
-      <Route path="students"      element={<Students title="Students" />} />
-      <Route path="courses"       element={<FacultyCourses  title="Courses" />} />
-      <Route path="mentoring"     element={<Mentoring title="Mentoring" />} />
+      <Route path="dashboard" element={<FacultyDashboard title="Faculty Dashboard" />} />
+      <Route path="students" element={<Students title="Students" />} />
+      <Route path="courses" element={<FacultyCourses title="Courses" />} />
+      <Route path="mentoring" element={<Mentoring title="Mentoring" />} />
       <Route path="leave-payroll" element={<LeavePayroll title="Leave & Payroll" />} />
-      <Route path="reports"       element={<FacultyReports title="Reports" />} />
-      <Route path="settings"      element={<FacultySettings title="Settings" />} />
+      <Route path="reports" element={<FacultyReports title="Reports" />} />
+      <Route path="settings" element={<FacultySettings title="Settings" />} />
     </Route>
 
     <Route path="/student" element={<ProtectedRoute allowedRole="student"><StudentLayout /></ProtectedRoute>}>
@@ -82,8 +83,9 @@ const InnerRoutes = () => (
       <Route path="mentoring" element={<StudentMentoring title="Mentoring" />} />
       <Route path="materials" element={<Materials />} />
       <Route path="materials/:materialsId" element={<MaterialDetails />} />
-      <Route path="grades"    element={<StudentGrades title="My Grades" />} />
-      <Route path="help"      element={<StudentHelp title="Help" />} />
+      <Route path="grades" element={<StudentGrades title="My Grades" />} />
+      <Route path="attendance" element={<StudentAttendance />} />
+      <Route path="attendance/:subjectId" element={<SubjectAttendanceDetails />} />
     </Route>
   </Routes>
 );

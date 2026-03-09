@@ -210,8 +210,8 @@ export default function Materials() {
       </div>
 
       {/* ── Grid / List ── */}
-      <div className={`sm-grid${view === "List" ? " sm-list-view" : ""}`}>
-        {visible.length === 0 && (
+        <div className={`sm-grid ${view === "List" ? "sm-list-view" : ""}`}>        
+          {visible.length === 0 && (
           <p className="sm-empty">No courses match your search.</p>
         )}
         {visible.map((course) => (
@@ -231,13 +231,12 @@ export default function Materials() {
 
             {/* Body */}
             <div className="sm-card-body">
-              <a
+              <span
                 className="sm-card-title"
-                href={`/student/materials/${course.id}`}
-                onClick={(e) => { e.preventDefault(); navigate(`/student/materials/${course.id}`); }}
-              >
+                onClick={() => navigate(`/student/materials/${course.id}`)}
+                >
                 {course.code} {course.name}
-              </a>
+              </span>
               <p className="sm-card-batch">{course.batch}</p>
               <ProgressBar value={course.progress} color={course.color} />
             </div>
