@@ -53,7 +53,7 @@ const FacultySidebar = () => {
 
         <NavLink to="/faculty/settings" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <Cog size={24} className="menu-icon"/>
-          {isOpen && <span className="link-text">Settings</span>}
+          {isOpen && <span className="link-text">Attendance</span>}
         </NavLink>
       </nav>
     </div>

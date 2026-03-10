@@ -1,0 +1,624 @@
+/* =====================================================
+   Mentoring Slot Booking System — styles.css
+   Color Palette:
+     Dark Blue  : #1e3a8a
+     Primary Blue: #2563eb
+     Light BG   : #f0f4ff
+     White      : #ffffff
+     Border     : #d1dbe8
+===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #eef2fb;
+  color: #1e293b;
+  min-height: 100vh;
+}
+
+/* ── App Shell ─────────────────────────────────────── */
+.app-shell {
+  max-width: 85%;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+/* ── Tab Navigation ────────────────────────────────── */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  width: fit-content;
+  box-shadow: 0 2px 12px rgba(30,58,138,0.10);
+}
+
+.tab-btn {
+  padding: 0.7rem 1.6rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  background: #dce6f8;
+  color: #2563eb;
+}
+
+.tab-btn.active {
+  background: #1e3a8a;
+  color: #ffffff;
+}
+
+.tab-btn:hover:not(.active) {
+  background: #c7d7f5;
+}
+
+/* ── Cards ──────────────────────────────────────────── */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(30,58,138,0.08);
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #e2eaf8;
+}
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Form Grid ──────────────────────────────────────── */
+.form-row {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 160px;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+  letter-spacing: 0.02em;
+}
+
+/* ── Inputs & Selects ───────────────────────────────── */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap .icon-left {
+  position: absolute;
+  left: 0.75rem;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.input-wrap input,
+.input-wrap select,
+select.select-field,
+input.input-field {
+  width: 100%;
+  padding: 0.6rem 0.9rem 0.6rem 2.4rem;
+  border: 1.5px solid #d1dbe8;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #1e293b;
+  background: #f8faff;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+select.select-field,
+input.input-field {
+  padding: 0.6rem 2.5rem 0.6rem 0.9rem;
+}
+
+.input-wrap input:focus,
+.input-wrap select:focus,
+select.select-field:focus,
+input.input-field:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+  background: #fff;
+}
+
+/* chevron for selects */
+.select-wrap {
+  position: relative;
+}
+
+.select-wrap .chevron-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* ── Full-width input ───────────────────────────────── */
+.input-full {
+  width: 100%;
+  padding: 0.65rem 0.9rem 0.65rem 2.5rem;
+  border: 1.5px solid #d1dbe8;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #1e293b;
+  background: #f8faff;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.input-full:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+  background: #fff;
+}
+
+/* ── Collapsible sub-card ───────────────────────────── */
+.sub-card {
+  background: #f0f5ff;
+  border: 1.5px solid #c7d7f5;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.sub-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0.25rem;
+}
+
+.sub-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: 0.04em;
+}
+
+.sub-card-header .chevron-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.sub-card-header .chevron-btn.open {
+  transform: rotate(180deg);
+}
+
+.sub-card-body {
+  margin-top: 1rem;
+}
+
+.date-display {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #fff;
+  border: 1.5px solid #d1dbe8;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  color: #1e3a8a;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Time Inputs ────────────────────────────────────── */
+.time-row {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.time-group {
+  flex: 1;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.time-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ── Primary Button ─────────────────────────────────── */
+.btn-primary {
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.30);
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37,99,235,0.38);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ── OPEN SLOT Button ───────────────────────────────── */
+.btn-open-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  margin-top: 1.25rem;
+  padding: 0.95rem 1.5rem;
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(22,163,74,0.35);
+}
+
+.btn-open-slot:hover {
+  background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(22,163,74,0.45);
+}
+
+.btn-open-slot:active {
+  transform: translateY(0);
+}
+
+/* ── Opened Slots Summary Card ──────────────────────── */
+.opened-slots-card {
+  border: 1.5px solid #bbf7d0;
+  background: #f0fdf4;
+  animation: fadeIn 0.3s ease;
+}
+
+.opened-slots-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.opened-slots-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.slot-count-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #16a34a;
+  color: #fff;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(22,163,74,0.25);
+}
+
+/* ── Slot Pills Grid ────────────────────────────────── */
+.slot-pills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.slot-pill {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #ffffff;
+  border: 1.5px solid #86efac;
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  box-shadow: 0 2px 8px rgba(22,163,74,0.07);
+  transition: box-shadow 0.15s;
+}
+
+.slot-pill:hover {
+  box-shadow: 0 4px 14px rgba(22,163,74,0.15);
+}
+
+.slot-pill-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #16a34a;
+  min-width: 28px;
+}
+
+.slot-pill-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.slot-pill-time {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #1e3a8a;
+}
+
+.slot-pill-meta {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.slot-pill-status {
+  display: inline-block;
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 0.28rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid #86efac;
+}
+
+/* ── View Bookings Page ─────────────────────────────── */
+.view-bookings-page {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin-bottom: 1.25rem;
+}
+
+.filters-row {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 140px;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.date-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  border: 1.5px solid #d1dbe8;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #1e3a8a;
+  letter-spacing: 0.04em;
+  min-width: 180px;
+  box-shadow: 0 2px 8px rgba(30,58,138,0.06);
+}
+
+/* ── Bookings Table ─────────────────────────────────── */
+.table-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(30,58,138,0.08);
+  border: 1px solid #e2eaf8;
+  overflow: hidden;
+}
+
+.table-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+
+table.bookings-table thead tr {
+  background: #1e3a8a;
+}
+
+table.bookings-table thead th {
+  padding: 0.75rem 1.1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+table.bookings-table tbody tr {
+  border-bottom: 1px solid #eef2fb;
+  transition: background 0.15s;
+}
+
+table.bookings-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+table.bookings-table tbody tr:hover {
+  background: #f5f8ff;
+}
+
+table.bookings-table tbody td {
+  padding: 0.85rem 1.1rem;
+  font-size: 0.88rem;
+  color: #334155;
+  vertical-align: middle;
+}
+
+/* ── Status Badges ──────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.badge-booked {
+  background: #16a34a;
+  color: #fff;
+}
+
+.badge-rescheduled {
+  background: #f97316;
+  color: #fff;
+}
+
+.badge-cancelled {
+  background: #dc2626;
+  color: #fff;
+}
+
+/* ── Action Icons ───────────────────────────────────── */
+.action-cell {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.icon-btn:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 600px) {
+  .card {
+    padding: 1.25rem 1rem;
+  }
+
+  .form-row,
+  .time-row,
+  .filters-row {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    font-size: 0.72rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .date-badge {
+    min-width: unset;
+  }
+
+  .slot-pill {
+    flex-wrap: wrap;
+  }
+}

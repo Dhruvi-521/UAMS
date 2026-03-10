@@ -25,7 +25,7 @@ import FacultyDashboard from "../pages/faculty/FacultyDashboard.jsx";
 import LeavePayroll from '../pages/faculty/LeavePayroll.jsx';
 import Mentoring from '../pages/faculty/Mentoring.jsx';
 import FacultyReports from '../pages/faculty/Reports.jsx';
-import FacultySettings from '../pages/faculty/Settings.jsx';
+import FacultyAttendance from '../pages/faculty/MarkAttendance.jsx';
 import Students from "../pages/faculty/Students.jsx";
 
 /* Student Pages*/
@@ -75,7 +75,7 @@ const InnerRoutes = () => (
       <Route path="mentoring" element={<Mentoring title="Mentoring" />} />
       <Route path="leave-payroll" element={<LeavePayroll title="Leave & Payroll" />} />
       <Route path="reports" element={<FacultyReports title="Reports" />} />
-      <Route path="settings" element={<FacultySettings title="Settings" />} />
+      <Route path="settings" element={<FacultyAttendance title="Settings" />} />
     </Route>
 
     <Route path="/student" element={<ProtectedRoute allowedRole="student"><StudentLayout /></ProtectedRoute>}>
