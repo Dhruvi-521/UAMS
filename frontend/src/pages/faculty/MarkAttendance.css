@@ -395,6 +395,9 @@
   overflow: hidden;
   margin-bottom: 2rem;
   box-shadow: var(--fa-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .fact-att-list-header {
@@ -414,9 +417,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: .85rem 1.4rem;
-  border-bottom: 1px solid var(--fa-border);
-  transition: background .15s;
+  padding: 1.2rem 1.4rem;
+  border-bottom: 2px solid var(--fa-border);
+  border: 1px solid transparent;   /* ← add this */
+  transition: background .15s, border-color .2s;
   gap: 1rem;
 }
 
@@ -432,7 +436,7 @@
 .fact-att-student-info {
   display: flex;
   align-items: center;
-  gap: .9rem;
+  gap: 1.2rem;
   flex: 1;
   min-width: 0;
 }
@@ -460,13 +464,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: .3rem;
 }
 
 .fact-att-student-roll {
   display: block;
   font-size: .72rem;
   color: var(--fa-grey);
-  margin-top: .15rem;
+  margin-top: .25rem;
 }
 
 /* ─── Toggle Buttons ────────────────────────────────────────────────────────── */
@@ -647,6 +652,17 @@
 
 .fact-att-stat-present { background: var(--fa-green-light); color: var(--fa-green); }
 .fact-att-stat-absent  { background: var(--fa-red-light);   color: var(--fa-red); }
+
+/* ─── Row Borders on Click ──────────────────────────────────────────────────── */
+.fact-att-border-present {
+  border: 1px solid var(--fa-green) !important;
+  border-radius: var(--fa-radius-sm);
+}
+
+.fact-att-border-absent {
+  border: 1px solid var(--fa-red) !important;
+  border-radius: var(--fa-radius-sm);
+}
 
 /* ─── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
