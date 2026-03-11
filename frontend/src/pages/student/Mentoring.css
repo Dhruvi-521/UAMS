@@ -1,0 +1,664 @@
+/* =====================================================================
+   mentoring.css
+   Brand Colors:
+     Dark Blue  : #1e3a8a
+     Primary Blue: #2563eb
+     Light BG   : #f0f4ff
+     White      : #ffffff
+     Border     : #d1dbe8
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@600;700;800&display=swap');
+
+/* ── Design Tokens ───────────────────────────────────────────────────── */
+:root {
+    /* Brand palette */
+    --dark-blue: #1e3a8a;
+    --primary: #2563eb;
+    --primary-h: #1d4ed8;
+    /* hover — slightly darker */
+    --primary-lt: #dbeafe;
+    /* light tint of primary   */
+    --bg: #f0f4ff;
+    /* Light BG                */
+    --card: #ffffff;
+    /* White                   */
+    --border: #d1dbe8;
+    /* Border                  */
+
+    /* Derived shades */
+    --inner: #eef3ff;
+    /* inner panel / table head */
+    --text-hd: var(--dark-blue);
+    --text-body: #334155;
+    --text-muted: #6b7ea8;
+
+    /* Pill / slot colors — blue family instead of teal */
+    --pill-bg: #eff6ff;
+    --pill-border: #93c5fd;
+    --pill-hover: #2563eb;
+    --pill-active-bg: #2563eb;
+    --pill-active-fg: #ffffff;
+
+    /* Status badges */
+    --green-bg: #dcfce7;
+    --green-fg: #166534;
+    --orange-bg: #ffedd5;
+    --orange-fg: #9a3412;
+    --red-bg: #fee2e2;
+    --red-fg: #991b1b;
+
+    /* Cancel button */
+    --cancel-bg: #fff1f2;
+    --cancel-border: #fecdd3;
+    --cancel-fg: #be123c;
+    --cancel-h-bg: #be123c;
+    --cancel-h-fg: #ffffff;
+
+    /* Radii / shadows */
+    --r-card: 14px;
+    --r-pill: 50px;
+    --r-btn: 8px;
+    --shadow: 0 2px 16px rgba(30, 58, 138, 0.09);
+    --shadow-open: 0 6px 28px rgba(30, 58, 138, 0.16);
+
+    --ff-hd: 'Sora', sans-serif;
+    --ff-body: 'DM Sans', sans-serif;
+    --ease: 0.2s ease;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.mentoring-page button {
+    font-family: var(--ff-body);
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* ── Page ────────────────────────────────────────────────────────────── */
+.mentoring-page .mp {
+    min-height: 100vh;
+    background: var(--bg);
+    font-family: var(--ff-body);
+    color: var(--text-hd);
+}
+
+/* ── Topbar ──────────────────────────────────────────────────────────── */
+.mentoring-page .mp__topbar {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    box-shadow: 0 1px 6px rgba(30, 58, 138, .07);
+}
+.mentoring-page .mp__topbar-title {
+    font-family: var(--ff-hd);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+}
+
+/* ── Main body ───────────────────────────────────────────────────────── */
+.mentoring-page .mp__body {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* ── Page heading ────────────────────────────────────────────────────── */
+.mentoring-page .mp__page-hd {
+    text-align: center;
+}
+.mentoring-page .mp__page-hd h2 {
+    font-family: var(--ff-hd);
+    font-size: .92rem;
+    font-weight: 700;
+    letter-spacing: .13em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* ── Grid label ──────────────────────────────────────────────────────── */
+.mentoring-page .mp__grid-label {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* ── 3-column faculty grid ───────────────────────────────────────────── */
+.mentoring-page .mp__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   FACULTY CARD
+   ══════════════════════════════════════════════════════════════════════ */
+.mentoring-page .fcard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow var(--ease), border-color var(--ease);
+}
+.mentoring-page .fcard--open {
+    border-color: #93c5fd;
+    box-shadow: var(--shadow-open);
+}
+
+/* Header */
+.mentoring-page .fcard__hdr {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 18px 16px;
+    text-align: left;
+    transition: background var(--ease);
+}
+.mentoring-page .fcard__hdr:hover {
+    background: var(--inner);
+}
+.mentoring-page .fcard__hdr-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.mentoring-page .fcard__name {
+    font-family: var(--ff-hd);
+    font-size: .97rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    line-height: 1.2;
+}
+.mentoring-page .fcard__meta {
+    font-size: .75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+.mentoring-page .fcard__chevron {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-top: 3px;
+    transition: transform var(--ease);
+}
+.mentoring-page .fcard__chevron--up {
+    transform: rotate(180deg);
+}
+
+/* Expanded panel */
+.mentoring-page .fcard__panel {
+    padding: 0 16px 18px;
+    border-top: 1px solid var(--border);
+    background: var(--card);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: fadeSlide .2s ease;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.mentoring-page .fcard__block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 14px;
+}
+.mentoring-page .fcard__block-label {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* Pill row */
+.mentoring-page .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+/* ── Pill buttons ────────────────────────────────────────────────────── */
+.mentoring-page .pill {
+    padding: 6px 13px;
+    border-radius: var(--r-pill);
+    border: 1.5px solid var(--pill-border);
+    background: var(--pill-bg);
+    color: var(--primary);
+    font-size: .78rem;
+    font-weight: 600;
+    transition: background var(--ease), color var(--ease),
+        border-color var(--ease), transform var(--ease);
+    white-space: nowrap;
+}
+.mentoring-page .pill:hover:not(:disabled):not(.pill--off) {
+    background: var(--primary-lt);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+/* Active/selected */
+.mentoring-page .pill--on {
+    background: var(--pill-active-bg) !important;
+    border-color: var(--pill-active-bg) !important;
+    color: var(--pill-active-fg) !important;
+    box-shadow: 0 2px 10px rgba(37, 99, 235, .3);
+}
+
+/* Date pill — darker border to distinguish */
+.mentoring-page .pill--date {
+    border-color: var(--primary);
+}
+
+/* Disabled slot */
+.mentoring-page .pill--off,
+.mentoring-page .pill:disabled {
+    opacity: .38;
+    cursor: not-allowed;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: var(--text-muted);
+}
+
+/* Mentoring style */
+.mentoring-page .fcard__style {
+    font-size: .8rem;
+    color: var(--text-body);
+}
+.mentoring-page .fcard__style strong {
+    color: var(--dark-blue);
+}
+
+/* Selected slot summary */
+.mentoring-page .fcard__selected-label {
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.mentoring-page .fcard__selected-val {
+    font-weight: 600;
+    color: var(--primary);
+}
+.mentoring-page .fcard__selected-placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* ── Book Slot button ────────────────────────────────────────────────── */
+.mentoring-page .fcard__book-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--dark-blue);
+    /* #1e3a8a */
+    color: #fff;
+    font-family: var(--ff-hd);
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    border-radius: var(--r-btn);
+    box-shadow: 0 3px 14px rgba(30, 58, 138, .28);
+    transition: background var(--ease), transform var(--ease), box-shadow var(--ease);
+}
+.mentoring-page .fcard__book-btn:hover {
+    background: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 20px rgba(37, 99, 235, .35);
+}
+.mentoring-page .fcard__book-btn:active {
+    transform: translateY(0);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   SLOTS BOOKED TABLE
+   ══════════════════════════════════════════════════════════════════════ */
+.mentoring-page .bsec {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+.mentoring-page .bsec__label {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 14px 20px 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Desktop table */
+.mentoring-page .bsec__tbl-wrap {
+    overflow-x: auto;
+}
+.mentoring-page .bsec__tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+}
+.mentoring-page .bsec__tbl thead tr {
+    background: var(--inner);
+}
+.mentoring-page .bsec__tbl th {
+    padding: 11px 18px;
+    text-align: left;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+}
+.mentoring-page .bsec__tbl th span {
+    opacity: .5;
+    font-size: .65rem;
+}
+.mentoring-page .bsec__tbl td {
+    padding: 13px 18px;
+    color: var(--text-body);
+    font-weight: 500;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+.mentoring-page .bsec__tbl tbody tr:last-child td {
+    border-bottom: none;
+}
+.mentoring-page .bsec__tbl tbody tr:hover td {
+    background: #f8faff;
+}
+
+/* Cancelled row — dim entire row */
+.mentoring-page .row--cancelled td {
+    opacity: .55;
+}
+
+/* Mobile bookings cards — hidden on desktop */
+.mentoring-page .bsec__mob {
+    display: none;
+}
+.mentoring-page .bsec__mob-card {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+.mentoring-page .bsec__mob-card:last-child {
+    border-bottom: none;
+}
+.mentoring-page .bsec__mob-card--cancelled {
+    opacity: .55;
+}
+.mentoring-page .bsec__mob-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .84rem;
+}
+.mentoring-page .bsec__mob-key {
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--text-muted);
+}
+.mentoring-page .bsec__mob-val {
+    color: var(--text-body);
+    font-weight: 500;
+}
+
+/* ── Status badge ────────────────────────────────────────────────────── */
+.mentoring-page .sbadge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: .75rem;
+    font-weight: 700;
+}
+.mentoring-page .sbadge--booked {
+    background: var(--green-bg);
+    color: var(--green-fg);
+}
+.mentoring-page .sbadge--pending {
+    background: var(--orange-bg);
+    color: var(--orange-fg);
+}
+.mentoring-page .sbadge--cancelled {
+    background: var(--red-bg);
+    color: var(--red-fg);
+}
+
+/* ── Cancel button ───────────────────────────────────────────────────── */
+.mentoring-page .cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 13px;
+    border-radius: 6px;
+    border: 1.5px solid var(--cancel-border);
+    background: var(--cancel-bg);
+    color: var(--cancel-fg);
+    font-size: .76rem;
+    font-weight: 600;
+    transition: background var(--ease), color var(--ease),
+        border-color var(--ease), transform var(--ease);
+    white-space: nowrap;
+}
+.mentoring-page .cancel-btn:hover {
+    background: var(--cancel-h-bg);
+    color: var(--cancel-h-fg);
+    border-color: var(--cancel-h-bg);
+    transform: translateY(-1px);
+}
+.mentoring-page .cancel-btn:active {
+    transform: translateY(0);
+}
+.mentoring-page .cancelled-label {
+    color: var(--text-muted);
+    font-size: .82rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   CONFIRM DIALOG
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Full-screen overlay */
+.mentoring-page .dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: overlayIn .18s ease;
+}
+
+@keyframes overlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Dialog box */
+.mentoring-page .dialog {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(30, 58, 138, 0.22);
+    padding: 32px 28px 28px;
+    max-width: 420px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+    animation: dialogIn .22s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+@keyframes dialogIn {
+    from {
+        opacity: 0;
+        transform: scale(.92) translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Warning icon circle */
+.mentoring-page .dialog__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fff7ed;
+    border: 2px solid #fed7aa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ea580c;
+}
+.mentoring-page .dialog__title {
+    font-family: var(--ff-hd);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+}
+.mentoring-page .dialog__body {
+    font-size: .88rem;
+    color: var(--text-body);
+    line-height: 1.6;
+    max-width: 320px;
+}
+.mentoring-page .dialog__actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 6px;
+}
+
+/* Shared dialog button base */
+.mentoring-page .dialog__btn {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: var(--r-btn);
+    font-family: var(--ff-hd);
+    font-size: .85rem;
+    font-weight: 700;
+    transition: background var(--ease), color var(--ease),
+        border-color var(--ease), transform var(--ease);
+}
+.mentoring-page .dialog__btn:hover {
+    transform: translateY(-1px);
+}
+.mentoring-page .dialog__btn:active {
+    transform: translateY(0);
+}
+
+/* Ghost — "Keep Slot" */
+.mentoring-page .dialog__btn--ghost {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    color: var(--text-body);
+}
+.mentoring-page .dialog__btn--ghost:hover {
+    background: var(--primary-lt);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Danger — "Yes, Cancel" */
+.mentoring-page .dialog__btn--danger {
+    background: #dc2626;
+    border: 1.5px solid #dc2626;
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(220, 38, 38, .28);
+}
+.mentoring-page .dialog__btn--danger:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+    box-shadow: 0 5px 18px rgba(220, 38, 38, .38);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Tablet — 2 columns */
+@media (max-width: 860px) {
+.mentoring-page .mp__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile — 1 column; swap table → cards */
+@media (max-width: 560px) {
+.mentoring-page .mp__grid {
+        grid-template-columns: 1fr;
+    }
+.mentoring-page .mp__body {
+        padding: 18px 14px 50px;
+    }
+.mentoring-page .bsec__tbl-wrap {
+        display: none;
+    }
+.mentoring-page .bsec__mob {
+        display: block;
+    }
+.mentoring-page .fcard__name {
+        font-size: .9rem;
+    }
+.mentoring-page .pill {
+        padding: 5px 11px;
+        font-size: .74rem;
+    }
+.mentoring-page .dialog {
+        padding: 24px 18px 20px;
+    }
+.mentoring-page .dialog__actions {
+        flex-direction: column;
+    }
+}
