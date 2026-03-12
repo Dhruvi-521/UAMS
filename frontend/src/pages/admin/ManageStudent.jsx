@@ -204,7 +204,7 @@ export default function StudentManagement() {
                 </div>
 
                 {/* Summary Stats */}
-                <div className="sm-stats-row">
+                {/* <div className="sm-stats-row">
                     <div className="sm-stat-card">
                         <div className="sm-stat-icon blue"><GraduationCap size={18} color="#1e40af" /></div>
                         <div><div className="sm-stat-num">{studentData.length}</div><div className="sm-stat-label">Total Students</div></div>
@@ -221,7 +221,7 @@ export default function StudentManagement() {
                         <div className="sm-stat-icon red"><FileText size={18} color="#dc2626" /></div>
                         <div><div className="sm-stat-num">{studentData.filter(s => s.status === "On Hold").length}</div><div className="sm-stat-label">On Hold</div></div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Desktop table */}
                 <div className="sm-table-card">

@@ -1,0 +1,251 @@
+/* Scoped to .grades-page to prevent global leakage */
+.grades-page {
+    background-color: #f5f7fb;
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: 'Inter', 'Poppins', sans-serif;
+    color: #1e293b;
+}
+
+.grades-page .grades-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 1. Header Styles */
+.grades-page .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.grades-page .header-text h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #0f172a;
+}
+
+.grades-page .header-text p {
+    color: #64748b;
+    margin: 0.25rem 0 0 0;
+}
+
+.grades-page .header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* 2. Student Info Card */
+.grades-page .student-info-card {
+    background: #ffffff;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.grades-page .avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.grades-page .info-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #334155;
+}
+
+.grades-page .info-details p {
+    margin: 0;
+}
+
+.grades-page .divider {
+    color: #cbd5e1;
+}
+
+/* 3. Main Content Grid */
+.grades-page .main-content {
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.grades-page .card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Table Styles */
+.grades-page .grades-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.grades-page .grades-table th {
+    background-color: #eff6ff;
+    color: #1e40af;
+    padding: 1.25rem;
+    font-weight: 600;
+}
+
+.grades-page .grades-table td {
+    padding: 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.grades-page .grades-table tr:hover {
+    background-color: #f8fafc;
+}
+
+.grades-page .course-icon {
+    margin-right: 12px;
+}
+
+.grades-page .text-center {
+    text-align: center;
+}
+
+.grades-page .font-bold {
+    font-weight: 600;
+}
+
+/* GPA Summary Card */
+.grades-page .gpa-card {
+    padding: 1.5rem;
+}
+
+.grades-page .gpa-item {
+    margin-bottom: 2rem;
+}
+
+.grades-page .gpa-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.grades-page .progress-bar {
+    background-color: #e2e8f0;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.grades-page .progress-fill {
+    background-color: #3b82f6;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.grades-page .summary-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Button Styles */
+.grades-page .btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.grades-page .btn-primary {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.grades-page .btn-primary:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.grades-page .btn-secondary {
+    background-color: #e0e7ff;
+    color: #4338ca;
+}
+
+.grades-page .btn-secondary:hover {
+    background-color: #c7d2fe;
+}
+
+.grades-page .btn-outline {
+    background-color: transparent;
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+}
+
+.grades-page .btn-outline:hover {
+    background-color: #eff6ff;
+}
+
+/* Responsiveness */
+
+/* Tablet (768px - 1199px) */
+@media (max-width: 1199px) {
+    .grades-page .main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile (below 768px) */
+@media (max-width: 768px) {
+    .grades-page {
+        padding: 1rem;
+    }
+
+    .grades-page .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .grades-page .header-actions {
+        width: 100%;
+    }
+
+    .grades-page .header-actions .btn {
+        flex: 1;
+    }
+
+    .grades-page .student-info-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .grades-page .info-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .grades-page .divider {
+        display: none;
+    }
+
+    .grades-page .table-responsive {
+        overflow-x: auto;
+    }
+
+    .grades-page .grades-table th,
+    .grades-page .grades-table td {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+}
