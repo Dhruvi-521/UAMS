@@ -1,5 +1,5 @@
 import { Book03Icon, MentorIcon, NoteIcon } from 'hugeicons-react';
-import { BadgeQuestionMark, LayoutDashboard, Menu, X } from 'lucide-react';
+import { BadgeQuestionMark, LayoutDashboard, Menu, X ,  UserStar} from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
@@ -42,7 +42,7 @@ const StudentSidebar = () => {
         </NavLink>
 
         <NavLink to="/student/attendance" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
-          <BadgeQuestionMark size={24} className="menu-icon" />
+          <UserStar size={24} className="menu-icon" />
           {isOpen && <span className="link-text">Attendance</span>}
         </NavLink>
         

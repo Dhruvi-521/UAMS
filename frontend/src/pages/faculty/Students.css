@@ -2,7 +2,7 @@
    Students.css — Faculty Portal Student Management
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap'); */
 
 * {
   box-sizing: border-box;
@@ -11,7 +11,7 @@
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  /* font-family: 'DM Sans', sans-serif; */
   background: #f0f2f5;
   color: #1a202c;
 }
@@ -28,13 +28,17 @@ body {
 } */
 
 /* ── Title ─────────────────────────────────────────────────── */
-.page-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 2rem;
-  font-weight: 400;
+.st-page-title {
+  /* font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; */
+  /* font-size: 2rem; */
+  /* font-weight: 400; */
   color: #1a202c;
   margin-bottom: 24px;
   letter-spacing: -0.5px;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+
 }
 
 /* ── Back Button ───────────────────────────────────────────── */
@@ -45,7 +49,7 @@ body {
   background: none;
   border: none;
   color: #2563eb;
-  font-family: 'DM Sans', sans-serif;
+  /* font-family: 'DM Sans', sans-serif; */
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;

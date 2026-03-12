@@ -111,7 +111,7 @@ function StudentList({ onSelectStudent }) {
 
   return (
     <div className="page-container">
-      <h1 className="page-title">Students</h1>
+      <h1 className="st-page-title">Students</h1>
 
       <div className="filters-section">
         <div className="filter-group">

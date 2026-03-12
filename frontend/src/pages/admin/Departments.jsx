@@ -19,7 +19,7 @@ const Departments = ({ onSelectDepartment }) => {
 
   return (
     <div className="page">
-      <h1 className="page-title">Departments</h1>
+      <h1 className="dp-page-title">Departments</h1>
       <div className="top-bar">
         <div className="search-wrapper">
           <Search size={18} className="search-icon" />
