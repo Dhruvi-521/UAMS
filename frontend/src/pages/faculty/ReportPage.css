@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+.rpage-root {
+  --rp-bg: #f0f4f9;
+  --rp-surface: #ffffff;
+  --rp-border: #e2e8f0;
+  --rp-text-primary: #0f172a;
+  --rp-text-secondary: #64748b;
+  --rp-blue: #2563eb;
+  --rp-radius: 14px;
+  --rp-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  --rp-transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  --rp-font-body: 'DM Sans', sans-serif;
+  --rp-font-display: 'Syne', sans-serif;
+
+  font-family: var(--rp-font-body);
+  background: var(--rp-bg);
+  min-height: 100vh;
+  color: var(--rp-text-primary);
+}
+
+.rpage-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  /* padding: 32px 28px; */
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ── Back Button ── */
+.rpage-back-btn {
+  font-family: var(--rp-font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--rp-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--rp-transition);
+  width: fit-content;
+}
+
+.rpage-back-btn:hover { color: var(--rp-blue); }
+
+/* ── Title Row ── */
+.rpage-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.rpage-title {
+  /* font-family: var(--rp-font-display); */
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--rp-text-primary);
+}
+
+.rpage-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rpage-btn {
+  font-family: var(--rp-font-body);
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all var(--rp-transition);
+  border: none;
+  white-space: nowrap;
+}
+
+.rpage-btn-outline {
+  background: var(--rp-surface);
+  border: 1.5px solid var(--rp-border);
+  color: var(--rp-text-primary);
+  box-shadow: var(--rp-shadow);
+}
+
+.rpage-btn-outline:hover {
+  border-color: var(--rp-blue);
+  color: var(--rp-blue);
+}
+
+.rpage-btn-primary {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+}
+
+.rpage-btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* ── Filter Card ── */
+.rpage-filter-card {
+  background: var(--rp-surface);
+  border-radius: var(--rp-radius);
+  padding: 22px 24px;
+  border: 1.5px solid var(--rp-border);
+  box-shadow: var(--rp-shadow);
+}
+
+.rpage-filter-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rp-text-secondary);
+  margin: 0 0 14px;
+}
+
+.rpage-filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.rpage-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.rpage-filter-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rp-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rpage-filter-group select,
+.rpage-filter-group input[type="date"] {
+  font-family: var(--rp-font-body);
+  font-size: 0.9rem;
+  color: var(--rp-text-primary);
+  background: var(--rp-bg);
+  border: 1.5px solid var(--rp-border);
+  border-radius: 9px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color var(--rp-transition), box-shadow var(--rp-transition);
+}
+
+.rpage-filter-group select:focus,
+.rpage-filter-group input[type="date"]:focus {
+  border-color: var(--rp-blue);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+/* ── Summary Grid ── */
+.rpage-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.rpage-summary-card {
+  background: var(--rp-surface);
+  border-radius: var(--rp-radius);
+  padding: 20px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px solid var(--rp-border);
+  border-left: 4px solid #2563eb;
+  box-shadow: var(--rp-shadow);
+  transition: transform var(--rp-transition);
+}
+
+.rpage-summary-card:hover { transform: translateY(-3px); }
+
+.rpage-summary-icon { font-size: 1.6rem; }
+
+.rpage-summary-value {
+  /* font-family: var(--rp-font-display); */
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 2px;
+  color: var(--rp-text-primary);
+}
+
+.rpage-summary-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rp-text-secondary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Table ── */
+.rpage-table-card {
+  background: var(--rp-surface);
+  border-radius: var(--rp-radius);
+  border: 1.5px solid var(--rp-border);
+  box-shadow: var(--rp-shadow);
+  overflow: hidden;
+}
+
+.rpage-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rpage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.rpage-table thead { background: var(--rp-bg); }
+
+.rpage-table th {
+  padding: 13px 18px;
+  text-align: left;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--rp-text-secondary);
+  white-space: nowrap;
+}
+
+.rpage-table td {
+  padding: 14px 18px;
+  border-top: 1px solid var(--rp-border);
+  color: var(--rp-text-primary);
+  white-space: nowrap;
+}
+
+.rpage-table tbody tr { transition: background var(--rp-transition); }
+.rpage-table tbody tr:hover { background: #f8fafc; }
+
+.rpage-empty-cell {
+  text-align: center;
+  padding: 48px 20px !important;
+  color: var(--rp-text-secondary);
+  font-size: 0.92rem;
+}
+
+/* ── Badges ── */
+.rpage-badge {
+  display: inline-block;
+  padding: 4px 13px;
+  border-radius: 99px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.rpage-badge-success { background: #dcfce7; color: #15803d; }
+.rpage-badge-warning { background: #fef9c3; color: #a16207; }
+.rpage-badge-danger  { background: #fee2e2; color: #b91c1c; }
+.rpage-badge-info    { background: #dbeafe; color: #1d4ed8; }
+.rpage-badge-neutral { background: #f1f5f9; color: #475569; }
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .rpage-summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .rpage-wrapper { padding: 16px 12px; gap: 16px; }
+  .rpage-title { font-size: 1.3rem; }
+  .rpage-summary-grid { grid-template-columns: repeat(1, 1fr); }
+  .rpage-title-row { flex-direction: column; align-items: flex-start; }
+  .rpage-actions { width: 100%; }
+  .rpage-btn { flex: 1; text-align: center; }
+}

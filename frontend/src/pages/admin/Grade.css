@@ -1,0 +1,48 @@
+.grade-container {
+    padding: 24px;
+    font-family: 'Inter', sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.grade-header h1 {
+    color: #1e293b;
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.grade-header p {
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.tab-navigation {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-btn {
+    padding: 10px 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #64748b;
+    font-weight: 500;
+    border-radius: 8px 8px 0 0;
+    transition: 0.3s;
+}
+
+.tab-btn.active {
+    background: #2563eb;
+    color: white;
+}
+
+.card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}

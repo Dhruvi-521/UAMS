@@ -1,0 +1,546 @@
+/* ─────────────────────────────────────────
+   UAMS Faculty Dashboard — LeavePayroll.css
+   Scoped to .leave-payroll-root to avoid
+   leaking into other components
+   ───────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap');
+
+/* ── CSS Variables scoped to root class only ── */
+.leave-payroll-root {
+  --lp-bg: #f0f4f9;
+  --lp-surface: #ffffff;
+  --lp-border: #e2e8f0;
+  --lp-text-primary: #0f172a;
+  --lp-text-secondary: #64748b;
+  --lp-accent-blue: #2563eb;
+  --lp-accent-blue-light: #dbeafe;
+  --lp-accent-green: #16a34a;
+  --lp-accent-green-light: #dcfce7;
+  --lp-accent-purple: #7c3aed;
+  --lp-debit-color: #dc2626;
+  --lp-credit-color: #16a34a;
+  --lp-badge-approved-bg: #dcfce7;
+  --lp-badge-approved-text: #15803d;
+  --lp-badge-pending-bg: #fef9c3;
+  --lp-badge-pending-text: #a16207;
+  --lp-badge-rejected-bg: #fee2e2;
+  --lp-badge-rejected-text: #b91c1c;
+  --lp-radius-sm: 8px;
+  --lp-radius-md: 14px;
+  --lp-radius-lg: 20px;
+  --lp-shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --lp-shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --lp-shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+  --lp-font-body: 'DM Sans', sans-serif;
+  --lp-font-display: 'Syne', sans-serif;
+  --lp-transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+  font-family: var(--lp-font-body);
+  background: var(--lp-bg);
+  color: var(--lp-text-primary);
+  min-height: 100vh;
+}
+
+/* ── Wrapper ── */
+.leave-payroll-root .dashboard-wrapper {
+  padding: 32px 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Tab Navigation ── */
+.leave-payroll-root .tab-nav {
+  display: flex;
+  gap: 6px;
+  background: var(--lp-surface);
+  border-radius: var(--lp-radius-lg);
+  padding: 6px;
+  box-shadow: var(--lp-shadow-sm);
+  border: 1px solid var(--lp-border);
+  width: fit-content;
+  margin-bottom: 28px;
+}
+
+.leave-payroll-root .tab-btn {
+  font-family: var(--lp-font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--lp-radius-md);
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--lp-text-secondary);
+  transition: background var(--lp-transition), color var(--lp-transition), box-shadow var(--lp-transition);
+  letter-spacing: 0.01em;
+}
+
+.leave-payroll-root .tab-btn:hover {
+  background: var(--lp-bg);
+  color: var(--lp-text-primary);
+}
+
+.leave-payroll-root .tab-btn.tab-active {
+  background: var(--lp-accent-blue);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+/* ── Fade In ── */
+@keyframes lpFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.leave-payroll-root .fade-in {
+  animation: lpFadeIn 0.3s ease forwards;
+}
+
+/* ── Sections ── */
+.leave-payroll-root .section {
+  margin-bottom: 32px;
+}
+
+.leave-payroll-root .section-title {
+  /* font-family: var(--lp-font-display); */
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--lp-text-primary);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* ─────────────────────────────────────────
+   LEAVE SECTION
+   ───────────────────────────────────────── */
+
+.leave-payroll-root .leave-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.leave-payroll-root .leave-card {
+  border-radius: var(--lp-radius-md);
+  padding: 22px 20px 18px;
+  color: #fff;
+  box-shadow: var(--lp-shadow-md);
+  transition: transform var(--lp-transition), box-shadow var(--lp-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.leave-payroll-root .leave-card::after {
+  content: "";
+  position: absolute;
+  right: -18px;
+  top: -18px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+}
+
+.leave-payroll-root .leave-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--lp-shadow-lg);
+}
+
+.leave-payroll-root .card-blue   { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+.leave-payroll-root .card-green  { background: linear-gradient(135deg, #16a34a, #22c55e); }
+.leave-payroll-root .card-purple { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+
+.leave-payroll-root .leave-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.leave-payroll-root .leave-icon {
+  font-size: 1.3rem;
+}
+
+.leave-payroll-root .leave-type {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.92;
+  letter-spacing: 0.02em;
+}
+
+.leave-payroll-root .leave-count {
+  /* font-family: var(--lp-font-display); */
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.leave-payroll-root .leave-total {
+  font-size: 1.1rem;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.leave-payroll-root .leave-bar {
+  height: 5px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.leave-payroll-root .leave-bar-fill {
+  height: 100%;
+  background: rgba(255,255,255,0.85);
+  border-radius: 99px;
+  transition: width 0.5s ease;
+}
+
+/* ── Form Card ── */
+.leave-payroll-root .form-card {
+  background: var(--lp-surface);
+  border-radius: var(--lp-radius-md);
+  padding: 28px;
+  box-shadow: var(--lp-shadow-sm);
+  border: 1px solid var(--lp-border);
+}
+
+.leave-payroll-root .leave-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.leave-payroll-root .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.leave-payroll-root .form-row.two-col {
+  flex-direction: row;
+  gap: 18px;
+}
+
+.leave-payroll-root .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+
+.leave-payroll-root .form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--lp-text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.leave-payroll-root .form-group select,
+.leave-payroll-root .form-group input[type="date"],
+.leave-payroll-root .form-group textarea {
+  font-family: var(--lp-font-body);
+  font-size: 0.92rem;
+  color: var(--lp-text-primary);
+  background: var(--lp-bg);
+  border: 1.5px solid var(--lp-border);
+  border-radius: var(--lp-radius-sm);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color var(--lp-transition), box-shadow var(--lp-transition);
+  resize: vertical;
+}
+
+.leave-payroll-root .form-group select:focus,
+.leave-payroll-root .form-group input[type="date"]:focus,
+.leave-payroll-root .form-group textarea:focus {
+  border-color: var(--lp-accent-blue);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+.leave-payroll-root .form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.leave-payroll-root .btn-primary {
+  font-family: var(--lp-font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 11px 28px;
+  background: var(--lp-accent-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--lp-radius-sm);
+  cursor: pointer;
+  transition: background var(--lp-transition), transform var(--lp-transition), box-shadow var(--lp-transition);
+  letter-spacing: 0.02em;
+}
+
+.leave-payroll-root .btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37,99,235,0.3);
+}
+
+/* ── Table ── */
+.leave-payroll-root .table-card {
+  background: var(--lp-surface);
+  border-radius: var(--lp-radius-md);
+  box-shadow: var(--lp-shadow-sm);
+  border: 1px solid var(--lp-border);
+  overflow: hidden;
+}
+
+.leave-payroll-root .table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.leave-payroll-root .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.leave-payroll-root .data-table thead {
+  background: var(--lp-bg);
+}
+
+.leave-payroll-root .data-table th {
+  padding: 13px 18px;
+  text-align: left;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--lp-text-secondary);
+  white-space: nowrap;
+}
+
+.leave-payroll-root .data-table td {
+  padding: 14px 18px;
+  border-top: 1px solid var(--lp-border);
+  color: var(--lp-text-primary);
+  white-space: nowrap;
+}
+
+.leave-payroll-root .data-table tbody tr {
+  transition: background var(--lp-transition);
+}
+
+.leave-payroll-root .data-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.leave-payroll-root .row-id {
+  font-weight: 600;
+  color: var(--lp-text-secondary);
+  font-size: 0.85rem;
+}
+
+/* ── Badges ── */
+.leave-payroll-root .badge {
+  display: inline-block;
+  padding: 4px 13px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.leave-payroll-root .badge-approved {
+  background: var(--lp-badge-approved-bg);
+  color: var(--lp-badge-approved-text);
+}
+
+.leave-payroll-root .badge-pending {
+  background: var(--lp-badge-pending-bg);
+  color: var(--lp-badge-pending-text);
+}
+
+.leave-payroll-root .badge-rejected {
+  background: var(--lp-badge-rejected-bg);
+  color: var(--lp-badge-rejected-text);
+}
+
+/* ─────────────────────────────────────────
+   PAYROLL SECTION
+   ───────────────────────────────────────── */
+
+.leave-payroll-root .payroll-top-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.leave-payroll-root .salary-summary-card {
+  background: linear-gradient(145deg, #16a34a, #15803d);
+  border-radius: var(--lp-radius-md);
+  padding: 30px 24px;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(22,163,74,0.3);
+  transition: transform var(--lp-transition);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.leave-payroll-root .salary-summary-card:hover {
+  transform: translateY(-3px);
+}
+
+.leave-payroll-root .summary-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+.leave-payroll-root .summary-amount {
+  /* font-family: var(--lp-font-display); */
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.leave-payroll-root .summary-sub {
+  font-size: 0.82rem;
+  opacity: 0.75;
+}
+
+.leave-payroll-root .breakdown-grid {
+  background: var(--lp-surface);
+  border-radius: var(--lp-radius-md);
+  border: 1px solid var(--lp-border);
+  box-shadow: var(--lp-shadow-sm);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  overflow: hidden;
+}
+
+.leave-payroll-root .breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--lp-border);
+  border-right: 1px solid var(--lp-border);
+  transition: background var(--lp-transition);
+}
+
+.leave-payroll-root .breakdown-item:nth-child(even) {
+  border-right: none;
+}
+
+.leave-payroll-root .breakdown-item:nth-last-child(-n+2) {
+  border-bottom: none;
+}
+
+.leave-payroll-root .breakdown-item:hover {
+  background: #f8fafc;
+}
+
+.leave-payroll-root .breakdown-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--lp-text-secondary);
+}
+
+.leave-payroll-root .breakdown-value {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.leave-payroll-root .breakdown-value.credit {
+  color: var(--lp-credit-color);
+}
+
+.leave-payroll-root .breakdown-value.debit {
+  color: var(--lp-debit-color);
+}
+
+.leave-payroll-root .salary-cell {
+  font-weight: 700;
+  color: var(--lp-accent-blue);
+}
+
+.leave-payroll-root .btn-download {
+  font-family: var(--lp-font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 16px;
+  background: var(--lp-accent-blue-light);
+  color: var(--lp-accent-blue);
+  border: 1.5px solid #bfdbfe;
+  border-radius: var(--lp-radius-sm);
+  cursor: pointer;
+  transition: background var(--lp-transition), transform var(--lp-transition), box-shadow var(--lp-transition);
+}
+
+.leave-payroll-root .btn-download:hover {
+  background: var(--lp-accent-blue);
+  color: #fff;
+  border-color: var(--lp-accent-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .leave-payroll-root .dashboard-wrapper {
+    padding: 22px 18px;
+  }
+  .leave-payroll-root .leave-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .leave-payroll-root .payroll-top-grid {
+    grid-template-columns: 1fr;
+  }
+  .leave-payroll-root .salary-summary-card {
+    padding: 22px 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .leave-payroll-root .dashboard-wrapper {
+    padding: 16px 12px;
+  }
+  .leave-payroll-root .tab-nav {
+    width: 100%;
+  }
+  .leave-payroll-root .tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.82rem;
+  }
+  .leave-payroll-root .leave-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .leave-payroll-root .form-row.two-col {
+    flex-direction: column;
+  }
+  .leave-payroll-root .breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+  .leave-payroll-root .breakdown-item {
+    border-right: none;
+  }
+  .leave-payroll-root .breakdown-item:nth-last-child(-n+2) {
+    border-bottom: 1px solid var(--lp-border);
+  }
+  .leave-payroll-root .breakdown-item:last-child {
+    border-bottom: none;
+  }
+}
