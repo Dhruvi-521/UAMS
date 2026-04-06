@@ -1,41 +1,41 @@
-const Program = require('../models/Program');
+const Department = require('../models/Department');
 
-// ✅ CREATE Program
-exports.addProgram = async (req, res) => {
+// ✅ CREATE
+exports.addDepartment = async (req, res) => {
     try {
         if (!req.body.StartDate) {
             delete req.body.StartDate;
         }
 
-        const program = await Program.create(req.body);
+        const dept = await Department.create(req.body);
 
-        res.status(201).json({
-            message: "Program added successfully",
-            data: program
+        res.json({
+            message: "Department added successfully",
+            data: dept
         });
 
     } catch (error) {
-        res.status(500).json({
-            error: error.message
-        });
+        res.status(500).json({ error: error.message });
     }
 };
 
-// ✅ GET All Programs
-exports.getPrograms = async (req, res) => {
+// ✅ GET all departments
+exports.getDepartments = async (req, res) => {
     try {
-        const data = await Program.find().populate('departmentName');
+        const data = await Department.find();
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// ✅ UPDATE Program (FIXED 🔥)
-exports.updateProgram = async (req, res) => {
+// ✅ UPDATE Department (FIXED 🔥)
+exports.updateDepartment = async (req, res) => {
     try {
-        const updated = await Program.findByIdAndUpdate(
-            req.params.id,
+        const { id } = req.params;
+
+        const updatedDept = await Department.findByIdAndUpdate(
+            id,
             {
                 $set: req.body,        // ✅ correct update
                 $inc: { __v: 1 }       // ✅ increment version
@@ -43,41 +43,17 @@ exports.updateProgram = async (req, res) => {
             { new: true }
         );
 
-        if (!updated) {
-            return res.status(404).json({ message: "Program not found" });
+        if (!updatedDept) {
+            return res.status(404).json({
+                message: "Department not found"
+            });
         }
 
         res.json({
-            message: "Program updated successfully",
-            data: updated,
-            updateCount: updated.__v   // optional
+            message: "Department updated successfully",
+            data: updatedDept,
+            updateCount: updatedDept.__v   // optional
         });
-
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// ✅ DELETE Program
-exports.deleteProgram = async (req, res) => {
-    try {
-        await Program.findByIdAndDelete(req.params.id);
-        res.json({ message: "Program deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// ✅ GET Programs by Department
-exports.getProgramsByDepartment = async (req, res) => {
-    try {
-        const { departmentId } = req.params;
-
-        const programs = await Program.find({
-            departmentName: departmentId
-        }).populate('departmentName');
-
-        res.json(programs);
 
     } catch (error) {
         res.status(500).json({ error: error.message });

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addDepartment, getDepartments } = require('../controllers/departmentController');
-const { updateDepartment } = require('../controllers/departmentController');
+const { addDepartment, getDepartments, updateDepartment } = require('../controllers/departmentController');
 
 // POST
 router.post('/add-department', addDepartment);
