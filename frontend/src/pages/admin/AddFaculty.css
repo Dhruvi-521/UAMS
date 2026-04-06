@@ -1,0 +1,263 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.af-wrapper {
+    min-height: 100vh;
+    background: #f0f4f8;
+    font-family: "DM Sans", "Segoe UI", sans-serif;
+    padding: 28px;
+}
+
+/* ── Header ── */
+.af-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.af-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 6px 10px 6px 6px;
+    border-radius: 8px;
+    transition: background 0.15s;
+}
+
+.af-back-btn:hover {
+    background: #e2e8f0;
+}
+
+.af-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ── Form Body ── */
+.af-form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1200px;
+}
+
+/* ── Section Card ── */
+.af-section {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    padding: 24px 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.af-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* ── Field ── */
+.af-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.af-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* ── Input base ── */
+.af-input,
+.af-select,
+.af-textarea {
+    width: 100%;
+    padding: 9px 13px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    background: #f8fafc;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.af-input:focus,
+.af-select:focus,
+.af-textarea:focus {
+    border-color: #1e40af;
+    background: #fff;
+}
+
+.af-textarea {
+    resize: vertical;
+    min-height: 76px;
+}
+
+.af-select {
+    cursor: pointer;
+}
+
+/* Input with icon */
+.af-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.af-icon {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.af-icon-top {
+    top: 14px;
+    transform: none;
+}
+
+.af-input-icon {
+    padding-left: 34px;
+}
+
+/* ── Grid Rows ── */
+.af-row {
+    display: grid;
+    gap: 14px;
+}
+
+.af-row-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.af-row-2-auto {
+    grid-template-columns: 200px 220px;
+}
+
+.af-row-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.af-row-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+/* ── Footer ── */
+.af-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px 0 12px;
+}
+
+.af-submit-btn {
+    background: #1e40af;
+    color: #fff;
+    border: none;
+    padding: 13px 48px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.2px;
+}
+
+.af-submit-btn:hover {
+    background: #1d3a9e;
+}
+
+.af-submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* ════════════════════
+   Tablet — 768px–1100px
+════════════════════ */
+@media (max-width: 1100px) {
+    .af-row-4 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .af-row-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .af-row-2-auto {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ════════════════════
+   Mobile — under 768px
+════════════════════ */
+@media (max-width: 768px) {
+    .af-wrapper {
+        padding: 16px 14px 32px;
+    }
+
+    .af-title {
+        font-size: 22px;
+    }
+
+    .af-section {
+        padding: 18px 16px 16px;
+        gap: 14px;
+    }
+
+    .af-row-2,
+    .af-row-2-auto,
+    .af-row-3,
+    .af-row-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .af-footer {
+        justify-content: stretch;
+    }
+
+    .af-submit-btn {
+        width: 100%;
+        text-align: center;
+        padding: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .af-wrapper {
+        padding: 12px 10px 28px;
+    }
+
+    .af-title {
+        font-size: 20px;
+    }
+}

@@ -1,10 +1,11 @@
 import {
     BookMarked, BookOpen, Check, Eye,
     Pencil, Plus, Search, Trash2, X,
-    GraduationCap, Award, Phone, Mail, MapPin, Calendar, User, FileText
+    GraduationCap, Award, Phone, Mail, MapPin, Calendar, User, FileText, UserPlus
 } from "lucide-react";
 import { useState } from "react";
 import "./ManageStudent.css";
+import AddStudent from "./addStudent";
 
 const studentData = [
     { id: "S-20240001", name: "Aiden Parker", department: "Computer Science", semester: "Semester 3", status: "Active", email: "aiden.parker@student.edu", phone: "+1 (555) 201-3341", joinDate: "Aug 12, 2022", dob: "Mar 5, 2003", cgpa: "3.85", address: "42 Maple Ave, Boston, MA 02101", courses: ["CS-101", "CS-201", "CS-301"], avatar: "AP", gender: "Male", guardian: "Robert Parker", guardianPhone: "+1 (555) 201-0001" },
@@ -54,6 +55,7 @@ function CGPABadge({ cgpa }) {
 }
 
 export default function StudentManagement() {
+    const [view, setView] = useState("list");
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
@@ -66,8 +68,12 @@ export default function StudentManagement() {
     const [semesterFilter, setSemesterFilter] = useState("All Semesters");
     const [statusFilter, setStatusFilter] = useState("All Status");
 
-    const filtered = studentData.filter((s) => {
+    // ── Render Add Student page ──
+    if (view === "addStudent") {
+        return <AddStudent onBack={() => setView("list")} />;
+    }
 
+    const filtered = studentData.filter((s) => {
         const matchesSearch =
             s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             s.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -136,6 +142,7 @@ export default function StudentManagement() {
     const selectedIndex = studentData.findIndex(
         s => s.id === selectedStudent?.id
     );
+
     return (
         <div className="sm-wrapper">
 
@@ -150,7 +157,10 @@ export default function StudentManagement() {
                         <h1 className="sm-title">Student Management</h1>
                     </div>
                     <div className="sm-header-actions">
-                        <button className="sm-btn-primary"><Plus size={15} /> Add New Student</button>
+                        {/* ── UPDATED BUTTON ── */}
+                        <button className="sm-btn-primary" onClick={() => setView("addStudent")}>
+                            <UserPlus size={15} /> Add Student
+                        </button>
                         <button className="sm-btn-secondary">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
@@ -165,21 +175,12 @@ export default function StudentManagement() {
                         <svg className="sm-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
                         <input className="sm-search" placeholder="Search by Name, Student ID, or Email..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                     </div>
-                    <select
-                        className="sm-select"
-                        value={departmentFilter}
-                        onChange={(e) => setDepartmentFilter(e.target.value)}
-                    >
+                    <select className="sm-select" value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
                         <option>All Departments</option>
                         <option>Computer Science</option>
                         <option>Mathematics</option>
                     </select>
-
-                    <select
-                        className="sm-select"
-                        value={semesterFilter}
-                        onChange={(e) => setSemesterFilter(e.target.value)}
-                    >
+                    <select className="sm-select" value={semesterFilter} onChange={(e) => setSemesterFilter(e.target.value)}>
                         <option>All Semesters</option>
                         <option>Semester 1</option>
                         <option>Semester 2</option>
@@ -190,38 +191,13 @@ export default function StudentManagement() {
                         <option>Semester 7</option>
                         <option>Semester 8</option>
                     </select>
-
-                    <select
-                        className="sm-select"
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                    >
+                    <select className="sm-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                         <option>All Status</option>
                         <option>Active</option>
                         <option>On Hold</option>
                         <option>Graduated</option>
                     </select>
                 </div>
-
-                {/* Summary Stats */}
-                {/* <div className="sm-stats-row">
-                    <div className="sm-stat-card">
-                        <div className="sm-stat-icon blue"><GraduationCap size={18} color="#1e40af" /></div>
-                        <div><div className="sm-stat-num">{studentData.length}</div><div className="sm-stat-label">Total Students</div></div>
-                    </div>
-                    <div className="sm-stat-card">
-                        <div className="sm-stat-icon green"><User size={18} color="#059669" /></div>
-                        <div><div className="sm-stat-num">{studentData.filter(s => s.status === "Active").length}</div><div className="sm-stat-label">Active</div></div>
-                    </div>
-                    <div className="sm-stat-card">
-                        <div className="sm-stat-icon amber"><Award size={18} color="#d97706" /></div>
-                        <div><div className="sm-stat-num">{studentData.filter(s => s.status === "Graduated").length}</div><div className="sm-stat-label">Graduated</div></div>
-                    </div>
-                    <div className="sm-stat-card">
-                        <div className="sm-stat-icon red"><FileText size={18} color="#dc2626" /></div>
-                        <div><div className="sm-stat-num">{studentData.filter(s => s.status === "On Hold").length}</div><div className="sm-stat-label">On Hold</div></div>
-                    </div>
-                </div> */}
 
                 {/* Desktop table */}
                 <div className="sm-table-card">
@@ -236,7 +212,8 @@ export default function StudentManagement() {
                                         <td><span className="sm-id-text">{s.id}</span></td>
                                         <td>
                                             <div className="sm-name-cell">
-                                                <Avatar initials={s.avatar} index={i} size={36} />                                               <div>
+                                                <Avatar initials={s.avatar} index={i} size={36} />
+                                                <div>
                                                     <div className="sm-name-text">{s.name}</div>
                                                     <div className="sm-email-text">{s.email}</div>
                                                 </div>
@@ -284,7 +261,7 @@ export default function StudentManagement() {
             </div>
 
             {/* FAB */}
-            <button className="sm-fab"><Plus size={24} /></button>
+            <button className="sm-fab" onClick={() => setView("addStudent")}><Plus size={24} /></button>
 
             {/* ── Profile Sidebar / Bottom Sheet ── */}
             <div className={`sm-sidebar${sidebarOpen ? " open" : ""}`}>

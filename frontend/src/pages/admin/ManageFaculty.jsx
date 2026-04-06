@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import "./ManageFaculty.css";
+import AddFaculty from "./AddFaculty";
 
 const facultyData = [
   { id: "F-103300001", name: "Dr. Alisha Singh",         department: "Computer Science", designation: "Professor",           status: "Active",   email: "alisingh@gmail.com",   joinDate: "Aug 18, 1985", experience: "35+ years", specializations: ["AI", "Engineering"],        degree: "Ph.D. in Computer Science (UBC)",          primaryDept: "Computer Science", office: "252 Miandresa, Suite 8800", currentLoad: "4 Courses", avatar: "AS" },
@@ -54,6 +55,10 @@ export default function FacultyManagement() {
   const [courseSearch,    setCourseSearch]    = useState("");
   const [assignedCourses, setAssignedCourses] = useState(["CS-101","CS-201","CS-301","CS-401"]);
   const [tempAssigned,    setTempAssigned]    = useState([]);
+  const [showAddForm,     setShowAddForm]     = useState(false);
+
+  // ── Show Add Faculty page ──
+  if (showAddForm) return <AddFaculty onBack={() => setShowAddForm(false)} />;
 
   const filtered = facultyData.filter(f =>
     f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -86,7 +91,9 @@ export default function FacultyManagement() {
             <h1 className="fm-title">Faculty Management</h1>
           </div>
           <div className="fm-header-actions">
-            <button className="fm-btn-primary"><Plus size={15} /> Add New Faculty</button>
+            <button className="fm-btn-primary" onClick={() => setShowAddForm(true)}>
+              <Plus size={15} /> Add New Faculty
+            </button>
             <button className="fm-btn-secondary">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
@@ -159,7 +166,7 @@ export default function FacultyManagement() {
       </div>
 
       {/* FAB */}
-      <button className="fm-fab"><Plus size={24}/></button>
+      <button className="fm-fab" onClick={() => setShowAddForm(true)}><Plus size={24}/></button>
 
       {/* ── Profile Sidebar / Bottom Sheet ── */}
       <div className={`fm-sidebar${sidebarOpen ? " open" : ""}`}>
@@ -168,7 +175,6 @@ export default function FacultyManagement() {
           <div className="fm-sb-drag-handle" />
           <div className="fm-sb-header-row">
             <span className="fm-sb-title">Faculty Profile</span>
-            {/* <button className="fm-sb-close" onClick={closeSidebar}><X size={16}/></button> */}
             <X size={16} onClick={closeSidebar}/>
           </div>
         </div>
@@ -268,28 +274,6 @@ export default function FacultyManagement() {
               )}
 
             </div>
-
-            {/* Quick Actions footer — mobile only */}
-            {/* <div className="fm-qa-footer">
-              <div className="fm-qa-top">
-                <span className="fm-qa-title">Quick Actions</span>
-                <div className="fm-qa-icons">
-                  <button className="fm-qa-icon-btn"><Pencil size={15}/></button>
-                  <button className="fm-qa-icon-btn red"><Trash2 size={15}/></button>
-                </div>
-              </div>
-              <div className="fm-qa-btns">
-                <button className={`fm-qa-btn${sidebarTab==="personal"?" active":""}`} onClick={() => setSidebarTab("personal")}>
-                  <Search size={20}/><span>Details</span>
-                </button>
-                <button className={`fm-qa-btn${sidebarTab==="courses"?" active":""}`} onClick={() => setSidebarTab("courses")}>
-                  <BookOpen size={20}/><span>Courses</span>
-                </button>
-                <button className="fm-qa-btn">
-                  <Settings size={20}/><span>Settings</span>
-                </button>
-              </div>
-            </div> */}
           </>
         )}
       </div>

@@ -1,0 +1,72 @@
+.as-wrapper {
+    min-height: 100vh;
+    background: #f0f4f8;
+    font-family: "DM Sans", "Segoe UI", sans-serif;
+    padding: 28px;
+    box-sizing: border-box;
+}
+
+.as-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.as-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+.as-back-btn:hover { background: #1d4ed8; }
+
+.as-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.as-tabs {
+    display: flex;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 24px;
+    gap: 0;
+}
+
+.as-tab {
+    background: none;
+    border: none;
+    padding: 11px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -2px;
+    font-family: inherit;
+    transition: all 0.15s;
+}
+.as-tab.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+    font-weight: 700;
+}
+.as-tab:hover:not(.active) { color: #2563eb; background: #f0f7ff; }
+
+.as-content { width: 100%; }
+
+@media (max-width: 768px) {
+    .as-wrapper { padding: 16px 14px; }
+    .as-title { font-size: 20px; }
+    .as-tab { padding: 10px 14px; font-size: 13px; }
+}

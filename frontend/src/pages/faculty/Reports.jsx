@@ -18,28 +18,28 @@ const reportCards = [
       { name: "year",  type: "select", label: "Year",  options: ["2022","2023","2024","2025"] },
     ],
   },
-  {
-    id: "leave",
-    title: "Leave Report",
-    description: "View leave summaries, approval status, and trends by type.",
-    icon: "🏖️",
-    color: "card-green",
-    filters: [
-      { name: "leaveType", type: "select", label: "Leave Type", options: ["All","Casual","Sick","Earned"] },
-      { name: "status",    type: "select", label: "Status",     options: ["All","Approved","Pending","Rejected"] },
-    ],
-  },
-  {
-    id: "payroll",
-    title: "Payroll Report",
-    description: "Review salary breakdowns, deductions, and net pay history.",
-    icon: "💰",
-    color: "card-teal",
-    filters: [
-      { name: "month", type: "select", label: "Month", options: ["January","February","March","April","May","June","July","August","September","October","November","December"] },
-      { name: "year",  type: "select", label: "Year",  options: ["2022","2023","2024","2025"] },
-    ],
-  },
+  // {
+  //   id: "leave",
+  //   title: "Leave Report",
+  //   description: "View leave summaries, approval status, and trends by type.",
+  //   icon: "🏖️",
+  //   color: "card-green",
+  //   filters: [
+  //     { name: "leaveType", type: "select", label: "Leave Type", options: ["All","Casual","Sick","Earned"] },
+  //     { name: "status",    type: "select", label: "Status",     options: ["All","Approved","Pending","Rejected"] },
+  //   ],
+  // },
+  // {
+  //   id: "payroll",
+  //   title: "Payroll Report",
+  //   description: "Review salary breakdowns, deductions, and net pay history.",
+  //   icon: "💰",
+  //   color: "card-teal",
+  //   filters: [
+  //     { name: "month", type: "select", label: "Month", options: ["January","February","March","April","May","June","July","August","September","October","November","December"] },
+  //     { name: "year",  type: "select", label: "Year",  options: ["2022","2023","2024","2025"] },
+  //   ],
+  // },
   {
     id: "lecture",
     title: "Lecture / Class Report",
