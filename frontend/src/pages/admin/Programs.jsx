@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Search, Plus, ChevronRight, BookMarked, Layers, Monitor, GraduationCap, Users } from "lucide-react";
 import "./Programs.css";
+import ManageProgramModal from "./ManageProgramModal";
 
 const programsData = {
   1: [
@@ -35,6 +36,7 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="page">
       <div className="breadcrumb">
@@ -54,8 +56,8 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
               onChange={e => setSearch(e.target.value)}
             />
           </div>
-          <button className="add-btn">
-            <Plus size={16} /> Add Program
+          <button className="add-btn" onClick={() => setShowModal(true)}>
+            <Plus size={16} /> Manage Program
           </button>
         </div>
       </div>
@@ -76,6 +78,8 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
           );
         })}
       </div>
+
+       {showModal && <ManageProgramModal onClose={() => setShowModal(false)} />}
     </div>
   );
 };

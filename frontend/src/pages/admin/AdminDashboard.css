@@ -141,15 +141,15 @@
 /* BOTTOM SECTION */
 /* ============================= */
 
-.bottom-layout {
+/* .bottom-layout {
   display: grid;
-  grid-template-columns: 1fr;  /* MOBILE stacked */
+  grid-template-columns: 1fr; 
   gap: 15px;
-}
+} */
 
 .payroll-row {
   display: flex;
-  flex-direction: column;  /* MOBILE stacked */
+  flex-direction: column;  
   gap: 5px;
   padding: 10px 0;
   border-bottom: 1px solid #f1f5f9;

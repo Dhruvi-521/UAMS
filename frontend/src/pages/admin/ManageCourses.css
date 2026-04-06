@@ -197,6 +197,7 @@
 }
 
 .action-td {
+  display: flex;
   white-space: nowrap;
 }
 

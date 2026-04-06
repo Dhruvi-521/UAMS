@@ -37,14 +37,14 @@ const Semesters = ({ department, program, onSelectSemester, onBack, onBackToDepa
             <Search size={16} className="search-icon" />
             <input
               className="search-input"
-              placeholder="Search Programs..."
+              placeholder="Search semester"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
           </div>
-          <button className="add-btn">
+          {/* <button className="add-btn">
             <Plus size={16} /> Add Semester
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="divider" />

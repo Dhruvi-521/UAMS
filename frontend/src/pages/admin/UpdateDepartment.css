@@ -1,0 +1,222 @@
+/* ─── Update Form ────────────────────────────────────────────── */
+.update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.update-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.update-form__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ─── Select Wrapper ─────────────────────────────────────────── */
+.update-form__select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.update-form__select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 13px 44px 13px 16px;
+  font-size: 15px;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.update-form__select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.update-form__select-icon {
+  position: absolute;
+  right: 14px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* ─── Info Grid ──────────────────────────────────────────────── */
+.update-form__info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.update-form__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.update-form__info-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ─── Info Inputs ────────────────────────────────────────────── */
+.update-form__input {
+  width: 100%;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 15px;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.update-form__input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.update-form__input--readonly {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.update-form__input--readonly:focus {
+  border-color: #e2e8f0;
+  box-shadow: none;
+}
+
+/* ─── Radio Group ────────────────────────────────────────────── */
+.update-form__radio-group {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.update-form__radio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #0f172a;
+  cursor: pointer;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+  position: relative;
+}
+
+.update-form__radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.update-form__radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.update-form__radio:checked + .update-form__radio-custom {
+  border-color: #2563eb;
+}
+
+.update-form__radio:checked + .update-form__radio-custom::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: #2563eb;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ─── Action Buttons ─────────────────────────────────────────── */
+.update-form__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.update-form__submit-btn {
+  flex: 1;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.update-form__submit-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.update-form__submit-btn:active {
+  transform: translateY(0);
+}
+
+.update-form__cancel-btn {
+  flex: 1;
+  background: #fff;
+  color: #2563eb;
+  border: 1.5px solid #2563eb;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.update-form__cancel-btn:hover {
+  background: #eff6ff;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .update-form__actions {
+    flex-direction: column;
+  }
+
+  .update-form__radio-group {
+    gap: 20px;
+  }
+}

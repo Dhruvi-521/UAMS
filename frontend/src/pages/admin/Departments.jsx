@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Search, Plus, Monitor, Briefcase, FlaskConical, BookOpen } from "lucide-react";
 import "./Departments.css";
+import Modal from "./ManageDepartmentModel";
 
 const departmentsData = [
   { id: 1, name: "School of Computer Science", shortName: "SCS", description: "6 Programs. Computation", subtitle: "School of Computer Science", programCount: 5 },
@@ -13,6 +14,8 @@ const deptIcons = { 1: Monitor, 2: Briefcase, 3: FlaskConical, 4: BookOpen };
 
 const Departments = ({ onSelectDepartment }) => {
   const [search, setSearch] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const filtered = departmentsData.filter(d =>
     d.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -30,8 +33,8 @@ const Departments = ({ onSelectDepartment }) => {
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-        <button className="add-btn">
-          <Plus size={18} /> Add Department
+        <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+          <Plus size={18} /> Manage Department
         </button>
       </div>
       <div className="card-grid">
@@ -55,6 +58,8 @@ const Departments = ({ onSelectDepartment }) => {
           );
         })}
       </div>
+
+      {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };

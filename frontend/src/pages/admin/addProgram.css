@@ -1,0 +1,270 @@
+/* ── Modal Overlay & Shell (shared via addProgram.css) ── */
+
+.mpm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.mpm-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  animation: mpm-slide-up 0.25s ease;
+}
+
+@keyframes mpm-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mpm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 28px 0;
+}
+
+.mpm-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.mpm-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mpm-close-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* ── Tabs ── */
+
+.mpm-tabs {
+  display: flex;
+  padding: 16px 28px 0;
+  gap: 0;
+  border-bottom: 2px solid #e2e8f0;
+  margin-top: 4px;
+}
+
+.mpm-tab {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  cursor: pointer;
+  position: relative;
+  bottom: -2px;
+  border-bottom: 2px solid transparent;
+  font-family: 'Segoe UI', sans-serif;
+  transition: color 0.15s;
+}
+
+.mpm-tab:hover {
+  color: #475569;
+}
+
+.mpm-tab--active {
+  color: #2563eb;
+  font-weight: 600;
+  border-bottom: 2px solid #2563eb;
+}
+
+.mpm-body {
+  padding: 24px 28px 28px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* ── Add Program Form ── */
+
+.ap-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ap-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ap-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.ap-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #0f172a;
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.ap-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Select */
+.ap-select-wrapper {
+  position: relative;
+}
+
+.ap-select {
+  width: 100%;
+  padding: 11px 40px 11px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #0f172a;
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.ap-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.ap-select-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* Date */
+.ap-date-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ap-date-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748b;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ap-input--date {
+  padding-left: 40px;
+}
+
+/* Radio */
+.ap-radio-group {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.ap-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+}
+
+.ap-radio {
+  width: 17px;
+  height: 17px;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+/* Footer */
+.ap-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.ap-submit-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.ap-submit-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.ap-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .mpm-header,
+  .mpm-tabs,
+  .mpm-body {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .mpm-tab {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

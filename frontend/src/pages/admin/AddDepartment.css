@@ -1,0 +1,267 @@
+/* ─── Backdrop ─────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+/* ─── Container ─────────────────────────────────────────────── */
+.modal-container {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modal-slide-in 0.25s ease;
+}
+
+@keyframes modal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 0 28px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.modal-close-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* ─── Tabs ───────────────────────────────────────────────────── */
+.modal-tabs {
+  display: flex;
+  border-bottom: 1.5px solid #e2e8f0;
+  margin: 20px 28px 0 28px;
+  gap: 4px;
+}
+
+.modal-tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
+  padding: 12px 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.modal-tab-btn:hover {
+  color: #2563eb;
+}
+
+.modal-tab-btn--active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  font-weight: 600;
+}
+
+/* ─── Body ───────────────────────────────────────────────────── */
+.modal-body {
+  padding: 24px 28px 28px 28px;
+}
+
+/* ─── Add Form ───────────────────────────────────────────────── */
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-form__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.add-form__input {
+  width: 100%;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 15px;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.add-form__input::placeholder {
+  color: #94a3b8;
+}
+
+.add-form__input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ─── Date Wrapper ───────────────────────────────────────────── */
+.add-form__date-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.add-form__input--date {
+  padding-right: 44px;
+  cursor: pointer;
+}
+
+.add-form__date-icon {
+  position: absolute;
+  right: 14px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* ─── Radio Group ────────────────────────────────────────────── */
+.add-form__radio-group {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.add-form__radio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #0f172a;
+  cursor: pointer;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+  position: relative;
+}
+
+.add-form__radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.add-form__radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.add-form__radio:checked + .add-form__radio-custom {
+  border-color: #2563eb;
+  background: #fff;
+}
+
+.add-form__radio:checked + .add-form__radio-custom::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: #2563eb;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ─── Submit Button ──────────────────────────────────────────── */
+.add-form__submit-btn {
+  width: 100%;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  margin-top: 4px;
+}
+
+.add-form__submit-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.add-form__submit-btn:active {
+  transform: translateY(0);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .modal-header {
+    padding: 20px 20px 0 20px;
+  }
+
+  .modal-tabs {
+    margin: 16px 20px 0 20px;
+  }
+
+  .modal-body {
+    padding: 20px 20px 24px 20px;
+  }
+
+  .modal-title {
+    font-size: 18px;
+  }
+}

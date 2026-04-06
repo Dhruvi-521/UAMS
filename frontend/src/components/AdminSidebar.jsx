@@ -44,15 +44,15 @@ const Sidebar = () => {
           {isOpen && <span className="link-text">Grade</span>}
         </NavLink>
 
-        <NavLink to="/admin/payroll" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+        {/* <NavLink to="/admin/payroll" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <ReceiptIndianRupee size={24} className="menu-icon" />
           {isOpen && <span className="link-text">Payroll</span>}
-        </NavLink>
+        </NavLink> */}
 
-        <NavLink to="/admin/leaves" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
+        {/* <NavLink to="/admin/leaves" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <Note03Icon size={24} className="menu-icon" />
           {isOpen && <span className="link-text">Leave</span>}
-        </NavLink>
+        </NavLink> */}
 
         <NavLink to="/admin/reports" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <ChartLine size={24} className="menu-icon" />

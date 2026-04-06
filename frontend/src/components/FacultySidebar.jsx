@@ -45,11 +45,10 @@ const FacultySidebar = () => {
           {isOpen && <span className="link-text">Mentoring</span>}
         </NavLink>
 
-        <NavLink to="/faculty/leave-payroll" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
-          {/* <Note03Icon size={24} className="menu-icon"/> */}
+        {/* <NavLink to="/faculty/leave-payroll" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <ReceiptIndianRupee size={24} className="menu-icon" />
           {isOpen && <span className="link-text">Leave & Payroll</span>}
-        </NavLink>
+        </NavLink> */}
 
         <NavLink to="/faculty/reports" className={({ isActive }) => (isActive ? 'active' : 'nav-link')}>
           <ChartLine size={24} className="menu-icon" />

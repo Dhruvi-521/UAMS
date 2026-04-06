@@ -75,7 +75,7 @@ const Dashboard = () => {
 
         {/* ===== Bottom Section ===== */}
         <div className="bottom-layout">
-          <div className="content-card">
+          {/* <div className="content-card">
             <h3>Monthly Payroll Summary</h3>
             <div className="payroll-row">
               <span className="pay-amount">₹12,50,000</span>
@@ -85,7 +85,7 @@ const Dashboard = () => {
               <span className="pay-amount">₹1,80,000</span>
               <span className="pay-status pending">Pending</span>
             </div>
-          </div>
+          </div> */}
 
           <div className="content-card">
             <h3>Quick Actions</h3>

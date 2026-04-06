@@ -1,9 +1,11 @@
+import { CalendarDays, ChevronRight, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { Search, Plus, ChevronRight, Pencil, Trash2, CalendarDays } from "lucide-react";
-import "./ManageCourses.css";
 import Departments from "./Departments";
+import "./ManageCourses.css";
 import Programs from "./Programs";
 import Semesters from "./Semesters";
+import AddCourse from "./addCourse";
+import UpdateCourse from "./updateCourse";
 
 const courseNames = [
   "Web Development", "Database Systems", "Software Engineering",
@@ -18,11 +20,12 @@ const coursesData = {};
     code: `CSCI${101 + ci}`,
     name,
     credits: [4, 3, 3, 3, 3, 4, 3, 4][ci],
+    status: 'Active',
     instructor: name === "Algorithms" ? "Algorithms" : "Professons",
   }));
 });
 
-const CoursesPage = ({ department, program, semester, onBack }) => {
+const CoursesPage = ({ department, program, semester, onBack, onAddCourse, onEditCourse }) => {  // ← onEditCourse added
   const [search, setSearch] = useState("");
   const courses = (coursesData[semester.number] || coursesData[1]).filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -59,17 +62,13 @@ const CoursesPage = ({ department, program, semester, onBack }) => {
       </div>
 
       <div className="courses-action-bar">
-        <div className="search-wrapper">
-          <Search size={16} className="search-icon" />
-          <input className="search-input" placeholder="Search within Courses" />
-        </div>
         <div className="program-badge">
           <span className="program-badge-icon">📘</span>
           {program.name}
         </div>
-        <button className="add-btn"><Plus size={16} /> Add Course</button>
-        <button className="outline-btn"><Pencil size={15} /> Edit Semester Details</button>
-        <button className="outline-btn">Set Exam Dates</button>
+        <button className="add-btn" onClick={onAddCourse}>
+          <Plus size={16} /> Add Course
+        </button>
       </div>
 
       <div className="table-container">
@@ -80,6 +79,7 @@ const CoursesPage = ({ department, program, semester, onBack }) => {
                 <th>Course Code</th>
                 <th>Name</th>
                 <th>Credits</th>
+                <th>Status</th>
                 <th>Instructor</th>
                 <th>Actions</th>
               </tr>
@@ -90,10 +90,13 @@ const CoursesPage = ({ department, program, semester, onBack }) => {
                   <td className="muted">{course.code}</td>
                   <td>{course.name}</td>
                   <td>{course.credits}</td>
+                  <td>{course.status}</td>
                   <td>{course.instructor}</td>
                   <td className="action-td">
-                    <button className="icon-btn"><Pencil size={16} /></button>
-                    <button className="icon-btn"><Trash2 size={16} /></button>
+                    <button className="icon-btn" onClick={() => onEditCourse(course)}>  {/* ← wired */}
+                      <Pencil size={16} /> Edit
+                    </button>
+                    <button className="icon-btn"><Trash2 size={16} /> Delete</button>
                   </td>
                 </tr>
               ))}
@@ -110,7 +113,9 @@ const ManageCourses = () => {
   const [selectedDept, setSelectedDept] = useState(null);
   const [selectedProg, setSelectedProg] = useState(null);
   const [selectedSem, setSelectedSem] = useState(null);
-
+  const [showAddCourse, setShowAddCourse] = useState(false);
+  const [editCourse, setEditCourse] = useState(null);
+  
   const handleSelectDepartment = (dept) => {
     setSelectedDept(dept);
     setPage("programs");
@@ -157,8 +162,27 @@ const ManageCourses = () => {
           program={selectedProg}
           semester={selectedSem}
           onBack={handleBack}
+          onAddCourse={() => setShowAddCourse(true)}
+          onEditCourse={(course) => setEditCourse(course)} 
         />
       )}
+
+      {showAddCourse && (
+        <AddCourse
+          onClose={() => setShowAddCourse(false)}
+          onSubmit={(data) => console.log("New course:", data)}
+        />
+      )}
+
+      {editCourse && (
+        <UpdateCourse
+        course={editCourse}
+        onClose={()=>setEditCourse(null)}
+        onSubmit={(data)=> console.log("Updated Course: ",data)}
+        />
+      )
+
+      }
     </>
   );
 };
