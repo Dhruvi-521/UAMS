@@ -20,7 +20,6 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
   const [programs, setPrograms] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  // ✅ Fetch programs based on department
   useEffect(() => {
     if (department?._id) {
       fetchPrograms();
@@ -38,7 +37,6 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
     }
   };
 
-  // ✅ Search filter
   const filteredPrograms = programs.filter((p) =>
     p.programName?.toLowerCase().includes(search.toLowerCase())
   );
@@ -79,7 +77,6 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
 
       <div className="divider" />
 
-      {/* ✅ Program Cards */}
       <div className="card-grid">
         {filteredPrograms.length > 0 ? (
           filteredPrograms.map((prog, idx) => {
@@ -89,7 +86,7 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
               <div
                 key={prog._id}
                 className="card"
-                onClick={() => onSelectProgram(prog)}
+                onClick={() => onSelectProgram(prog)} // ✅ PASS FULL OBJECT
               >
                 <div className="icon-box">
                   <Icon size={22} color="#2563eb" />
@@ -110,12 +107,11 @@ const Programs = ({ department, onSelectProgram, onBack }) => {
         )}
       </div>
 
-      {/* ✅ Modal */}
       {showModal && (
         <ManageProgramModal
           onClose={() => {
             setShowModal(false);
-            fetchPrograms(); // 🔥 refresh after add
+            fetchPrograms();
           }}
         />
       )}

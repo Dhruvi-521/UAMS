@@ -1,37 +1,59 @@
 import { useState } from "react";
-import { Search, Plus, ChevronRight } from "lucide-react";
+import { Search, ChevronRight, Plus } from "lucide-react";
 import "./Semesters.css";
+import AddCourse from "./addCourse";
 
-const generateSemesters = (count = 6) =>
-  Array.from({ length: count }, (_, i) => ({
-    id: i + 1, number: i + 1, name: `Semester ${i + 1}`, courses: 6, credits: 18,
+// ✅ Dynamic Semester Generator
+const generateSemesters = (years = 3) => {
+  const totalSemesters = years * 2;
+
+  return Array.from({ length: totalSemesters }, (_, i) => ({
+    id: i + 1,
+    number: i + 1,
+    name: `Semester ${i + 1}`,
+    courses: 6,
+    credits: 18,
   }));
-
-const semestersData = {
-  1: generateSemesters(6),
-  2: generateSemesters(4),
-  3: generateSemesters(4),
-  4: generateSemesters(6),
-  5: generateSemesters(3),
 };
 
-const Semesters = ({ department, program, onSelectSemester, onBack, onBackToDepartments }) => {
+const Semesters = ({
+  department,
+  program,
+  onSelectSemester,
+  onBack,
+  onBackToDepartments
+}) => {
   const [search, setSearch] = useState("");
-  const semesters = (semestersData[program.id] || generateSemesters(6)).filter(s =>
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState(null);
+
+  const semesters = generateSemesters(program.totalYearsProgram).filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="page">
       <div className="breadcrumb">
-        <span className="breadcrumb-link" onClick={onBackToDepartments}>Departments</span>
+        <span className="breadcrumb-link" onClick={onBackToDepartments}>
+          Departments
+        </span>
         <ChevronRight size={14} />
-        <span className="breadcrumb-link" onClick={onBack}>{department.shortName}</span>
+
+        <span className="breadcrumb-link" onClick={onBack}>
+          {department.DepartmentName}
+        </span>
         <ChevronRight size={14} />
-        <span className="breadcrumb-active">{program.name}</span>
+
+        <span className="breadcrumb-active">
+          {program.programName}
+        </span>
       </div>
+
       <div className="top-row">
-        <h1 className="page-title">{program.name} Semesters Structure</h1>
+        <h1 className="page-title">
+          {program.programName} Semesters Structure
+        </h1>
+
         <div className="top-right">
           <div className="search-wrapper">
             <Search size={16} className="search-icon" />
@@ -39,26 +61,45 @@ const Semesters = ({ department, program, onSelectSemester, onBack, onBackToDepa
               className="search-input"
               placeholder="Search semester"
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          {/* <button className="add-btn">
-            <Plus size={16} /> Add Semester
-          </button> */}
         </div>
       </div>
+
       <div className="divider" />
+
       <div className="card-grid">
-        {semesters.map(sem => (
-          <div key={sem.id} className="card" onClick={() => onSelectSemester(sem)}>
+        {semesters.map((sem) => (
+          <div
+            key={sem.id}
+            className="card"
+            onClick={() =>
+              onSelectSemester({
+                ...sem,
+                programId: program._id,
+                programName: program.programName,
+              })
+            }
+          >
             <div className="num-badge">{sem.number}</div>
             <div className="sem-name">{sem.name}</div>
+
             <div className="card-meta">
-              {sem.courses} Courses <span className="dot">•</span> {sem.credits} Credits
+              {sem.courses} Courses <span className="dot">•</span>{" "}
+              {sem.credits} Credits
             </div>
           </div>
         ))}
       </div>
+
+      {/* ✅ Add Course Modal */}
+      {showModal && (
+        <AddCourse
+          semesterData={selectedSemester}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 };
