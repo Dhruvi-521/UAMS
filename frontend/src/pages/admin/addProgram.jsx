@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { ChevronDown, Calendar } from "lucide-react";
 import "./addProgram.css";
 
@@ -16,15 +17,50 @@ const addProgram = ({ onClose }) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = () => {
-    console.log("Add Program:", formData);
+const handleSubmit = async () => {
+  try {
+    // convert data for backend
+    const dataToSend = {
+      programName: formData.programName,
+      departmentName: formData.departmentName, // now this is _id
+      totalYearsProgram: parseInt(formData.totalYears),
+      totalCredit: Number(formData.totalCreditHour),
+      isActive: formData.status === "active"
+    };
+
+    // remove empty date
+    if (formData.startDate) {
+      dataToSend.StartDate = formData.startDate;
+    }
+
+    const res = await axios.post(
+      "http://localhost:5000/api/programs",
+      dataToSend
+    );
+
+    console.log(res.data);
+    alert("Program Added Successfully");
+
     onClose();
-  };
+
+  } catch (error) {
+    console.log(error);
+    alert("Error adding program");
+  }
+};
+
+  const [departments, setDepartments] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/departments")
+      .then(res => setDepartments(res.data))
+      .catch(err => console.log(err));
+  }, []);
 
   return (
     <div className="ap-form">
       {/* Department Name */}
-      <div className="ap-field">
+      {/* <div className="ap-field">
         <label className="ap-label">Department Name</label>
         <input
           className="ap-input"
@@ -33,6 +69,23 @@ const addProgram = ({ onClose }) => {
           value={formData.departmentName}
           onChange={(e) => handleChange("departmentName", e.target.value)}
         />
+      </div> */}
+
+      <div className="ap-select-wrapper">
+        <select
+          className="ap-select"
+          value={formData.departmentName}
+          onChange={(e) => handleChange("departmentName", e.target.value)}
+        >
+          <option value="">Select Department</option>
+
+          {departments.map((dept) => (
+            <option key={dept._id} value={dept._id}>
+              {dept.DepartmentName}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={16} className="ap-select-icon" />
       </div>
 
       {/* Program Name */}
