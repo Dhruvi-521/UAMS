@@ -3,7 +3,6 @@ const Program = require('../models/Program');
 // ✅ CREATE Program
 exports.addProgram = async (req, res) => {
     try {
-        // remove empty StartDate (for default to work)
         if (!req.body.StartDate) {
             delete req.body.StartDate;
         }
@@ -22,50 +21,52 @@ exports.addProgram = async (req, res) => {
     }
 };
 
-
-// ✅ GET All Programs (with department details 🔥)
+// ✅ GET All Programs
 exports.getPrograms = async (req, res) => {
     try {
-        const data = await Program.find()
-            .populate('departmentName');  // 🔥 join with Department
-
+        const data = await Program.find().populate('departmentName');
         res.json(data);
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-
-// ✅ UPDATE Program
+// ✅ UPDATE Program (FIXED 🔥)
 exports.updateProgram = async (req, res) => {
     try {
         const updated = await Program.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            {
+                $set: req.body,        // ✅ correct update
+                $inc: { __v: 1 }       // ✅ increment version
+            },
             { new: true }
         );
 
-        res.json(updated);
+        if (!updated) {
+            return res.status(404).json({ message: "Program not found" });
+        }
+
+        res.json({
+            message: "Program updated successfully",
+            data: updated,
+            updateCount: updated.__v   // optional
+        });
 
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 // ✅ DELETE Program
 exports.deleteProgram = async (req, res) => {
     try {
         await Program.findByIdAndDelete(req.params.id);
-
         res.json({ message: "Program deleted successfully" });
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 // ✅ GET Programs by Department
 exports.getProgramsByDepartment = async (req, res) => {
@@ -73,8 +74,8 @@ exports.getProgramsByDepartment = async (req, res) => {
         const { departmentId } = req.params;
 
         const programs = await Program.find({
-            departmentName: departmentId   // filtering by department
-        }).populate('departmentName'); // optional (for extra info)
+            departmentName: departmentId
+        }).populate('departmentName');
 
         res.json(programs);
 

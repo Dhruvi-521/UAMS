@@ -1,22 +1,73 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { ChevronDown } from "lucide-react";
 import "./UpdateDepartment.css";
 
-const departmentOptions = [
-  { id: 1, name: "Engineering Department", code: "ENG-001", head: "Dr. Amelia Chen" },
-  { id: 2, name: "School of Business", code: "BUS-002", head: "Prof. James Reed" },
-  { id: 3, name: "School of Sciences", code: "SCI-003", head: "Dr. Priya Sharma" },
-  { id: 4, name: "School of Arts", code: "ART-004", head: "Dr. Lucas Morin" },
-];
-
 const UpdateDepartment = () => {
+  const [departments, setDepartments] = useState([]);
   const [selectedId, setSelectedId] = useState("");
-  const [status, setStatus] = useState("active");
+  const [status, setStatus] = useState(true);
+  // const [facultyList, setFacultyList] = useState([]);
+  const [formData, setFormData] = useState({
+    DepartmentName: "",
+    HeadOfDepartment: ""
+  });
 
-  const selectedDept = departmentOptions.find(d => d.id === parseInt(selectedId));
+  // GET DEPARTMENT DATA FROM DB
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/departments")
+      .then(res => setDepartments(res.data))
+      .catch(err => console.log(err));
+  }, []);
 
-  const handleSubmit = () => {
-    console.log("Update Department:", { selectedDept, status });
+  // GET FACULTY DATA FROM DB
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/faculty")
+      .then(res => setFacultyList(res.data))
+      .catch(err => console.log(err));
+  }, []);
+
+  const selectedDept = departments.find(d => d._id === selectedId);
+
+  // HANDLE SELECT
+  const handleSelect = (id) => {
+    setSelectedId(id);
+
+    const dept = departments.find(d => d._id === id);
+    if (dept) {
+      setFormData({
+        DepartmentName: dept.DepartmentName,
+        HeadOfDepartment: dept.HeadOfDepartment
+      });
+      setStatus(dept.isActive);
+    }
+  };
+
+  // HANDLE CHANGE
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // UPDATE API
+  const handleSubmit = async () => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/update-department/${selectedId}`,
+        {
+          ...formData,
+          isActive: status
+        }
+      );
+
+      alert("Department Updated Successfully");
+
+    } catch (error) {
+      console.log(error);
+      alert("Error updating department");
+    }
   };
 
   return (
@@ -30,11 +81,13 @@ const UpdateDepartment = () => {
             id="selectDepartment"
             className="update-form__select"
             value={selectedId}
-            onChange={e => setSelectedId(e.target.value)}
+            onChange={e => handleSelect(e.target.value)}
           >
             <option value="" disabled>Select a department</option>
-            {departmentOptions.map(dept => (
-              <option key={dept.id} value={dept.id}>{dept.name}</option>
+            {departments.map(dept => (
+              <option key={dept._id} value={dept._id}>
+                {dept.DepartmentName}
+              </option>
             ))}
           </select>
           <ChevronDown size={18} className="update-form__select-icon" />
@@ -47,25 +100,37 @@ const UpdateDepartment = () => {
             <span className="update-form__info-label">Department Name</span>
             <input
               type="text"
+              name="DepartmentName"
               className="update-form__input"
-              defaultValue={selectedDept.name}
+              value={formData.DepartmentName}
+              onChange={handleChange}
             />
           </div>
-          {/* <div className="update-form__info-item">
-            <span className="update-form__info-label">Head of Department</span>
-            <input
-              type="text"
-              className="update-form__input"
-              value={selectedDept.code}
-            />
-          </div> */}
+
           <div className="update-form__info-item">
             <span className="update-form__info-label">Head of Department</span>
             <div className="update-form__select-wrapper">
-              <select className="update-form__select" defaultValue={selectedDept.head}>
-                <option>{selectedDept.head}</option>
-              </select>
-              <ChevronDown size={18} className="update-form__select-icon" />
+              <input
+                type="text"
+                name="HeadOfDepartment"
+                className="update-form__input"
+                value={formData.HeadOfDepartment}
+                onChange={handleChange}
+              />
+              {/* <select
+                name="HeadOfDepartment"
+                className="update-form__select"
+                value={formData.HeadOfDepartment}
+                onChange={handleChange}
+              >
+                <option value="">Select HOD</option>
+                {facultyList.map(fac => (
+                  <option key={fac._id} value={`${fac.firstName} ${fac.lastName}`}>
+                    {fac.firstName} {fac.lastName}
+                  </option>
+                ))}
+              </select> */}
+              {/* <ChevronDown size={18} className="update-form__select-icon" /> */}
             </div>
           </div>
         </div>
@@ -76,23 +141,20 @@ const UpdateDepartment = () => {
           <label className="update-form__radio-label">
             <input
               type="radio"
-              name="update-status"
-              value="active"
+              checked={status === true}
+              onChange={() => setStatus(true)}
               className="update-form__radio"
-              checked={status === "active"}
-              onChange={() => setStatus("active")}
             />
             <span className="update-form__radio-custom"></span>
             Active
           </label>
+
           <label className="update-form__radio-label">
             <input
               type="radio"
-              name="update-status"
-              value="inactive"
+              checked={status === false}
+              onChange={() => setStatus(false)}
               className="update-form__radio"
-              checked={status === "inactive"}
-              onChange={() => setStatus("inactive")}
             />
             <span className="update-form__radio-custom"></span>
             Inactive
