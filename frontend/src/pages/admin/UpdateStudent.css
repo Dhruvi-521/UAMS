@@ -1,0 +1,456 @@
+.us-wrapper {
+    padding: 28px;
+    min-height: 100vh;
+    background: #f0f4f8;
+    font-family: "DM Sans", "Segoe UI", sans-serif;
+}
+
+/* Header */
+.us-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.us-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e40af;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.us-back-btn:hover {
+    background: #1d3a9e;
+}
+
+.us-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Tabs */
+.us-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 20px;
+    background: transparent;
+}
+
+.us-tab {
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+}
+
+.us-tab.active {
+    color: #1e40af;
+    border-bottom-color: #1e40af;
+    font-weight: 700;
+}
+
+.us-tab:hover:not(.active) {
+    color: #1e40af;
+    background: #f8fafc;
+}
+
+/* Card */
+.us-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07);
+    border: 1px solid #e2e8f0;
+}
+
+.us-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+/* Section Label */
+.us-section-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 12px;
+    margin-top: 20px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.us-section-label:first-of-type {
+    margin-top: 0;
+}
+
+/* Grids */
+.us-grid {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 4px;
+}
+
+.us-grid-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.us-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.us-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.us-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* Field */
+.us-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+
+.us-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.us-input {
+    padding: 9px 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #1e293b;
+    background: #f8fafc;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s, background 0.15s;
+    width: 100%;
+}
+
+.us-input:focus {
+    border-color: #1e40af;
+    background: #fff;
+}
+
+.us-date-wrap {
+    position: relative;
+}
+
+.us-date-wrap .us-input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 12px;
+}
+
+/* Custom Select */
+.us-custom-select-wrap {
+    position: relative;
+}
+
+.us-custom-select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #1e293b;
+    background: #f8fafc;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.15s;
+    text-align: left;
+}
+
+.us-custom-select:hover,
+.us-custom-select:focus {
+    border-color: #1e40af;
+    background: #fff;
+    outline: none;
+}
+
+.us-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    z-index: 200;
+    overflow: hidden;
+    animation: us-drop-in 0.15s ease;
+}
+
+@keyframes us-drop-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.us-dropdown-item {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.12s;
+    font-family: inherit;
+}
+
+.us-dropdown-item:hover {
+    background: #f0f7ff;
+    color: #1e40af;
+}
+
+.us-dropdown-item.selected {
+    background: #eff6ff;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* Radio Group */
+.us-radio-group {
+    display: flex;
+    gap: 24px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+.us-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+    user-select: none;
+}
+
+.us-radio-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    transition: border-color 0.15s;
+    flex-shrink: 0;
+}
+
+.us-radio-circle.checked {
+    border-color: #1e40af;
+}
+
+.us-radio-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1e40af;
+}
+
+/* Footer */
+.us-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.us-cancel-btn {
+    padding: 10px 24px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+}
+
+.us-cancel-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.us-submit-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #1e40af;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.us-submit-btn:hover {
+    background: #1d3a9e;
+}
+
+/* Excel Drop Zone */
+.us-excel-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    padding: 48px 24px;
+    background: #f8fafc;
+    transition: border-color 0.15s;
+}
+
+.us-excel-drop:hover {
+    border-color: #93c5fd;
+    background: #f0f7ff;
+}
+
+.us-excel-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.us-excel-sub {
+    font-size: 13px;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.us-excel-btn {
+    margin-top: 8px;
+    padding: 9px 22px;
+    background: #1e40af;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.us-excel-btn:hover {
+    background: #1d3a9e;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+    .us-grid-5 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .us-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .us-wrapper {
+        padding: 16px 14px 40px;
+    }
+
+    .us-title {
+        font-size: 20px;
+    }
+
+    .us-card {
+        padding: 18px 16px;
+    }
+
+    .us-grid-5 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .us-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .us-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .us-grid-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .us-footer {
+        flex-direction: column-reverse;
+    }
+
+    .us-cancel-btn,
+    .us-submit-btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .us-wrapper {
+        padding: 14px 12px 40px;
+    }
+
+    .us-grid-5,
+    .us-grid-4,
+    .us-grid-3,
+    .us-grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .us-tab {
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+
+    .us-radio-group {
+        gap: 16px;
+    }
+}

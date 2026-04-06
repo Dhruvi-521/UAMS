@@ -6,6 +6,7 @@ import {
 import { useState } from "react";
 import "./ManageStudent.css";
 import AddStudent from "./addStudent";
+import UpdateStudentForm from "./UpdateStudentForm";
 
 const studentData = [
     { id: "S-20240001", name: "Aiden Parker", department: "Computer Science", semester: "Semester 3", status: "Active", email: "aiden.parker@student.edu", phone: "+1 (555) 201-3341", joinDate: "Aug 12, 2022", dob: "Mar 5, 2003", cgpa: "3.85", address: "42 Maple Ave, Boston, MA 02101", courses: ["CS-101", "CS-201", "CS-301"], avatar: "AP", gender: "Male", guardian: "Robert Parker", guardianPhone: "+1 (555) 201-0001" },
@@ -68,9 +69,23 @@ export default function StudentManagement() {
     const [semesterFilter, setSemesterFilter] = useState("All Semesters");
     const [statusFilter, setStatusFilter] = useState("All Status");
 
+    // ── Edit state ──
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingStudent, setEditingStudent] = useState(null);
+
     // ── Render Add Student page ──
     if (view === "addStudent") {
         return <AddStudent onBack={() => setView("list")} />;
+    }
+
+    // ── Render Update Student page ──
+    if (isEditing && editingStudent) {
+        return (
+            <UpdateStudentForm
+                student={editingStudent}
+                onBack={() => { setIsEditing(false); setEditingStudent(null); }}
+            />
+        );
     }
 
     const filtered = studentData.filter((s) => {
@@ -157,7 +172,6 @@ export default function StudentManagement() {
                         <h1 className="sm-title">Student Management</h1>
                     </div>
                     <div className="sm-header-actions">
-                        {/* ── UPDATED BUTTON ── */}
                         <button className="sm-btn-primary" onClick={() => setView("addStudent")}>
                             <UserPlus size={15} /> Add Student
                         </button>
@@ -226,7 +240,12 @@ export default function StudentManagement() {
                                         <td>
                                             <div className="sm-action-btns" onClick={e => e.stopPropagation()}>
                                                 <button className="sm-act-btn sm-act-view" onClick={() => openProfile(s)}><Eye size={13} /></button>
-                                                <button className="sm-act-btn sm-act-edit"><Pencil size={13} /></button>
+                                                <button
+                                                    className="sm-act-btn sm-act-edit"
+                                                    onClick={() => { setEditingStudent(s); setIsEditing(true); }}
+                                                >
+                                                    <Pencil size={13} />
+                                                </button>
                                                 <button className="sm-act-btn sm-act-del"><Trash2 size={13} /></button>
                                             </div>
                                         </td>
@@ -252,7 +271,12 @@ export default function StudentManagement() {
                             </div>
                             <div className="sm-card-actions" onClick={e => e.stopPropagation()}>
                                 <button className="sm-card-view-btn" onClick={() => openProfile(s)}><Eye size={14} /> View Profile</button>
-                                <button className="sm-card-icon-btn edit"><Pencil size={14} color="#64748b" /></button>
+                                <button
+                                    className="sm-card-icon-btn edit"
+                                    onClick={(e) => { e.stopPropagation(); setEditingStudent(s); setIsEditing(true); }}
+                                >
+                                    <Pencil size={14} color="#64748b" />
+                                </button>
                                 <button className="sm-card-icon-btn del"><Trash2 size={14} /></button>
                             </div>
                         </div>
@@ -294,10 +318,6 @@ export default function StudentManagement() {
                                     <span className="sm-sb-cgpa-label">CGPA</span>
                                     <CGPABadge cgpa={selectedStudent.cgpa} />
                                     <span className="sm-sb-sem-tag">{selectedStudent.semester}</span>
-                                </div>
-                                <div className="sm-sb-desktop-btns">
-                                    <button className="sm-sb-btn-blue">Update Details</button>
-                                    <button className="sm-sb-btn-red">Delete Student</button>
                                 </div>
                             </div>
 

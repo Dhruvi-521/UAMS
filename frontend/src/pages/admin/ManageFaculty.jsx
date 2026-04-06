@@ -5,6 +5,7 @@ import {
 import { useState } from "react";
 import "./ManageFaculty.css";
 import AddFaculty from "./AddFaculty";
+import UpdateFacultyForm from "./UpdateFacultyForm";
 
 const facultyData = [
   { id: "F-103300001", name: "Dr. Alisha Singh",         department: "Computer Science", designation: "Professor",           status: "Active",   email: "alisingh@gmail.com",   joinDate: "Aug 18, 1985", experience: "35+ years", specializations: ["AI", "Engineering"],        degree: "Ph.D. in Computer Science (UBC)",          primaryDept: "Computer Science", office: "252 Miandresa, Suite 8800", currentLoad: "4 Courses", avatar: "AS" },
@@ -57,8 +58,22 @@ export default function FacultyManagement() {
   const [tempAssigned,    setTempAssigned]    = useState([]);
   const [showAddForm,     setShowAddForm]     = useState(false);
 
+  // ── Edit state ──
+  const [isEditing,      setIsEditing]      = useState(false);
+  const [currentFaculty, setCurrentFaculty] = useState(null);
+
   // ── Show Add Faculty page ──
   if (showAddForm) return <AddFaculty onBack={() => setShowAddForm(false)} />;
+
+  // ── Show Update Faculty page ──
+  if (isEditing && currentFaculty) {
+    return (
+      <UpdateFacultyForm
+        faculty={currentFaculty}
+        onBack={() => { setIsEditing(false); setCurrentFaculty(null); }}
+      />
+    );
+  }
 
   const filtered = facultyData.filter(f =>
     f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -131,7 +146,12 @@ export default function FacultyManagement() {
                     <td>
                       <div className="fm-action-btns" onClick={e => e.stopPropagation()}>
                         <button className="fm-act-btn fm-act-view" onClick={() => openProfile(f)}><Eye size={13}/></button>
-                        <button className="fm-act-btn fm-act-edit"><Pencil size={13}/></button>
+                        <button
+                          className="fm-act-btn fm-act-edit"
+                          onClick={() => { setCurrentFaculty(f); setIsEditing(true); }}
+                        >
+                          <Pencil size={13}/>
+                        </button>
                         <button className="fm-act-btn fm-act-del"><Trash2 size={13}/></button>
                       </div>
                     </td>
@@ -157,7 +177,12 @@ export default function FacultyManagement() {
               </div>
               <div className="fm-card-actions" onClick={e => e.stopPropagation()}>
                 <button className="fm-card-view-btn" onClick={() => openProfile(f)}><Eye size={14}/> View Profile</button>
-                <button className="fm-card-icon-btn edit"><Pencil size={14} color="#64748b"/></button>
+                <button
+                  className="fm-card-icon-btn edit"
+                  onClick={(e) => { e.stopPropagation(); setCurrentFaculty(f); setIsEditing(true); }}
+                >
+                  <Pencil size={14} color="#64748b"/>
+                </button>
                 <button className="fm-card-icon-btn del"><Trash2 size={14}/></button>
               </div>
             </div>
@@ -195,10 +220,6 @@ export default function FacultyManagement() {
                 </div>
                 <h2 className="fm-sb-name">{selectedFaculty.name}</h2>
                 <p className="fm-sb-id">{selectedFaculty.id.replace("F-", "")}</p>
-                <div className="fm-sb-desktop-btns">
-                  <button className="fm-sb-btn-blue">Update Details</button>
-                  <button className="fm-sb-btn-red">Delete Faculty</button>
-                </div>
               </div>
 
               {/* Tabs */}

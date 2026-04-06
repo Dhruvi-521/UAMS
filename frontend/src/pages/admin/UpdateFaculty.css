@@ -1,0 +1,352 @@
+.uf-wrapper {
+    padding: 28px;
+    min-height: 100vh;
+    background: #f0f4f8;
+    font-family: "DM Sans", "Segoe UI", sans-serif;
+}
+
+/* ── Header ── */
+.uf-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1.5px solid #e2e8f0;
+}
+
+.uf-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    color: #374151;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s;
+}
+
+.uf-back-btn:hover {
+    color: #1e40af;
+}
+
+.uf-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* ── Card ── */
+.uf-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07);
+    border: 1px solid #e2e8f0;
+}
+
+/* ── Section Labels ── */
+.uf-section-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.uf-section-label:first-of-type {
+    margin-top: 0;
+}
+
+/* ── Grids ── */
+.uf-grid {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.uf-grid-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.uf-grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.uf-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.uf-grid-addr {
+    grid-template-columns: 1fr 2fr;
+    align-items: start;
+}
+
+.uf-addr-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* ── Fields ── */
+.uf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.uf-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.uf-input {
+    padding: 10px 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    background: #fff;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+}
+
+.uf-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.uf-textarea {
+    padding: 10px 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    background: #fff;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 90px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+}
+
+.uf-textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ── Icon Input ── */
+.uf-icon-input-wrap {
+    position: relative;
+}
+
+.uf-input-icon {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.uf-input-icon-pad {
+    padding-left: 34px;
+}
+
+/* ── Custom Dropdown ── */
+.uf-custom-select-wrap {
+    position: relative;
+}
+
+.uf-custom-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    text-align: left;
+}
+
+.uf-custom-select:hover,
+.uf-custom-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+.uf-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    z-index: 300;
+    overflow: hidden;
+    animation: uf-drop-in 0.15s ease;
+}
+
+@keyframes uf-drop-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.uf-dropdown-item {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s;
+}
+
+.uf-dropdown-item:hover {
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+.uf-dropdown-item.selected {
+    background: #eff6ff;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* ── Footer ── */
+.uf-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.uf-cancel-btn {
+    padding: 11px 32px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+}
+
+.uf-cancel-btn:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.uf-submit-btn {
+    padding: 11px 40px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.uf-submit-btn:hover {
+    background: #1d4ed8;
+}
+
+/* ════════════════════
+   RESPONSIVE
+════════════════════ */
+
+@media (max-width: 1100px) {
+    .uf-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .uf-grid-addr {
+        grid-template-columns: 1fr;
+    }
+
+    .uf-addr-right {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .uf-wrapper {
+        padding: 16px 14px 40px;
+    }
+
+    .uf-card {
+        padding: 20px 16px;
+    }
+
+    .uf-title {
+        font-size: 19px;
+    }
+
+    .uf-grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .uf-grid-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .uf-grid-4 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .uf-addr-right {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .uf-footer {
+        flex-direction: column-reverse;
+    }
+
+    .uf-cancel-btn,
+    .uf-submit-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .uf-wrapper {
+        padding: 14px 12px 40px;
+    }
+
+    .uf-grid-3,
+    .uf-grid-4,
+    .uf-addr-right {
+        grid-template-columns: 1fr;
+    }
+
+    .uf-title {
+        font-size: 17px;
+    }
+}
