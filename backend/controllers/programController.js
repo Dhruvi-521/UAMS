@@ -65,3 +65,20 @@ exports.deleteProgram = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+// ✅ GET Programs by Department
+exports.getProgramsByDepartment = async (req, res) => {
+    try {
+        const { departmentId } = req.params;
+
+        const programs = await Program.find({
+            departmentName: departmentId   // filtering by department
+        }).populate('departmentName'); // optional (for extra info)
+
+        res.json(programs);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar } from "lucide-react";
 import "./AddDepartment.css";
 import axios from "axios";
@@ -10,6 +10,8 @@ const AddDepartment = () => {
     StartDate: "",
     isActive: false,
   });
+
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
