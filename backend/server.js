@@ -18,8 +18,14 @@ app.use('/api', require('./routes/programRoutes'));
 
 app.use('/api', require('./routes/courseRoutes'));
 
-// app.use('/api', require('./routes/facultyRoutes'));
+app.use('/api', require('./routes/facultyRoutes'));
 
+// app.use("/api/faculty", facultyRoutes);
+
+// ... other imports students 
+const studentRoutes = require("./routes/studentRoutes");
+// ... other middleware
+app.use("/api/students", studentRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

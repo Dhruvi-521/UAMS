@@ -1,29 +1,87 @@
-import { useState } from "react";
+import axios from "axios";
 import { Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
 import "./addManualStudent.css";
 
-const PROGRAMS = ["B.Tech.", "B.Sc.", "M.Tech.", "MBA", "PhD"];
-const YEAR_OPTIONS = ["2 Year", "3 Year", "5 Year"];
 const GENDERS = ["Male", "Female", "Other"];
 
+
+
 const initialForm = {
-    department: "", program: "", totalYears: "3 Year", creditHour: "140", startDate: "",
-    studentId: "", rollNumber: "",
-    firstName: "", lastName: "", dob: "", gender: "",
-    email: "", mobile: "", parentContact: "",
+    program: "",
+    semester: "",
+    division: "",
+    createdDate: "",
+    studentId: "",
+    rollNumber: "",
+
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    dob: "",
+    gender: "",
+
+    address: "",
+    country: "",
+    state: "",
+    city: "",
+    pincode: "",
+
+    universityEmail: "",
+    personalEmail: "",
+    mobile: "",
+    parentContact: "",
+
     status: "Inactive"
 };
 
 export default function AddManualStudent() {
     const [form, setForm] = useState(initialForm);
-    const [yearOpen, setYearOpen] = useState(false);
+    const [program, setProgram] = useState([]);
 
-    const set = (field) => (e) => setForm(prev => ({ ...prev, [field]: e.target.value }));
-    const setVal = (field, val) => setForm(prev => ({ ...prev, [field]: val }));
+    useEffect(() => {
+        axios.get("http://localhost:5000/api/programs")
+            .then(res => setProgram(res.data))
+            .catch(err => console.log(err))
+    }, [])
+    const set = (field) => (e) =>
+        setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-    const handleSubmit = () => {
-        console.log("New Student:", form);
-        alert("Student added successfully!");
+    const setVal = (field, val) =>
+        setForm((prev) => ({ ...prev, [field]: val }));
+
+    const handleSubmit = async () => {
+        // 1. Basic Validation: Ensure a program is selected
+        if (!form.program) {
+            alert("Please select a Program");
+            return;
+        }
+
+        try {
+            // 2. Prepare the data for the backend
+            const payload = {
+                ...form,
+                // Convert strings to Numbers to match your Mongoose Schema
+                semester: Number(form.semester),
+                rollNumber: Number(form.rollNumber),
+                // Ensure dates aren't empty strings if they are optional
+                dob: form.dob || null,
+                createdDate: form.createdDate || new Date()
+            };
+
+            console.log("Submitting Cleaned Payload:", payload);
+
+            const response = await axios.post("http://localhost:5000/api/students/add", payload);
+
+            if (response.data.success) {
+                alert("Student added successfully!");
+                setForm(initialForm);
+            }
+        } catch (err) {
+            console.error("Server Error Details:", err.response?.data);
+            // Show the specific error message from the backend if available
+            alert(`Error: ${err.response?.data?.message || "Failed to add student"}`);
+        }
     };
 
     return (
@@ -33,53 +91,81 @@ export default function AddManualStudent() {
             {/* Academic Information */}
             <div className="ams-section">
                 <div className="ams-section-label">Academic Information</div>
+
                 <div className="ams-grid-5">
                     <div className="ams-field">
-                        <label className="ams-label">Department Name</label>
-                        <input className="ams-input" placeholder="e.g. Engineering" value={form.department} onChange={set("department")} />
-                    </div>
-                    <div className="ams-field">
                         <label className="ams-label">Program Name</label>
-                        <input className="ams-input" placeholder="e.g. B.Tech." value={form.program} onChange={set("program")} />
+                        <select
+                            className="ams-input"
+                            value={form.program}
+                            onChange={set("program")}
+                        >
+                            <option value="">-- Select Program --</option> {/* ADD THIS */}
+                            {program.map((prog) => (
+                                <option key={prog._id} value={prog._id}>
+                                    {prog.programName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <div className="ams-field ams-field-rel">
-                        <label className="ams-label">Total Years Program</label>
-                        <div className="ams-custom-select" onClick={() => setYearOpen(o => !o)}>
-                            <span>{form.totalYears}</span>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        </div>
-                        {yearOpen && (
-                            <div className="ams-dropdown">
-                                {YEAR_OPTIONS.map(y => (
-                                    <div key={y} className={`ams-dropdown-item${form.totalYears === y ? " selected" : ""}`}
-                                        onClick={() => { setVal("totalYears", y); setYearOpen(false); }}>
-                                        {y}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+
                     <div className="ams-field">
-                        <label className="ams-label">Total Credit Hour</label>
-                        <input className="ams-input" placeholder="140" value={form.creditHour} onChange={set("creditHour")} type="number" />
+                        <label className="ams-label">Semester</label>
+                        <input
+                            type="text"
+                            className="ams-input"
+                            value={form.semester}
+                            onChange={set("semester")}
+                            placeholder="Enter Semester"
+                        />
                     </div>
+
+                    <div className="ams-field">
+                        <label className="ams-label">Division</label>
+                        <input
+                            type="text"
+                            className="ams-input"
+                            value={form.division}
+                            onChange={set("division")}
+                            placeholder="Enter Division (eg.A)"
+                        />
+                    </div>
+
                     <div className="ams-field ams-field-rel">
-                        <label className="ams-label">Start Date</label>
+                        <label className="ams-label">Created Date</label>
                         <div className="ams-date-wrap">
-                            <input className="ams-input ams-date-input" placeholder="Select Date" value={form.startDate}
-                                onChange={set("startDate")} type="date" />
+                            <input
+                                type="date"
+                                className="ams-input ams-date-input"
+                                value={form.createdDate}
+                                onChange={set("createdDate")}
+                            />
                             <Calendar size={15} className="ams-date-icon" />
                         </div>
                     </div>
                 </div>
+
                 <div className="ams-grid-2" style={{ marginTop: 14 }}>
                     <div className="ams-field">
                         <label className="ams-label">Student ID</label>
-                        <input className="ams-input" placeholder="" value={form.studentId} onChange={set("studentId")} />
+                        <input
+                            type="text"
+                            className="ams-input"
+                            value={form.studentId}
+                            onChange={set("studentId")}
+                            placeholder="Enter Student ID (eg. SU252701)"
+                        />
                     </div>
+
                     <div className="ams-field">
                         <label className="ams-label">Roll Number</label>
-                        <input className="ams-input" placeholder="" value={form.rollNumber} onChange={set("rollNumber")} />
+                        <input
+                            type="text"
+                            className="ams-input"
+                            value={form.rollNumber}
+                            onChange={set("rollNumber")}
+                            placeholder="Enter Class roll number"
+                        />
                     </div>
                 </div>
             </div>
@@ -87,44 +173,126 @@ export default function AddManualStudent() {
             {/* Personal Information */}
             <div className="ams-section">
                 <div className="ams-section-label">Personal Information</div>
+
                 <div className="ams-grid-4">
+
                     <div className="ams-field">
                         <label className="ams-label">First Name</label>
-                        <input className="ams-input" placeholder="First Name" value={form.firstName} onChange={set("firstName")} />
+                        <input className="ams-input" placeholder="First Name"
+                            value={form.firstName} onChange={set("firstName")} />
                     </div>
+
+                    <div className="ams-field">
+                        <label className="ams-label">Middle Name</label>
+                        <input className="ams-input" placeholder="Middle Name"
+                            value={form.middleName} onChange={set("middleName")} />
+                    </div>
+
                     <div className="ams-field">
                         <label className="ams-label">Last Name</label>
-                        <input className="ams-input" placeholder="Last Name" value={form.lastName} onChange={set("lastName")} />
+                        <input className="ams-input" placeholder="Last Name"
+                            value={form.lastName} onChange={set("lastName")} />
                     </div>
+
                     <div className="ams-field">
                         <label className="ams-label">Date of Birth</label>
-                        <input className="ams-input" placeholder="DOB" value={form.dob} onChange={set("dob")} type="date" />
+                        <input type="date" className="ams-input"
+                            value={form.dob} onChange={set("dob")} />
                     </div>
-                    <div className="ams-field">
-                        <label className="ams-label">Gender</label>
-                        <select className="ams-input ams-select" value={form.gender} onChange={set("gender")}>
-                            <option value="">Gender</option>
-                            {GENDERS.map(g => <option key={g}>{g}</option>)}
-                        </select>
+
+                    <select className="ams-input"
+                        value={form.gender}
+                        onChange={set("gender")}>
+                        <option value="">Gender</option>
+                        {GENDERS.map(g => (
+                            <option key={g} value={g}>{g}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            {/* Address */}
+            <div className="ams-section">
+                <div className="ams-section-label">Address Information</div>
+
+                <div className="ams-grid-4">
+
+                    <div>
+                        <label className="ams-label">Address</label>
+
+                        <input className="ams-input" placeholder="Address"
+                            value={form.address} onChange={set("address")} />
+                    </div>
+
+                    <div>
+                        <label className="ams-label">Country</label>
+
+                        <input className="ams-input" placeholder="Country"
+                            value={form.country} onChange={set("country")} />
+                    </div>
+
+                    <div>
+                        <label className="ams-label">State</label>
+
+                        <input className="ams-input" placeholder="State"
+                            value={form.state} onChange={set("state")} />
+                    </div>
+
+                    <div>
+                        <label className="ams-label">City</label>
+
+                        <input className="ams-input" placeholder="City"
+                            value={form.city} onChange={set("city")} />
+                    </div>
+                    <div>
+                        <label className="ams-label">Pin Code</label>
+                        <input className="ams-input" placeholder="Pin Code"
+                            value={form.pincode} onChange={set("pincode")} />
                     </div>
                 </div>
             </div>
 
-            {/* Contact Information */}
+            {/* Contact */}
             <div className="ams-section">
                 <div className="ams-section-label">Contact Information</div>
+
                 <div className="ams-grid-3">
-                    <div className="ams-field">
-                        <label className="ams-label">Student Email</label>
-                        <input className="ams-input" placeholder="Student Email" value={form.email} onChange={set("email")} type="email" />
+
+                    <div>
+                        <label className="ams-label">University Email</label>
+
+                        <input type="email" className="ams-input"
+                            placeholder="University Email"
+                            value={form.universityEmail}
+                            onChange={set("universityEmail")} />
                     </div>
-                    <div className="ams-field">
-                        <label className="ams-label">Mobile Number</label>
-                        <input className="ams-input" placeholder="Mobile Number" value={form.mobile} onChange={set("mobile")} type="tel" />
+
+                    <div>
+                        <label className="ams-label">Personal Email</label>
+
+                        <input type="email" className="ams-input"
+                            placeholder="Personal Email"
+                            value={form.personalEmail}
+                            onChange={set("personalEmail")} />
                     </div>
-                    <div className="ams-field">
+
+                    <div>
+                        <label className="ams-label">Mobile</label>
+
+                        <input type="tel" className="ams-input"
+                            placeholder="Mobile"
+                            value={form.mobile}
+                            onChange={set("mobile")} />
+
+                    </div>
+
+                    <div>
                         <label className="ams-label">Parent Contact</label>
-                        <input className="ams-input" placeholder="Parent Contact" value={form.parentContact} onChange={set("parentContact")} type="tel" />
+
+                        <input type="tel" className="ams-input"
+                            placeholder="Parent Contact"
+                            value={form.parentContact}
+                            onChange={set("parentContact")} />
                     </div>
                 </div>
             </div>
@@ -132,18 +300,16 @@ export default function AddManualStudent() {
             {/* Status */}
             <div className="ams-section">
                 <div className="ams-section-label">Status</div>
+
                 <div className="ams-radio-group">
                     {["Active", "Inactive"].map(s => (
                         <label key={s} className="ams-radio-label">
                             <input
                                 type="radio"
-                                name="status"
                                 value={s}
                                 checked={form.status === s}
                                 onChange={() => setVal("status", s)}
-                                className="ams-radio"
                             />
-                            <span className={`ams-radio-custom${form.status === s ? " checked" : ""}`} />
                             {s}
                         </label>
                     ))}
@@ -152,7 +318,9 @@ export default function AddManualStudent() {
 
             {/* Submit */}
             <div className="ams-footer">
-                <button className="ams-submit-btn" onClick={handleSubmit}>Add Student</button>
+                <button className="ams-submit-btn" onClick={handleSubmit}>
+                    Add Student
+                </button>
             </div>
         </div>
     );
