@@ -19,7 +19,7 @@ router.get('/programs', getPrograms);
 router.put('/programs/:id', updateProgram);
 
 // DELETE
-router.delete('/programs/:id', deleteProgram);
+router.delete('/delete-programs/:id', deleteProgram);
 
 // Department wise Program
 router.get('/programs/:departmentId', getProgramsByDepartment);

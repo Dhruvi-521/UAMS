@@ -59,11 +59,35 @@ exports.updateProgram = async (req, res) => {
 };
 
 // ✅ DELETE Program
+// exports.deleteProgram = async (req, res) => {
+//     try {
+//         await Program.findByIdAndDelete(req.params.id);
+//         res.json({ message: "Program deleted successfully" });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// };
+
+// ✅ DELETE Program
 exports.deleteProgram = async (req, res) => {
     try {
-        await Program.findByIdAndDelete(req.params.id);
-        res.json({ message: "Program deleted successfully" });
+        const { id } = req.params;
+
+        const deletedProgram = await Program.findByIdAndDelete(id);
+
+        if (!deletedProgram) {
+            return res.status(404).json({
+                message: "Program not found"
+            });
+        }
+
+        res.json({
+            message: "Program deleted successfully",
+            data: deletedProgram
+        });
+
     } catch (error) {
+        console.error("DELETE ERROR:", error); // 🔥 VERY IMPORTANT
         res.status(500).json({ error: error.message });
     }
 };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import AddProgram from "./addProgram";
 import UpdateProgram from "./updateProgram";
+import DeleteProgram from "./DeleteProgram";
 import "./addProgram.css";
 
 const ManageProgramModal = ({ onClose }) => {
@@ -32,15 +33,24 @@ const ManageProgramModal = ({ onClose }) => {
           >
             Update Program
           </button>
+          <button
+            className={`mpm-tab ${activeTab === "delete" ? "mpm-tab--active" : ""}`}
+            onClick={() => setActiveTab("delete")}
+          >
+            Delete Program
+          </button>
         </div>
 
         {/* Tab Content */}
         <div className="mpm-body">
-          {activeTab === "add" ? (
+          {/* {activeTab === "add" ? (
             <AddProgram onClose={onClose} />
           ) : (
             <UpdateProgram onClose={onClose} />
-          )}
+          )} */}
+          {activeTab === "add" && <AddProgram/>}
+          {activeTab === "update" && <UpdateProgram/>}
+          {activeTab === "delete" && <DeleteProgram/>}
         </div>
       </div>
     </div>

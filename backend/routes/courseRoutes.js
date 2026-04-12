@@ -13,10 +13,10 @@ router.post("/courses", addCourse);
 // GET
 router.get("/courses/:programId/:semesterNumber", getCourses);
 
-// ✅ UPDATE
+// UPDATE
 router.put("/courses/:id", updateCourse);
 
-// DELETE
-router.delete("/courses/:id", deleteCourse);
+// DELETE route
+router.delete('/delete-course/:id', deleteCourse);
 
 module.exports = router;

@@ -49,7 +49,7 @@ export default function FacultyManagement() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentFaculty, setCurrentFaculty] = useState(null);
 
-  // ── Fetch faculty data from API ──
+  // ── Fetch faculty data from Backend API
   useEffect(() => {
     const fetchFaculty = async () => {
       try {

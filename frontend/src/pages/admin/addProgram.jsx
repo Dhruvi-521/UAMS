@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
 import axios from "axios";
-import { ChevronDown, Calendar } from "lucide-react";
+import { Calendar, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
 import "./addProgram.css";
 
 const addProgram = ({ onClose }) => {
@@ -41,7 +41,10 @@ const handleSubmit = async () => {
     console.log(res.data);
     alert("Program Added Successfully");
 
-    onClose();
+   // Check if onClose exists before calling it
+    if (typeof onClose === "function") {
+      onClose();
+    }
 
   } catch (error) {
     console.log(error);

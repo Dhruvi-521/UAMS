@@ -2,6 +2,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import AddDepartment from "./AddDepartment";
 import UpdateDepartment from "./UpdateDepartment";
+import DeleteDepartment from "./DeleteDepartment";
 import "./AddDepartment.css";
 
 const ManageDepartmentModel = ({ onClose }) => {
@@ -30,10 +31,19 @@ const ManageDepartmentModel = ({ onClose }) => {
           >
             Update Department
           </button>
+          <button
+            className={`modal-tab-btn ${activeTab === "delete" ? "modal-tab-btn--active" : ""}`}
+            onClick={() => setActiveTab("delete")}
+          >
+            Delete Department
+          </button>
         </div>
 
         <div className="modal-body">
-          {activeTab === "add" ? <AddDepartment /> : <UpdateDepartment />}
+          {activeTab==="add" && <AddDepartment/>}
+          {activeTab==="update" && <UpdateDepartment/>}
+          {activeTab==="delete" && <DeleteDepartment/>}
+          {/* {activeTab === "add" ? <AddDepartment /> : <UpdateDepartment />} */}
         </div>
       </div>
     </div>
