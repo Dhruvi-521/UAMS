@@ -73,3 +73,73 @@ exports.addFaculty = async (req, res) => {
     });
   }
 };
+
+// UPDATE FACULTY
+
+exports.updateFaculty = async (req, res) => {
+  try {
+    const { id } = req.params; // This is "FAC-2026-001"
+
+    // Use findOneAndUpdate to search by the 'facultyId' field
+    const updatedFaculty = await Faculty.findOneAndUpdate(
+      { facultyId: id }, // Match the custom ID field
+      req.body,
+      { new: true, runValidators: true } 
+    );
+
+    if (!updatedFaculty) {
+      return res.status(404).json({
+        success: false,
+        message: "Faculty not found with ID: " + id
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Faculty updated successfully",
+      data: updatedFaculty
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating faculty",
+      error: error.message
+    });
+  }
+};
+
+// DELETE FACULTY (using facultyId)
+exports.deleteFaculty = async (req, res) => {
+  try {
+    const { id } = req.params; // this is FAC-2026-001
+
+    const deletedFaculty = await Faculty.findOneAndDelete({
+      facultyId: id
+    });
+
+    if (!deletedFaculty) {
+      return res.status(404).json({
+        success: false,
+        message: "Faculty not found with ID: " + id
+      });
+    }
+
+    // ALSO DELETE FROM USERS COLLECTION (important 🔥)
+    await Users.findOneAndDelete({
+      userID: deletedFaculty._id
+    });
+
+    res.json({
+      success: true,
+      message: "Faculty deleted successfully"
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error deleting faculty",
+      error: error.message
+    });
+  }
+};
