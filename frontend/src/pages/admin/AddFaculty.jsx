@@ -7,19 +7,20 @@ import axios from "axios";
 import "./AddFaculty.css";
 
 // Generate next Faculty ID
-const getNextFacultyId = () => {
-  const prefix = "SUF2022";
-  const lastId = localStorage.getItem("lastFacultyId") || "0";
-  const nextNumber = parseInt(lastId, 10) + 1;
-  const nextId = prefix + String(nextNumber).padStart(3, "0");
-  localStorage.setItem("lastFacultyId", nextNumber);
-  return nextId;
-};
+// const getNextFacultyId = () => {
+//   const prefix = "SUF2022";
+//   const lastId = localStorage.getItem("lastFacultyId") || "0";
+//   const nextNumber = parseInt(lastId, 10) + 1;
+//   const nextId = prefix + String(nextNumber).padStart(3, "0");
+//   localStorage.setItem("lastFacultyId", nextNumber);
+//   return nextId;
+// };
 
 // Initial form state
 const INITIAL = {
   universityEmail: "",
-  facultyId: getNextFacultyId(),
+  // facultyId: getNextFacultyId(),
+  facultyId: " ",
   firstName: "",
   middleName: "",
   lastName: "",
@@ -140,7 +141,7 @@ export default function AddFaculty({ onBack }) {
               <label className="af-label">Faculty ID</label>
               <div className="af-input-wrap">
                 <Hash size={15} className="af-icon" />
-                <input className="af-input af-input-icon" value={form.facultyId} readOnly />
+                <input className="af-input af-input-icon" value={form.facultyId} />
               </div>
             </div>
           </div>
