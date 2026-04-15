@@ -1,112 +1,125 @@
-import { ArrowLeft, Upload, X } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
 import "./UpdateStudent.css";
 
 export default function UpdateStudentForm({ student, onBack }) {
-    const [activeTab, setActiveTab] = useState("manual");
+    const [activeTab] = useState("manual");
+
     const [form, setForm] = useState({
-        department: student?.department || "Engineering",
-        program: student?.program || "B.Tech.",
-        totalYears: student?.totalYears || "3 Year",
-        totalCredits: student?.totalCredits || "140",
-        startDate: student?.startDate || "2023-08-12",
-        studentId: student?.id || "STU1023",
-        rollNumber: student?.rollNumber || "45",
-        firstName: student?.firstName || (student?.name?.split(" ")[0] || "Rahul"),
-        lastName: student?.lastName || (student?.name?.split(" ")[1] || "Sharma"),
-        dob: student?.dob || "15/05/2004",
-        gender: student?.gender || "Male",
-        email: student?.email || "rahul@email.com",
-        mobile: student?.phone || "9876543210",
-        parentContact: student?.guardianPhone || "9123456780",
-        status: student?.status === "On Hold" ? "inactive" : "active",
+        program: "",
+        semester: "",
+        batch: "",
+        division: "",
+        fullAddress: "",
+        city: "",
+        state: "",
+        pincode: "",
+        country: "",
+        studentId: "",
+        rollNumber: "",
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        dob: "",
+        gender: "",
+        email: "",
+        mobile: "",
+        parentContact: "",
+        status: "active",
     });
 
-    const [yearsOpen, setYearsOpen] = useState(false);
     const [genderOpen, setGenderOpen] = useState(false);
 
-    const update = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
+    const update = (field, value) =>
+        setForm(prev => ({ ...prev, [field]: value }));
+
+    // ✅ FIXED: Handles both API + normalized data
+    useEffect(() => {
+        if (student) {
+            const addr = student?.address || {};
+
+            setForm({
+                program:
+                    typeof student?.program === "object"
+                        ? student?.program?.programName
+                        : student?.program || "",
+
+                semester: student?.semester || "",
+                batch: student?.batch || "",
+                division: student?.division || "",
+
+                fullAddress: addr.fullAddress || "",
+                city: addr.city || "",
+                state: addr.state || "",
+                pincode: addr.pincode || "",
+                country: addr.country || "",
+
+                studentId: student?.studentId || student?.id || "",
+                rollNumber: student?.rollNumber || "",
+
+                firstName: student?.firstName || "",
+                middleName: student?.middleName || "",
+                lastName: student?.lastName || "",
+
+                dob: student?.dob
+                    ? new Date(student.dob).toISOString().split("T")[0]
+                    : "",
+
+                gender: student?.gender || "",
+
+                email:
+                    student?.personalEmail ||
+                    student?.universityEmail ||
+                    student?.email ||
+                    "",
+
+                mobile: student?.mobile || student?.phone || "",
+
+                parentContact: student?.guardianPhone || "",
+
+                status:
+                    student?.status === "On Hold"
+                        ? "inactive"
+                        : "active",
+            });
+        }
+    }, [student]);
 
     return (
         <div className="us-wrapper">
             {/* Header */}
             <div className="us-header">
                 <button className="us-back-btn" onClick={onBack}>
-                    <ArrowLeft size={16} />
-                    Back
+                    <ArrowLeft size={16} /> Back
                 </button>
                 <h1 className="us-title">Update Student</h1>
             </div>
 
-            {/* Tabs */}
-            {/* <div className="us-tabs">
-                <button
-                    className={`us-tab${activeTab === "excel" ? " active" : ""}`}
-                    onClick={() => setActiveTab("excel")}
-                >
-                    Upload via Excel
-                </button>
-                <button
-                    className={`us-tab${activeTab === "manual" ? " active" : ""}`}
-                    onClick={() => setActiveTab("manual")}
-                >
-                    Add Manually
-                </button>
-            </div> */}
-
-            {/* Excel Tab */}
-            {activeTab === "excel" && (
-                <div className="us-card">
-                    <div className="us-excel-drop">
-                        <Upload size={32} color="#94a3b8" />
-                        <p className="us-excel-title">Upload Excel File</p>
-                        <p className="us-excel-sub">Drag & drop or click to select a .xlsx / .csv file</p>
-                        <button className="us-excel-btn">Choose File</button>
-                    </div>
-                </div>
-            )}
-
-            {/* Manual Tab */}
             {activeTab === "manual" && (
                 <div className="us-card">
                     <h2 className="us-card-title">Enter Student Details</h2>
 
-                    {/* Academic Information */}
+                    {/* Academic */}
                     <div className="us-section-label">Academic Information</div>
                     <div className="us-grid us-grid-5">
-                        <div className="us-field">
-                            <label className="us-label">Department Name</label>
-                            <input className="us-input" value={form.department} onChange={e => update("department", e.target.value)} />
-                        </div>
                         <div className="us-field">
                             <label className="us-label">Program Name</label>
                             <input className="us-input" value={form.program} onChange={e => update("program", e.target.value)} />
                         </div>
+
                         <div className="us-field">
-                            <label className="us-label">Total Years Program</label>
-                            <div className="us-custom-select-wrap">
-                                <button className="us-custom-select" onClick={() => { setYearsOpen(p => !p); setGenderOpen(false); }}>
-                                    <span>{form.totalYears}</span>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
-                                </button>
-                                {yearsOpen && (
-                                    <div className="us-dropdown">
-                                        {["2 Year", "3 Year", "5 Year"].map(opt => (
-                                            <div key={opt} className={`us-dropdown-item${form.totalYears === opt ? " selected" : ""}`} onClick={() => { update("totalYears", opt); setYearsOpen(false); }}>{opt}</div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                            <label className="us-label">Semester</label>
+                            <input className="us-input" value={form.semester} onChange={e => update("semester", e.target.value)} />
                         </div>
+
                         <div className="us-field">
-                            <label className="us-label">Total Credit Hour</label>
-                            <input className="us-input" value={form.totalCredits} onChange={e => update("totalCredits", e.target.value)} />
+                            <label className="us-label">Batch</label>
+                            <input className="us-input" value={form.batch} onChange={e => update("batch", e.target.value)} />
                         </div>
+
                         <div className="us-field">
-                            <label className="us-label">Start Date</label>
-                            <div className="us-date-wrap">
-                                <input className="us-input" type="date" value={form.startDate} onChange={e => update("startDate", e.target.value)} />
-                            </div>
+                            <label className="us-label">Division</label>
+                            <input className="us-input" value={form.division} onChange={e => update("division", e.target.value)} />
                         </div>
                     </div>
 
@@ -115,38 +128,64 @@ export default function UpdateStudentForm({ student, onBack }) {
                             <label className="us-label">Student ID</label>
                             <input className="us-input" value={form.studentId} onChange={e => update("studentId", e.target.value)} />
                         </div>
+
                         <div className="us-field">
                             <label className="us-label">Roll Number</label>
                             <input className="us-input" value={form.rollNumber} onChange={e => update("rollNumber", e.target.value)} />
                         </div>
                     </div>
 
-                    {/* Personal Information */}
+                    {/* Personal */}
                     <div className="us-section-label">Personal Information</div>
                     <div className="us-grid us-grid-4">
                         <div className="us-field">
                             <label className="us-label">First Name</label>
                             <input className="us-input" value={form.firstName} onChange={e => update("firstName", e.target.value)} />
                         </div>
+
+                        <div className="us-field">
+                            <label className="us-label">Middle Name</label>
+                            <input className="us-input" value={form.middleName} onChange={e => update("middleName", e.target.value)} />
+                        </div>
+
                         <div className="us-field">
                             <label className="us-label">Last Name</label>
                             <input className="us-input" value={form.lastName} onChange={e => update("lastName", e.target.value)} />
                         </div>
+
                         <div className="us-field">
                             <label className="us-label">DOB</label>
-                            <input className="us-input" value={form.dob} onChange={e => update("dob", e.target.value)} placeholder="DD/MM/YYYY" />
+                            <input
+                                type="date"
+                                className="us-input"
+                                value={form.dob}
+                                onChange={e => update("dob", e.target.value)}
+                            />
                         </div>
+
                         <div className="us-field">
                             <label className="us-label">Gender</label>
                             <div className="us-custom-select-wrap">
-                                <button className="us-custom-select" onClick={() => { setGenderOpen(p => !p); setYearsOpen(false); }}>
-                                    <span>{form.gender}</span>
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
+                                <button
+                                    className="us-custom-select"
+                                    onClick={() => setGenderOpen(p => !p)}
+                                >
+                                    {form.gender || "Select"}
                                 </button>
+
                                 {genderOpen && (
                                     <div className="us-dropdown">
                                         {["Male", "Female", "Other"].map(opt => (
-                                            <div key={opt} className={`us-dropdown-item${form.gender === opt ? " selected" : ""}`} onClick={() => { update("gender", opt); setGenderOpen(false); }}>{opt}</div>
+                                            <div
+                                                key={opt}
+                                                className="us-dropdown-item"
+                                                onClick={() => {
+                                                    update("gender", opt);
+                                                    setGenderOpen(false);
+                                                }}
+                                            >
+                                                {opt}
+                                            </div>
                                         ))}
                                     </div>
                                 )}
@@ -154,17 +193,48 @@ export default function UpdateStudentForm({ student, onBack }) {
                         </div>
                     </div>
 
-                    {/* Contact Information */}
+                    {/* Address */}
+                    <div className="us-section-label">Address Information</div>
+                    <div className="us-grid us-grid-3">
+                        <div className="us-field">
+                            <label className="us-label">Address</label>
+                            <input className="us-input" value={form.fullAddress} onChange={e => update("fullAddress", e.target.value)} />
+                        </div>
+
+                        <div className="us-field">
+                            <label className="us-label">Country</label>
+                            <input className="us-input" value={form.country} onChange={e => update("country", e.target.value)} />
+                        </div>
+
+                        <div className="us-field">
+                            <label className="us-label">State</label>
+                            <input className="us-input" value={form.state} onChange={e => update("state", e.target.value)} />
+                        </div>
+
+                        <div className="us-field">
+                            <label className="us-label">City</label>
+                            <input className="us-input" value={form.city} onChange={e => update("city", e.target.value)} />
+                        </div>
+
+                        <div className="us-field">
+                            <label className="us-label">Pin Code</label>
+                            <input className="us-input" value={form.pincode} onChange={e => update("pincode", e.target.value)} />
+                        </div>
+                    </div>
+
+                    {/* Contact */}
                     <div className="us-section-label">Contact Information</div>
                     <div className="us-grid us-grid-3">
                         <div className="us-field">
                             <label className="us-label">Email</label>
-                            <input className="us-input" type="email" value={form.email} onChange={e => update("email", e.target.value)} />
+                            <input className="us-input" value={form.email} onChange={e => update("email", e.target.value)} />
                         </div>
+
                         <div className="us-field">
-                            <label className="us-label">Mobile Number</label>
+                            <label className="us-label">Mobile</label>
                             <input className="us-input" value={form.mobile} onChange={e => update("mobile", e.target.value)} />
                         </div>
+
                         <div className="us-field">
                             <label className="us-label">Parent Contact</label>
                             <input className="us-input" value={form.parentContact} onChange={e => update("parentContact", e.target.value)} />
@@ -174,21 +244,18 @@ export default function UpdateStudentForm({ student, onBack }) {
                     {/* Status */}
                     <div className="us-section-label">Status</div>
                     <div className="us-radio-group">
-                        <label className="us-radio-label">
-                            <div className={`us-radio-circle${form.status === "active" ? " checked" : ""}`} onClick={() => update("status", "active")}>
-                                {form.status === "active" && <div className="us-radio-dot" />}
-                            </div>
-                            <span>Active</span>
+                        <label>
+                            <input type="radio" checked={form.status === "active"} onChange={() => update("status", "active")} />
+                            Active
                         </label>
-                        <label className="us-radio-label">
-                            <div className={`us-radio-circle${form.status === "inactive" ? " checked" : ""}`} onClick={() => update("status", "inactive")}>
-                                {form.status === "inactive" && <div className="us-radio-dot" />}
-                            </div>
-                            <span>Inactive</span>
+
+                        <label>
+                            <input type="radio" checked={form.status === "inactive"} onChange={() => update("status", "inactive")} />
+                            Inactive
                         </label>
                     </div>
 
-                    {/* Footer Buttons */}
+                    {/* Buttons */}
                     <div className="us-footer">
                         <button className="us-cancel-btn" onClick={onBack}>Cancel</button>
                         <button className="us-submit-btn">Update Student</button>

@@ -42,6 +42,8 @@ export default function StudentManagement() {
                 setLoading(true);
                 setError(null);
                 const response = await axios.get("http://localhost:5000/api/students");
+                // 🔥 ONLY THIS PART IS UPDATED (inside map)
+
                 const normalized = response.data.map((f) => {
                     const firstName = f.firstName ?? "";
                     const lastName = f.lastName ?? "";
@@ -49,44 +51,49 @@ export default function StudentManagement() {
 
                     return {
                         id: f.id ?? f.studentId ?? "",
+                        rollNumber: f.rollNumber ?? "",
                         name: fullName,
                         firstName,
                         middleName: f.middleName ?? "",
                         lastName,
                         semester: f.semester ?? "",
+                        batch: f.batch ?? "",
                         division: f.division ?? "",
+
+                        // ✅ keep as string for table (NO CHANGE)
                         program: f.program?.programName ?? "",
+
                         status: f.status ?? "Active",
-                        email: f.universityEmail ?? f.email ?? "",
-                        phone: f.phone ?? f.mobileNumber ?? "",
+
+                        // ✅ FIX email fallback
+                        email: f.universityEmail ?? f.personalEmail ?? f.email ?? "",
+
+                        // ✅ FIX phone naming
+                        phone: f.mobile ?? f.mobileNumber ?? "",
+
                         joinDate: f.createdAt
                             ? new Date(f.createdAt).toLocaleDateString("en-US", {
                                 month: "short", day: "numeric", year: "numeric",
                             })
                             : "",
+
                         dob: f.dob
                             ? new Date(f.dob).toLocaleDateString("en-US", {
                                 month: "short", day: "numeric", year: "numeric",
                             })
                             : "",
+
                         cgpa: f.cgpa ?? f.gpa ?? "",
                         age: calculateAge(f.dob),
-                        address:
-                            typeof f.address === "object" && f.address !== null
-                                ? [
-                                    f.address.fullAddress,
-                                    f.address.city,
-                                    f.address.state,
-                                    f.address.country,
-                                    f.address.pincode,
-                                ]
-                                    .filter(Boolean)
-                                    .join(", ")
-                                : f.address ?? "",
+
+                        // ✅ 🔥 CRITICAL FIX (KEEP OBJECT)
+                        address: f.address || {},
+
                         gender: f.gender ?? "",
                         guardian: f.guardianName ?? f.guardian ?? "",
-                        guardianPhone: f.guardianPhone ?? f.guardianContact ?? "",
+                        guardianPhone: f.parentContact ?? f.guardianContact ?? "",
                         courses: f.courses ?? [],
+
                         avatar:
                             [firstName, lastName]
                                 .filter(Boolean)
@@ -219,6 +226,7 @@ export default function StudentManagement() {
                                     <th>Program</th>
                                     <th>Semester</th>
                                     <th>Division</th>
+                                    <th>Batch</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -285,6 +293,7 @@ export default function StudentManagement() {
                                         <td>{s.program || "—"}</td>
                                         <td><span className="sm-sem-pill">{s.semester || "—"}</span></td>
                                         <td>{s.division || "—"}</td>
+                                        <td>{s.batch || "—"}</td>
                                         <td><StatusBadge status={s.status} /></td>
                                         <td>
                                             <div className="sm-action-btns" onClick={(e) => e.stopPropagation()}>
@@ -293,7 +302,10 @@ export default function StudentManagement() {
                                                 </button>
                                                 <button
                                                     className="sm-act-btn sm-act-edit"
-                                                    onClick={() => { setEditingStudent(s); setIsEditing(true); }}
+                                                    onClick={() => {
+                                                        setEditingStudent(s);   // ✅ FIXED
+                                                        setIsEditing(true);
+                                                    }}
                                                 >
                                                     <Pencil size={13} />
                                                 </button>

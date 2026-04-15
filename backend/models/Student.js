@@ -9,6 +9,7 @@ const studentSchema = new mongoose.Schema({
     },
     
     semester: { type: Number, required: true },
+    batch: { type: String , required: true},
     division: { type: String },
     
     // Note: timestamps: true already provides 'createdAt'

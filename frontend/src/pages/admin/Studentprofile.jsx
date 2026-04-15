@@ -35,8 +35,8 @@ export function StatusBadge({ status }) {
         status === "Active"
             ? "sm-badge-active"
             : status === "Graduated"
-            ? "sm-badge-graduated"
-            : "sm-badge-hold";
+                ? "sm-badge-graduated"
+                : "sm-badge-hold";
     return <span className={`sm-badge ${cls}`}>{status}</span>;
 }
 
@@ -50,16 +50,16 @@ export function CGPABadge({ cgpa }) {
 // ── Course data ───────────────────────────────────────────────────────────────
 
 export const allCourses = [
-    { code: "CS-101", name: "Introduction to AI",               credits: 3, semester: "Semester 1" },
-    { code: "CS-201", name: "Data Structures & Algorithms",     credits: 4, semester: "Semester 2" },
-    { code: "CS-301", name: "Machine Learning",                 credits: 3, semester: "Semester 3" },
-    { code: "CS-401", name: "Advanced Algorithms",              credits: 4, semester: "Semester 4" },
-    { code: "CS-501", name: "Deep Learning",                    credits: 3, semester: "Semester 5" },
-    { code: "CS-601", name: "Computer Vision",                  credits: 3, semester: "Semester 6" },
-    { code: "CS-701", name: "Natural Language Processing",      credits: 3, semester: "Semester 7" },
-    { code: "CS-801", name: "Cloud Computing",                  credits: 4, semester: "Semester 8" },
-    { code: "CS-901", name: "Cybersecurity Fundamentals",       credits: 3, semester: "Semester 5" },
-    { code: "CS-111", name: "Database Management Systems",      credits: 4, semester: "Semester 3" },
+    { code: "CS-101", name: "Introduction to AI", credits: 3, semester: "Semester 1" },
+    { code: "CS-201", name: "Data Structures & Algorithms", credits: 4, semester: "Semester 2" },
+    { code: "CS-301", name: "Machine Learning", credits: 3, semester: "Semester 3" },
+    { code: "CS-401", name: "Advanced Algorithms", credits: 4, semester: "Semester 4" },
+    { code: "CS-501", name: "Deep Learning", credits: 3, semester: "Semester 5" },
+    { code: "CS-601", name: "Computer Vision", credits: 3, semester: "Semester 6" },
+    { code: "CS-701", name: "Natural Language Processing", credits: 3, semester: "Semester 7" },
+    { code: "CS-801", name: "Cloud Computing", credits: 4, semester: "Semester 8" },
+    { code: "CS-901", name: "Cybersecurity Fundamentals", credits: 3, semester: "Semester 5" },
+    { code: "CS-111", name: "Database Management Systems", credits: 4, semester: "Semester 3" },
 ];
 
 // ── StudentProfile component ──────────────────────────────────────────────────
@@ -77,11 +77,11 @@ export default function StudentProfile({
     onClose,
     onOverlayClick,
 }) {
-    const [sidebarTab,      setSidebarTab]      = useState("personal");
+    const [sidebarTab, setSidebarTab] = useState("personal");
     const [enrollModalOpen, setEnrollModalOpen] = useState(false);
-    const [courseSearch,    setCourseSearch]    = useState("");
+    const [courseSearch, setCourseSearch] = useState("");
     const [enrolledCourses, setEnrolledCourses] = useState([]);
-    const [tempEnrolled,    setTempEnrolled]    = useState([]);
+    const [tempEnrolled, setTempEnrolled] = useState([]);
 
     // Keep enrolledCourses in sync when selectedStudent changes
     // (parent re-mounts or passes a new student)
@@ -241,12 +241,25 @@ export default function StudentProfile({
                                             <div className="sm-notes-val">{selectedStudent.phone || "—"}</div>
                                         </div>
                                     </div>
+                                    <div className="sm-notes-row">
+                                        <Phone size={14} className="sm-notes-icon" />
+                                        <div>
+                                            <div className="sm-notes-key">Parent Phone</div>
+                                            <div className="sm-notes-val">{selectedStudent.guardianPhone || "—"}</div>
+                                        </div>
+                                    </div>
                                     {selectedStudent.address && (
                                         <div className="sm-notes-row">
                                             <MapPin size={14} className="sm-notes-icon" />
                                             <div>
                                                 <div className="sm-notes-key">Address</div>
-                                                <div className="sm-notes-val">{selectedStudent.address}</div>
+                                                <div className="sm-notes-val">
+                                                    {selectedStudent.address?.fullAddress || "—"},{" "}
+                                                    {selectedStudent.address?.city || ""},{" "}
+                                                    {selectedStudent.address?.state || ""},{" "}
+                                                    {selectedStudent.address?.country || ""} -{" "}
+                                                    {selectedStudent.address?.pincode || ""}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -326,8 +339,8 @@ export default function StudentProfile({
                                                         parseFloat(selectedStudent.cgpa) >= 3.7
                                                             ? "#059669"
                                                             : parseFloat(selectedStudent.cgpa) >= 3.0
-                                                            ? "#d97706"
-                                                            : "#dc2626",
+                                                                ? "#d97706"
+                                                                : "#dc2626",
                                                 }}
                                             />
                                         </div>

@@ -10,6 +10,7 @@ const GENDERS = ["Male", "Female", "Other"];
 const initialForm = {
     program: "",
     semester: "",
+    batch: "",
     division: "",
     createdDate: "",
     studentId: "",
@@ -117,6 +118,16 @@ export default function AddManualStudent() {
                             value={form.semester}
                             onChange={set("semester")}
                             placeholder="Enter Semester"
+                        />
+                    </div>
+                    <div className="ams-field">
+                        <label className="ams-label">Batch</label>
+                        <input
+                            type="text"
+                            className="ams-input"
+                            value={form.batch}
+                            onChange={set("batch")}
+                            placeholder="Enter Batch (eg: 2025-27)"
                         />
                     </div>
 
