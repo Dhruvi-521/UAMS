@@ -34,7 +34,7 @@ export default function UpdateFacultyForm({ faculty, onBack, onUpdateSuccess }) 
 
     return {
       // Identity
-      universityEmail: f.universityEmail ?? f.email         ?? "",
+      universityEmail: f.universityEmail ?? "",
       facultyId:       f.facultyId       ?? f.id            ?? "",
 
       // Personal

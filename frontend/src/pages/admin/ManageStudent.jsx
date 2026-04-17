@@ -1,10 +1,10 @@
+import axios from "axios";
 import { Eye, Pencil, Plus, Trash2, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import "./ManageStudent.css";
 import AddStudent from "./addStudent";
-import UpdateStudentForm from "./UpdateStudentForm";
+import "./ManageStudent.css";
 import StudentProfile, { Avatar, StatusBadge } from "./Studentprofile";
+import UpdateStudentForm from "./UpdateStudentForm";
 
 export default function StudentManagement() {
     const [view, setView] = useState("list");
@@ -50,7 +50,8 @@ export default function StudentManagement() {
                     const fullName = `${firstName} ${lastName}`.trim();
 
                     return {
-                        id: f.id ?? f.studentId ?? "",
+                        id: f.studentId ?? "",
+                        studentId: f.studentId ?? "",
                         rollNumber: f.rollNumber ?? "",
                         name: fullName,
                         firstName,
@@ -66,7 +67,15 @@ export default function StudentManagement() {
                         status: f.status ?? "Active",
 
                         // ✅ FIX email fallback
-                        email: f.universityEmail ?? f.personalEmail ?? f.email ?? "",
+                       universityEmail:
+                            f.universityEmail ??
+                            f.university_email ??
+                            "",
+
+                        personalEmail:
+                            f.personalEmail ??
+                            f.personal_email ??
+                            "",
 
                         // ✅ FIX phone naming
                         phone: f.mobile ?? f.mobileNumber ?? "",
@@ -131,7 +140,8 @@ export default function StudentManagement() {
         const matchesSearch =
             s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             s.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (s.email ?? "").toLowerCase().includes(searchTerm.toLowerCase());
+            (s.personalEmail ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (s.universityEmail ?? "").toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesDepartment =
             departmentFilter === "All Departments" || s.program === departmentFilter;
@@ -308,7 +318,7 @@ export default function StudentManagement() {
                                                 <Avatar initials={s.avatar} index={i} size={36} />
                                                 <div>
                                                     <div className="sm-name-text">{s.name}</div>
-                                                    <div className="sm-email-text">{s.email || "—"}</div>
+                                                    <div className="sm-email-text">{s.universityEmail || "—"}</div>
                                                 </div>
                                             </div>
                                         </td>

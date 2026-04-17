@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import "./UpdateStudent.css";
+import axios from "axios";
 
 export default function UpdateStudentForm({ student, onBack }) {
     const [activeTab] = useState("manual");
@@ -22,7 +23,8 @@ export default function UpdateStudentForm({ student, onBack }) {
         lastName: "",
         dob: "",
         gender: "",
-        email: "",
+        personalEmail: "",
+        universityEmail: "",
         mobile: "",
         parentContact: "",
         status: "active",
@@ -33,7 +35,7 @@ export default function UpdateStudentForm({ student, onBack }) {
     const update = (field, value) =>
         setForm(prev => ({ ...prev, [field]: value }));
 
-    // ✅ FIXED: Handles both API + normalized data
+    // ✅ FIXED: handles BOTH original + formatted student object
     useEffect(() => {
         if (student) {
             const addr = student?.address || {};
@@ -67,15 +69,18 @@ export default function UpdateStudentForm({ student, onBack }) {
 
                 gender: student?.gender || "",
 
-                email:
-                    student?.personalEmail ||
-                    student?.universityEmail ||
-                    student?.email ||
-                    "",
+                // ✅ MAIN FIX HERE
+                personalEmail: student?.personalEmail || "",
+
+                universityEmail: student?.universityEmail || "",
 
                 mobile: student?.mobile || student?.phone || "",
 
-                parentContact: student?.guardianPhone || "",
+                // ✅ FIXED FIELD NAME
+                parentContact:
+                    student?.parentContact ||
+                    student?.guardianPhone ||
+                    "",
 
                 status:
                     student?.status === "On Hold"
@@ -85,9 +90,47 @@ export default function UpdateStudentForm({ student, onBack }) {
         }
     }, [student]);
 
+    const handleUpdate = async () => {
+        try {
+            const payload = {
+                semester: form.semester,
+                batch: form.batch,
+                division: form.division,
+
+                firstName: form.firstName,
+                middleName: form.middleName,
+                lastName: form.lastName,
+                dob: form.dob,
+                gender: form.gender,
+
+                universityEmail: form.universityEmail,
+                personalEmail: form.personalEmail,
+                mobile: form.mobile,
+                parentContact: form.parentContact,
+
+                fullAddress: form.fullAddress,
+                city: form.city,
+                state: form.state,
+                country: form.country,
+                pincode: form.pincode
+            };
+
+            await axios.put(
+                `http://localhost:5000/api/students/student/${form.studentId}`,
+                payload
+            );
+
+            alert("Student updated successfully");
+            onBack();
+
+        } catch (error) {
+            console.error("❌ FRONTEND ERROR:", error.response?.data);
+            alert(error.response?.data?.message || "Update failed");
+        }
+    };
+
     return (
         <div className="us-wrapper">
-            {/* Header */}
             <div className="us-header">
                 <button className="us-back-btn" onClick={onBack}>
                     <ArrowLeft size={16} /> Back
@@ -99,7 +142,6 @@ export default function UpdateStudentForm({ student, onBack }) {
                 <div className="us-card">
                     <h2 className="us-card-title">Enter Student Details</h2>
 
-                    {/* Academic */}
                     <div className="us-section-label">Academic Information</div>
                     <div className="us-grid us-grid-5">
                         <div className="us-field">
@@ -135,7 +177,6 @@ export default function UpdateStudentForm({ student, onBack }) {
                         </div>
                     </div>
 
-                    {/* Personal */}
                     <div className="us-section-label">Personal Information</div>
                     <div className="us-grid us-grid-4">
                         <div className="us-field">
@@ -193,7 +234,6 @@ export default function UpdateStudentForm({ student, onBack }) {
                         </div>
                     </div>
 
-                    {/* Address */}
                     <div className="us-section-label">Address Information</div>
                     <div className="us-grid us-grid-3">
                         <div className="us-field">
@@ -222,12 +262,16 @@ export default function UpdateStudentForm({ student, onBack }) {
                         </div>
                     </div>
 
-                    {/* Contact */}
                     <div className="us-section-label">Contact Information</div>
                     <div className="us-grid us-grid-3">
                         <div className="us-field">
-                            <label className="us-label">Email</label>
-                            <input className="us-input" value={form.email} onChange={e => update("email", e.target.value)} />
+                            <label className="us-label">University Email</label>
+                            <input className="us-input" value={form.universityEmail} onChange={e => update("universityEmail", e.target.value)} />
+                        </div>
+
+                        <div className="us-field">
+                            <label className="us-label">Personal Email</label>
+                            <input className="us-input" value={form.personalEmail} onChange={e => update("personalEmail", e.target.value)} />
                         </div>
 
                         <div className="us-field">
@@ -241,7 +285,6 @@ export default function UpdateStudentForm({ student, onBack }) {
                         </div>
                     </div>
 
-                    {/* Status */}
                     <div className="us-section-label">Status</div>
                     <div className="us-radio-group">
                         <label>
@@ -255,10 +298,11 @@ export default function UpdateStudentForm({ student, onBack }) {
                         </label>
                     </div>
 
-                    {/* Buttons */}
                     <div className="us-footer">
                         <button className="us-cancel-btn" onClick={onBack}>Cancel</button>
-                        <button className="us-submit-btn">Update Student</button>
+                        <button className="us-submit-btn" onClick={handleUpdate}>
+                            Update Student
+                        </button>
                     </div>
                 </div>
             )}

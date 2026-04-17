@@ -77,7 +77,7 @@ const updateProgram = ({ onClose }) => {
 
     } catch (error) {
       console.log(error);
-      alert("Error updating program");
+      // alert("Error updating program");
     }
   };
 

@@ -21,6 +21,7 @@ export default function AddExcelStudent() {
     const [fileName, setFileName] = useState("");
 
     const [students, setStudents] = useState([]);
+    const [studentsRaw, setStudentsRaw] = useState([]); // ✅ FULL DATA
 
     const [page, setPage] = useState(1);
     const fileRef = useRef();
@@ -36,8 +37,8 @@ export default function AddExcelStudent() {
                 const formatted = res.data.map((s) => ({
                     name: `${s.firstName || ""} ${s.lastName || ""}`.trim(),
                     gender: s.gender || "",
-                    email: s.universityEmail || s.personalEmail || "",
-                    mobile: s.mobile || "",
+                    universityEmail: s.universityEmail || "",
+                    personalEmail: s.personalEmail || "",
                     program: s.program?.programName || "",
                     semester: s.semester || "",
                     batch: s.batch || "",
@@ -90,9 +91,17 @@ export default function AddExcelStudent() {
             const formatted = rows.map((row) => ({
                 name: `${row.firstName || ""} ${row.lastName || ""}`.trim(),
                 gender: row.gender || "",
-                email: row.universityEmail || row.personalEmail || "",
+                personalEmail:
+                    row.personalEmail ||
+                    row["Personal Email"] ||
+                    row.personal_email ||
+                    "",
+                universityEmail:
+                    row.universityEmail ||
+                    row["University Email"] ||
+                    "",
                 mobile: row.mobile || "",
-                program: form.program || "",
+                program: program.find(p => p._id === form.program)?.programName || "",
                 semester: semester,
                 batch: batch,
                 division: row.division || ""
@@ -140,10 +149,13 @@ export default function AddExcelStudent() {
 
                 const updated = await axios.get("http://localhost:5000/api/students");
 
+                 setStudentsRaw(updated.data); // ✅ IMPORTANT
+                 
                 const formatted = updated.data.map((s) => ({
                     name: `${s.firstName || ""} ${s.lastName || ""}`.trim(),
                     gender: s.gender || "",
-                    email: s.universityEmail || s.personalEmail || "",
+                    universityEmail: s.universityEmail || "",
+                    personalEmail: s.personalEmail || "",
                     mobile: s.mobile || "",
                     program: s.program?.programName || "",
                     semester: s.semester || "",
@@ -185,7 +197,7 @@ export default function AddExcelStudent() {
 
                 <div className="aes-field">
                     <label className="aes-label">Select Semester</label>
-                    <input className="aes-input" type="text" onChange={e => setSemester(e.target.value)} placeholder="Eg: 1"/>
+                    <input className="aes-input" type="text" onChange={e => setSemester(e.target.value)} placeholder="Eg: 1" />
                 </div>
 
                 <div className="aes-field">

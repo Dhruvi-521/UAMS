@@ -109,17 +109,65 @@ exports.uploadExcel = async (req, res) => {
     let students = [];
 
     rows.forEach((row, index) => {
-      // const studentId = `SU${new Date().getFullYear()}${String(index + 1).padStart(4, "0")}`; // This is regex to genrate studentID
+
+      // ============================
+      // ✅ DOB FIX (ALL CASES COVERED)
+      // ============================
+      let dobRaw =
+        row.dob ||
+        row.DOB ||
+        row.Dob ||
+        row["Date of Birth"] ||
+        row["date of birth"];
+
+      let dobValue = null;
+
+      if (dobRaw) {
+        if (typeof dobRaw === "number") {
+          // Excel numeric date
+          dobValue = new Date((dobRaw - 25569) * 86400 * 1000);
+        } else {
+          const parsed = new Date(dobRaw);
+          dobValue = isNaN(parsed) ? null : parsed;
+        }
+      }
+
+      // ============================
+      // ✅ PERSONAL EMAIL FIX
+      // ============================
+      const personalEmailValue =
+        row.personalEmail ||
+        row.PersonalEmail ||
+        row["Personal Email"] ||
+        row["personal email"] ||
+        row.email ||
+        "";
+
+      // ============================
+      // ✅ ADDRESS FIX
+      // ============================
+      const addressValue =
+        row.fullAddress ||
+        row.address ||
+        row["Full Address"] ||
+        "";
+
+      // ============================
+      // ✅ STUDENT ID FIX (fallback)
+      // ============================
+      const studentIdValue =
+        row.studentID ||
+        row.studentId ||
+        `SU${new Date().getFullYear()}${String(index + 1).padStart(4, "0")}`;
 
       students.push({
         program,
         semester: Number(semester),
         batch,
 
-        // ADD THIS (MAIN FIX)
         division: row.division || "",
 
-        studentId:row.studentID,
+        studentId: studentIdValue,
         rollNumber: index + 1,
 
         firstName: row.firstName || "",
@@ -127,16 +175,20 @@ exports.uploadExcel = async (req, res) => {
         lastName: row.lastName || "",
 
         gender: row.gender || "",
-        dob: row.dob ? new Date(row.dob) : null,
+        dob: dobValue,
 
-        universityEmail: row.universityEmail,
-        personalEmail: row.personalEmail || "",
+        universityEmail:
+          row.universityEmail ||
+          row["University Email"] ||
+          "",
 
-        mobile: row.mobile,
+        personalEmail: personalEmailValue,
+
+        mobile: row.mobile || "",
         parentContact: row.parentContact || "",
 
         address: {
-          fullAddress: row.fullAddress || row.address || "",
+          fullAddress: addressValue,
           city: row.city || "",
           state: row.state || "",
           country: row.country || "",
@@ -145,8 +197,14 @@ exports.uploadExcel = async (req, res) => {
       });
     });
 
+    // ============================
+    // ✅ SAVE STUDENTS
+    // ============================
     const saved = await Student.insertMany(students);
 
+    // ============================
+    // ✅ CREATE USERS
+    // ============================
     const users = saved.map((s) => ({
       userID: s._id,
       onModel: "Student",
@@ -156,6 +214,9 @@ exports.uploadExcel = async (req, res) => {
 
     await Users.insertMany(users);
 
+    // ============================
+    // ✅ DELETE FILE
+    // ============================
     fs.unlinkSync(file.path);
 
     res.json({
@@ -165,12 +226,78 @@ exports.uploadExcel = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("❌ UPLOAD ERROR:", error);
 
     res.status(500).json({
       success: false,
       message: "Upload failed",
       error: error.message
+    });
+  }
+};
+
+// ============================
+// UPDATE STUDENT
+// ============================
+exports.updateStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+
+const updatedData = {
+  semester: body.semester,
+  batch: body.batch,
+  division: body.division,
+
+  firstName: body.firstName,
+  middleName: body.middleName,
+  lastName: body.lastName,
+  dob: body.dob,
+  gender: body.gender,
+
+  universityEmail: body.universityEmail,
+  personalEmail: body.personalEmail, //  FIXED
+  mobile: body.mobile,
+  parentContact: body.parentContact, // FIXED
+
+  address: {
+    fullAddress: body.fullAddress,
+    city: body.city,
+    state: body.state,
+    country: body.country,
+    pincode: body.pincode
+  }
+};
+
+    const updatedStudent = await Student.findOneAndUpdate(
+      { studentId: id },
+      updatedData,
+      {
+        returnDocument: "after",
+        runValidators: true
+      }
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Student updated successfully",
+      data: updatedStudent
+    });
+
+  } catch (error) {
+    console.error("❌ UPDATE ERROR:", error);
+    console.error("❌ BODY:", req.body);
+
+    res.status(500).json({
+      success: false,
+      message: error.message
     });
   }
 };

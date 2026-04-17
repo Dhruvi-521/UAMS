@@ -230,8 +230,15 @@ export default function StudentProfile({
                                     <div className="sm-notes-row">
                                         <Mail size={14} className="sm-notes-icon" />
                                         <div>
-                                            <div className="sm-notes-key">Email</div>
-                                            <div className="sm-notes-val">{selectedStudent.email || "—"}</div>
+                                            <div className="sm-notes-key">Personal Email</div>
+                                            <div className="sm-notes-val">{selectedStudent.personalEmail || "—"}</div>
+                                        </div>
+                                    </div>
+                                    <div className="sm-notes-row">
+                                        <Mail size={14} className="sm-notes-icon" />
+                                        <div>
+                                            <div className="sm-notes-key">University Email</div>
+                                            <div className="sm-notes-val">{selectedStudent.universityEmail || "—"}</div>
                                         </div>
                                     </div>
                                     <div className="sm-notes-row">

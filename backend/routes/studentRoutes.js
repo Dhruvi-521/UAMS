@@ -14,7 +14,10 @@ router.get("/", studentController.getStudents);
 // DELETE
 router.delete("/student/:id", studentController.deleteStudent);
 
-// ✅ EXCEL UPLOAD
+// EXCEL UPLOAD
 router.post("/upload-excel", upload.single("file"), studentController.uploadExcel);
+
+// UPDATE
+router.put("/student/:id", studentController.updateStudent);
 
 module.exports = router;
