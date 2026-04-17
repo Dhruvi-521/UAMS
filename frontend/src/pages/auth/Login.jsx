@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
+import ForgotPassword from "./ForgotPassword";   // ← NEW
 
 export default function Login() {
-    const [studentId, setStudentId] = useState("");
-    const [password, setPassword] = useState("");
-    const [rememberMe, setRememberMe] = useState(false);
+    const [studentId, setStudentId]       = useState("");
+    const [password, setPassword]         = useState("");
+    const [rememberMe, setRememberMe]     = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [loading, setLoading]           = useState(false);
+    const [error, setError]               = useState("");
+    const [showForgot, setShowForgot]     = useState(false);  // ← NEW
 
-    const auth = useAuth();
+    const auth     = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -27,15 +29,10 @@ export default function Login() {
         setTimeout(() => {
             const role = auth.login(studentId, password);
             setLoading(false);
-            if (role === "admin") {
-                navigate("/admin/dashboard");
-            } else if (role === "student") {
-                navigate("/student/dashboard");
-            } else if (role === "faculty") {
-                navigate("/faculty/dashboard");
-            } else {
-                setError("Invalid username or password.");
-            }
+            if (role === "admin")        navigate("/admin/dashboard");
+            else if (role === "student") navigate("/student/dashboard");
+            else if (role === "faculty") navigate("/faculty/dashboard");
+            else setError("Invalid username or password.");
         }, 2000);
     };
 
@@ -141,11 +138,23 @@ export default function Login() {
                         </form>
 
                         <div className="card-footer">
-                            <a href="#forgot" className="footer-link">Forgot Password?</a>
+                            {/* ↓ Changed from <a href> to a button that opens the modal */}
+                            <button
+                                className="footer-link"
+                                style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                                onClick={() => setShowForgot(true)}
+                            >
+                                Forgot Password?
+                            </button>
                         </div>
                     </div>
                 </main>
             </div>
+
+            {/* Forgot Password Modal — rendered on top */}
+            {showForgot && (
+                <ForgotPassword onClose={() => setShowForgot(false)} />
+            )}
         </div>
     );
 }
