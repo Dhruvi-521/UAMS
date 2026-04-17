@@ -208,7 +208,7 @@ export default function ForgotPassword({ onClose }) {
                             </svg>
                         </div>
                         <h2 className="fp-title">Forgot Password?</h2>
-                        <p className="fp-desc">Enter your college email and we'll send you a verification code.</p>
+                        <p className="fp-desc">Enter your college email and we'll send you a verification code on email.</p>
 
                         <form className="fp-form" onSubmit={handleGetOtp}>
                             <div className="fp-field-label">College Email ID</div>
@@ -319,7 +319,7 @@ export default function ForgotPassword({ onClose }) {
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
                         </div>
-                        <h2 className="fp-title">Reset Password</h2>
+                        <h2 className="fp-title">Reset Password ? </h2>
                         <p className="fp-desc">Create a strong new password for your account.</p>
 
                         <form className="fp-form" onSubmit={handleReset}>
