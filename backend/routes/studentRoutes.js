@@ -2,12 +2,19 @@ const express = require("express");
 const router = express.Router();
 const studentController = require("../controllers/studentController");
 
-// @route   POST api/students/add
-// @desc    Add a new student and create their login account
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+// ADD
 router.post("/add", studentController.addStudent);
 
-// @route   GET api/students
-// @desc    Get all students for the management list
+// GET
 router.get("/", studentController.getStudents);
+
+// DELETE
+router.delete("/student/:id", studentController.deleteStudent);
+
+// ✅ EXCEL UPLOAD
+router.post("/upload-excel", upload.single("file"), studentController.uploadExcel);
 
 module.exports = router;

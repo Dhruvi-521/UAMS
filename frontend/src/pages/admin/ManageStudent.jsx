@@ -145,6 +145,28 @@ export default function StudentManagement() {
         return matchesSearch && matchesDepartment && matchesSemester && matchesStatus;
     });
 
+    const handleDelete = async (studentId) => {
+        if (!window.confirm("Are you sure you want to delete this student?")) return;
+
+        try {
+            const res = await axios.delete(
+                `http://localhost:5000/api/students/student/${studentId}`
+            );
+
+            if (res.data.success) {
+                alert("Student deleted successfully");
+
+                // remove from UI
+                setStudentData((prev) =>
+                    prev.filter((s) => s.id !== studentId)
+                );
+            }
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data?.message || "Failed to delete student");
+        }
+    };
+
     // ── Sidebar helpers ───────────────────────────────────────────────────────
     const openProfile = (student) => { setSelectedStudent(student); setSidebarOpen(true); };
     const closeSidebar = () => { setSidebarOpen(false); setSelectedStudent(null); };
@@ -309,7 +331,10 @@ export default function StudentManagement() {
                                                 >
                                                     <Pencil size={13} />
                                                 </button>
-                                                <button className="sm-act-btn sm-act-del">
+                                                <button
+                                                    className="sm-act-btn sm-act-del"
+                                                    onClick={() => handleDelete(s.id)}
+                                                >
                                                     <Trash2 size={13} />
                                                 </button>
                                             </div>
@@ -364,7 +389,10 @@ export default function StudentManagement() {
                                 >
                                     <Pencil size={14} color="#64748b" />
                                 </button>
-                                <button className="sm-card-icon-btn del">
+                                <button
+                                    className="sm-card-icon-btn del"
+                                    onClick={() => handleDelete(s.id)}
+                                >
                                     <Trash2 size={14} />
                                 </button>
                             </div>

@@ -1,26 +1,56 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Upload, Pencil, Trash2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import "./addExcelStudent.css";
+import axios from 'axios';
+import * as XLSX from "xlsx"; // ✅ NEW
 
 const PROGRAMS = ["Computer Science (B.Sc.)", "Mathematics (B.Sc.)", "Physics (B.Sc.)", "Engineering (B.Tech.)"];
 const SEMESTERS = ["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6", "Semester 7", "Semester 8"];
 
-const sampleStudents = [
-    { name: "Emily Davis", gender: "Female", email: "emily.d@email.com", mobile: "123-456-7890", program: "Comp Science", semester: "Semester 1", batch: "2025-27" },
-    { name: "Michael Brown", gender: "Male", email: "m.brown88@email.com", mobile: "987-654-3210", program: "Comp Science", semester: "Semester 1", batch: "2025-27" },
-    { name: "Sophia Green", gender: "Female", email: "sophia.green@email.com", mobile: "555-123-4567", program: "Comp Science", semester: "Semester 1", batch: "2025-27" },
-];
+const initialForm = {
+    program: ""
+};
 
 export default function AddExcelStudent() {
-    const [program, setProgram] = useState(PROGRAMS[0]);
+    const [program, setProgram] = useState([]);
+    const [form, setForm] = useState(initialForm);
+
     const [semester, setSemester] = useState(SEMESTERS[0]);
     const [batch, setBatch] = useState("2025-27");
     const [dragging, setDragging] = useState(false);
     const [fileName, setFileName] = useState("");
-    const [students, setStudents] = useState(sampleStudents);
+
+    const [students, setStudents] = useState([]);
+
     const [page, setPage] = useState(1);
     const fileRef = useRef();
     const totalPages = 2;
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/api/programs")
+            .then(res => setProgram(res.data))
+            .catch(err => console.log(err));
+
+        axios.get("http://localhost:5000/api/students")
+            .then(res => {
+                const formatted = res.data.map((s) => ({
+                    name: `${s.firstName || ""} ${s.lastName || ""}`.trim(),
+                    gender: s.gender || "",
+                    email: s.universityEmail || s.personalEmail || "",
+                    mobile: s.mobile || "",
+                    program: s.program?.programName || "",
+                    semester: s.semester || "",
+                    batch: s.batch || "",
+                    division: s.division || ""
+                }));
+
+                setStudents(formatted);
+            })
+            .catch(err => console.log(err));
+    }, []);
+
+    const set = (field) => (e) =>
+        setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -34,31 +64,136 @@ export default function AddExcelStudent() {
         if (file) setFileName(file.name);
     };
 
-    const deleteStudent = (idx) => setStudents(prev => prev.filter((_, i) => i !== idx));
+    const deleteStudent = (idx) =>
+        setStudents(prev => prev.filter((_, i) => i !== idx));
+
+    // ============================
+    // ✅ PREVIEW EXCEL (NEW)
+    // ============================
+    const handlePreview = () => {
+        const file = fileRef.current.files[0];
+
+        if (!file) {
+            alert("Please select file");
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: "array" });
+
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet);
+
+            const formatted = rows.map((row) => ({
+                name: `${row.firstName || ""} ${row.lastName || ""}`.trim(),
+                gender: row.gender || "",
+                email: row.universityEmail || row.personalEmail || "",
+                mobile: row.mobile || "",
+                program: form.program || "",
+                semester: semester,
+                batch: batch,
+                division: row.division || ""
+            }));
+
+            setStudents(formatted); // 🔥 SHOW IN TABLE
+        };
+
+        reader.readAsArrayBuffer(file);
+    };
+
+    // ============================
+    // ✅ UPLOAD TO BACKEND
+    // ============================
+    const handleUpload = async () => {
+        if (!fileRef.current.files[0]) {
+            alert("Please select file");
+            return;
+        }
+
+        if (!form.program || !semester || !batch) {
+            alert("Please select Program, Semester and Batch");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("file", fileRef.current.files[0]);
+            formData.append("program", form.program);
+            formData.append("semester", semester);
+            formData.append("batch", batch);
+
+            const res = await axios.post(
+                "http://localhost:5000/api/students/upload-excel",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
+            );
+
+            if (res.data.success) {
+                alert(`Uploaded ${res.data.count} students successfully`);
+
+                const updated = await axios.get("http://localhost:5000/api/students");
+
+                const formatted = updated.data.map((s) => ({
+                    name: `${s.firstName || ""} ${s.lastName || ""}`.trim(),
+                    gender: s.gender || "",
+                    email: s.universityEmail || s.personalEmail || "",
+                    mobile: s.mobile || "",
+                    program: s.program?.programName || "",
+                    semester: s.semester || "",
+                    batch: s.batch || "",
+                    division: s.division || ""
+                }));
+
+                setStudents(formatted);
+
+                fileRef.current.value = "";
+                setFileName("");
+            }
+
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data?.message || "Upload failed");
+        }
+    };
 
     return (
         <div className="aes-card">
-            {/* Filters Row */}
+
             <div className="aes-filters">
                 <div className="aes-field">
                     <label className="aes-label">Select Program</label>
-                    <select className="aes-select" value={program} onChange={e => setProgram(e.target.value)}>
-                        {PROGRAMS.map(p => <option key={p}>{p}</option>)}
+                    <select
+                        className="aes-select"
+                        value={form.program}
+                        onChange={set("program")}>
+
+                        <option value="">-- Select Program --</option>
+                        {program.map((prog) => (
+                            <option key={prog._id} value={prog._id}>
+                                {prog.programName}
+                            </option>
+                        ))}
                     </select>
                 </div>
+
                 <div className="aes-field">
                     <label className="aes-label">Select Semester</label>
-                    <select className="aes-select" value={semester} onChange={e => setSemester(e.target.value)}>
-                        {SEMESTERS.map(s => <option key={s}>{s}</option>)}
-                    </select>
+                    <input className="aes-input" type="text" onChange={e => setSemester(e.target.value)} placeholder="Eg: 1"/>
                 </div>
+
                 <div className="aes-field">
-                    <label className="aes-label">Batch Number (e.g., 2025-27)</label>
-                    <input className="aes-input" value={batch} onChange={e => setBatch(e.target.value)} placeholder="e.g. 2025-27" />
+                    <label className="aes-label">Batch</label>
+                    <input className="aes-input" type="text" onChange={e => setBatch(e.target.value)} placeholder="Eg: 2025-26" />
                 </div>
             </div>
 
-            {/* Upload Zone */}
             <div className="aes-upload-section">
                 <label className="aes-upload-label">Upload Excel File</label>
                 <div
@@ -69,15 +204,11 @@ export default function AddExcelStudent() {
                     onClick={() => fileRef.current.click()}
                 >
                     <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv" style={{ display: "none" }} onChange={handleFileChange} />
-                    <Upload size={28} className="aes-upload-icon" />
-                    {fileName
-                        ? <p className="aes-drop-text"><strong>{fileName}</strong> selected</p>
-                        : <p className="aes-drop-text">Drag & Drop Excel File or <span className="aes-browse">Browse</span></p>
-                    }
+                    <Upload size={28} />
+                    {fileName ? <p>{fileName}</p> : <p>Upload Excel</p>}
                 </div>
             </div>
 
-            {/* Table */}
             <div className="aes-table-wrap">
                 <table className="aes-table">
                     <thead>
@@ -98,10 +229,9 @@ export default function AddExcelStudent() {
                                 <td>{s.semester}</td>
                                 <td>{s.batch}</td>
                                 <td>
-                                    <div className="aes-actions">
-                                        <button className="aes-act-btn edit"><Pencil size={14} /></button>
-                                        <button className="aes-act-btn del" onClick={() => deleteStudent(i)}><Trash2 size={14} /></button>
-                                    </div>
+                                    <button onClick={() => deleteStudent(i)}>
+                                        <Trash2 size={14} />
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -109,23 +239,15 @@ export default function AddExcelStudent() {
                 </table>
             </div>
 
-            {/* Pagination */}
-            <div className="aes-pagination">
-                <span className="aes-page-info">Showing 1-10 of 100 students</span>
-                <div className="aes-page-btns">
-                    <button className="aes-page-btn" onClick={() => setPage(1)} disabled={page === 1}><ChevronsLeft size={14} /></button>
-                    <button className="aes-page-btn" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}><ChevronLeft size={14} /></button>
-                    {[1, 2].map(n => (
-                        <button key={n} className={`aes-page-btn${page === n ? " active" : ""}`} onClick={() => setPage(n)}>{n}</button>
-                    ))}
-                    <button className="aes-page-btn" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}><ChevronRight size={14} /></button>
-                    <button className="aes-page-btn" onClick={() => setPage(totalPages)} disabled={page === totalPages}><ChevronsRight size={14} /></button>
-                </div>
-            </div>
-
-            {/* Footer Button */}
+            {/* ✅ ONLY CHANGE: Added Upload File button */}
             <div className="aes-footer">
-                <button className="aes-submit-btn">Add All Students</button>
+                <button className="aes-submit-btn" onClick={handlePreview}>
+                    Upload File
+                </button>
+
+                <button className="aes-submit-btn" onClick={handleUpload}>
+                    Add All Students
+                </button>
             </div>
         </div>
     );

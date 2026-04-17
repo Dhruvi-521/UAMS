@@ -42,7 +42,7 @@ const studentSchema = new mongoose.Schema({
     status: { 
         type: String, 
         enum: ["Active", "Inactive"], 
-        default: "Inactive" 
+        default: "Active" 
     }
 }, { 
     timestamps: true // This adds 'createdAt' and 'updatedAt' automatically
