@@ -593,7 +593,7 @@ export default function ForgotPassword({ onClose }) {
                             <Mail01Icon size={26} color="white"/>
                         </div>
 
-                        <h2 className="fp-title">Forgot Password?</h2>
+                        <h2 className="fp-title">Reset Password?</h2>
 
                         <form onSubmit={handleGetOtp}>
                             <div className="fp-input-group">
