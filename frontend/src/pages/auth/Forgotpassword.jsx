@@ -457,17 +457,17 @@
 
 
 
-import React, { useState, useRef, useEffect } from "react";
-import "./ForgotPassword.css";
 import {
-    Mail01Icon,
-    Smartphone01Icon,
-    LockIcon,
-    ViewIcon,
-    ViewOffIcon,
+    ArrowLeft02Icon,
     CheckmarkCircle02Icon,
-    ArrowLeft02Icon
+    // Smartphone01Icon,
+    LockIcon,
+    Mail01Icon,
+    ViewIcon,
+    ViewOffIcon
 } from "hugeicons-react";
+import { useEffect, useRef, useState } from "react";
+import "./ForgotPassword.css";
 
 /* ───────────────────────────────────────────── */
 const STEP_EMAIL = "email";
@@ -619,7 +619,7 @@ export default function ForgotPassword({ onClose }) {
                 {step===STEP_OTP && (
                     <div className="fp-body">
                         <div className="fp-icon-wrap fp-icon-wrap--indigo">
-                            <Smartphone01Icon size={26} color="white"/>
+                            {/* <Smartphone01Icon size={26} color="white"/> */}
                         </div>
 
                         <form onSubmit={handleVerifyOtp}>

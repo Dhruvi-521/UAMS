@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import ForgotPassword from "./ForgotPassword"; // ← NEW
 import "./Login.css";
-import ForgotPassword from "./ForgotPassword";   // ← NEW
 
 export default function Login() {
     const [studentId, setStudentId]       = useState("");
