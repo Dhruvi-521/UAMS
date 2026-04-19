@@ -141,7 +141,11 @@ export default function AddFaculty({ onBack }) {
               <label className="af-label">Faculty ID</label>
               <div className="af-input-wrap">
                 <Hash size={15} className="af-icon" />
-                <input className="af-input af-input-icon" value={form.facultyId} />
+                <input className="af-input af-input-icon" 
+                value={form.facultyId} 
+                placeholder="Enter Faculty ID (eg. SUSOC2022001)"
+                onChange={setField('facultyId')}
+                />
               </div>
             </div>
           </div>

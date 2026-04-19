@@ -1,35 +1,3 @@
-exports.getFaculty = async (req, res) => {
-    try {
-        const data = await Faculty.find();
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// const Faculty = require("../models/Faculty");
-
-// // ADD FACULTY
-
-// exports.addFaculty = async (req, res) => {
-//   try {
-//     const newFaculty = new Faculty(req.body);
-//     const savedFaculty = await newFaculty.save();
-
-//     res.status(201).json({
-//       success: true,
-//       message: "Faculty added successfully",
-//       data: savedFaculty
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: "Error adding faculty",
-//       error: error.message
-//     });
-//   }
-// };
-
 const mongoose = require("mongoose");
 const Faculty = require("../models/Faculty");
 const Users = require("../models/Users"); // Make sure this path is correct
@@ -56,6 +24,7 @@ exports.addFaculty = async (req, res) => {
       userID: savedFaculty._id,
       onModel: "Faculty",
       role: "faculty",
+      username: savedFaculty.email,
       password: req.body.password || "SU1234"
     });
     await newUser.save();
@@ -93,6 +62,12 @@ exports.updateFaculty = async (req, res) => {
         message: "Faculty not found with ID: " + id
       });
     }
+
+    // UPDATE User table when you updated university email id of faculty table
+    await Users.findOneAndUpdate(
+      { userID: updatedFaculty._id },
+      { username: updatedFaculty.email }
+    );
 
     res.json({
       success: true,

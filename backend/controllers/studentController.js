@@ -28,6 +28,7 @@ exports.addStudent = async (req, res) => {
       userID: savedStudent._id,
       onModel: "Student",
       role: "student",
+      username: savedStudent.universityEmail,
       password: req.body.password || "SU1234"
     });
 
@@ -132,6 +133,15 @@ exports.uploadExcel = async (req, res) => {
         }
       }
 
+      // ✅ Email Validation
+      const email =
+        row.universityEmail ||
+        row["University Email"];
+
+      if (!email) {
+        throw new Error(`Missing university email at row ${index + 1}`);
+      }
+
       // ============================
       // ✅ PERSONAL EMAIL FIX
       // ============================
@@ -197,6 +207,20 @@ exports.uploadExcel = async (req, res) => {
       });
     });
 
+    // ✅ CHECK DUPLICATE EMAILS IN DB
+    const emails = students.map(s => s.universityEmail);
+
+    const existing = await Student.find({
+      universityEmail: { $in: emails }
+    });
+
+    if (existing.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Some university emails already exist in database"
+      });
+    }
+    
     // ============================
     // ✅ SAVE STUDENTS
     // ============================
@@ -209,6 +233,7 @@ exports.uploadExcel = async (req, res) => {
       userID: s._id,
       onModel: "Student",
       role: "student",
+      username: s.universityEmail,
       password: "SU1234"
     }));
 
@@ -284,6 +309,12 @@ const updatedData = {
         message: "Student not found"
       });
     }
+
+     // UPDATE User table when you updated university email id of Student table
+    await Users.findOneAndUpdate(
+      { userID: updatedStudent._id },
+      { username: updatedStudent.universityEmail }
+    );
 
     res.json({
       success: true,
