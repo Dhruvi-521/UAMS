@@ -36,6 +36,44 @@ body {
     flex-direction: column;
 }
 
+.stu-basic-detail {
+    padding: 10px 20px;
+}
+
+/* Welcome Text */
+.wc-student {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+}
+
+.wc-student span:nth-child(1) {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.wc-student span:nth-child(2) {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Student Details */
+.student-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.st-dt-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+
 /* ===== HEADER ===== */
 .dashboard-header {
     background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
@@ -196,6 +234,7 @@ body {
     opacity: 0.9;
     text-transform: uppercase;
     letter-spacing: 0.4px;
+    color: white;
 }
 
 .stat-icon {
@@ -490,6 +529,14 @@ body {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
+    .wc-student span:nth-child(1) {
+        font-size: 2.5rem;
+    }
+
+    .wc-student span:nth-child(2) {
+        font-size: 1.5rem;
+    }
+
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -504,6 +551,18 @@ body {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
         margin-bottom: 16px;
+    }
+
+     .wc-student span:nth-child(1) {
+        font-size: 2rem;
+    }
+
+    .wc-student span:nth-child(2) {
+        font-size: 1.3rem;
+    }
+
+    .student-details {
+        justify-content: space-between;
     }
 
     .content-grid {
@@ -523,6 +582,29 @@ body {
 @media (max-width: 480px) {
     .dashboard-header {
         padding: 12px 14px;
+    }
+
+        .wc-student {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wc-student span:nth-child(1) {
+        font-size: 1.5rem;
+    }
+
+    .wc-student span:nth-child(2) {
+        font-size: 1.2rem;
+    }
+
+    .student-details {
+        justify-content: flex-start;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .st-dt-title {
+        font-size: 1rem;
     }
 
     .stats-grid {

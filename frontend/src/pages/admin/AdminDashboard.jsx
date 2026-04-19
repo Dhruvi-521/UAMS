@@ -8,8 +8,10 @@ import {
 const Dashboard = () => {
   return (
     <div className="dashboard-wrapper">
+      
       <div className="dashboard-container">
 
+      
         {/* ===== Stats Section ===== */}
         <div className="stats-grid">
           <div className="stat-card blue-bg">

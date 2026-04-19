@@ -41,6 +41,20 @@ export default function StudentDashboard() {
             {/* ===== MAIN ===== */}
             <main className="dashboard-main">
 
+                <div className="stu-basic-detail">
+                    <p className="wc-student">
+                        <span>Welcome, </span>
+                        <span>Virajsinh Vaghela</span>
+                    </p>
+
+                    <p className="student-details">
+                        <span className="st-dt-title">Student ID :-</span>
+                        <span> SU252701001</span>
+                        <span className="st-dt-title">  Roll number :- </span>
+                        <span>01</span>
+                    </p>
+                </div>
+
                 {/* --- STATS --- */}
                 <div className="stats-grid">
                     <div className="stat-card purple">
@@ -158,11 +172,6 @@ export default function StudentDashboard() {
 
                 </div>
             </main>
-
-            {/* ===== FOOTER ===== */}
-            <footer className="dashboard-footer">
-                © 2024 UAMS — University Academic Management System. All rights reserved.
-            </footer>
 
         </div>
     );

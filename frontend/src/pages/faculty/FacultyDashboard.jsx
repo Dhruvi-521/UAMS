@@ -57,6 +57,20 @@ export default function FacultyDashboard() {
             {/* ===== MAIN ===== */}
             <main className="dashboard-main">
 
+                                <div className="stu-basic-detail">
+                    <p className="wc-student">
+                        <span>Welcome, </span>
+                        <span>Prof . Virajsinh Vaghela</span>
+                    </p>
+
+                    <p className="student-details">
+                        <span className="st-dt-title">Faculty ID :-</span>
+                        <span> SUF252701001</span>
+                        <span className="st-dt-title"> Department:- </span>
+                        <span>School of Computer Science</span>
+                    </p>
+                </div>
+
                 {/* --- STATS --- */}
                 <div className="stats-grid">
                     <div className="stat-card blue">
