@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
-
 const app = express();
 
 app.use(cors());
@@ -11,6 +10,10 @@ app.use(express.json());
 
 // DB connection
 connectDB();
+
+// ✅ Admin Route (YOU MISSED THIS)
+const adminRoutes = require("./routes/adminRoutes");
+app.use("/api", adminRoutes);
 
 // 🔥 Use routes
 app.use('/api', require('./routes/departmentRoutes'));

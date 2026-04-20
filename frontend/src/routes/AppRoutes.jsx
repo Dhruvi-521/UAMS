@@ -3,6 +3,8 @@ import { AuthProvider, useAuth } from "../context/AuthContext";
 
 import Login from "../pages/auth/Login.jsx";
 
+/* Admin Registration*/
+import AdminRegister from "../pages/admin/AdminRegister.jsx";
 /* All Layouts*/
 import AdminLayout from "../layouts/AdminLayout.jsx";
 import FacultyLayout from "../layouts/FacultyLayout.jsx";
@@ -54,6 +56,7 @@ const ProtectedRoute = ({ children, allowedRole }) => {
 const InnerRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
+      <Route path='/AdminRegistration' element={<AdminRegister/>}/>
     <Route path="/" element={<Navigate to="/login" replace />} />
 
     <Route path="/admin" element={<ProtectedRoute allowedRole="admin"><AdminLayout /></ProtectedRoute>}>
