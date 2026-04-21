@@ -23,6 +23,10 @@ app.use('/api', require('./routes/courseRoutes'));
 
 app.use('/api', require('./routes/facultyRoutes'));
 
+const authRoutes = require("./routes/authRoutes");
+
+app.use("/api/auth", authRoutes);
+
 // app.use("/api/faculty", facultyRoutes);
 
 // ... other imports students 

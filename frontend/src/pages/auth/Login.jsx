@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import ForgotPassword from "./Forgotpassword"; // ← NEW
+import ForgotPassword from "./Forgotpassword";
 import "./Login.css";
 
 export default function Login() {
@@ -11,12 +11,13 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading]           = useState(false);
     const [error, setError]               = useState("");
-    const [showForgot, setShowForgot]     = useState(false);  // ← NEW
+    const [showForgot, setShowForgot]     = useState(false);
 
     const auth     = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    // ✅ FIXED FUNCTION
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
@@ -25,15 +26,38 @@ export default function Login() {
             return;
         }
 
-        setLoading(true);
-        setTimeout(() => {
-            const role = auth.login(studentId, password);
+        if (!studentId || !password) {
+            setError("Please enter username and password.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            // ✅ CALL BACKEND LOGIN
+            const role = await auth.login(studentId, password);
+
             setLoading(false);
-            if (role === "admin")        navigate("/admin/dashboard");
-            else if (role === "student") navigate("/student/dashboard");
-            else if (role === "faculty") navigate("/faculty/dashboard");
-            else setError("Invalid username or password.");
-        }, 2000);
+
+            // ✅ ROLE BASED REDIRECTION
+            if (role === "admin") {
+                navigate("/admin/dashboard");
+            } 
+            else if (role === "student") {
+                navigate("/student/dashboard");
+            } 
+            else if (role === "faculty") {
+                navigate("/faculty/dashboard");
+            } 
+            else {
+                setError("Invalid username or password.");
+            }
+
+        } catch (err) {
+            setLoading(false);
+            setError("Something went wrong. Try again.");
+            console.error(err);
+        }
     };
 
     return (
@@ -138,7 +162,6 @@ export default function Login() {
                         </form>
 
                         <div className="card-footer">
-                            {/* ↓ Changed from <a href> to a button that opens the modal */}
                             <button
                                 className="footer-link"
                                 style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
@@ -151,10 +174,10 @@ export default function Login() {
                 </main>
             </div>
 
-            {/* Forgot Password Modal — rendered on top */}
             {showForgot && (
                 <ForgotPassword onClose={() => setShowForgot(false)} />
             )}
         </div>
     );
+    console.log("Input:", studentId, password);
 }
