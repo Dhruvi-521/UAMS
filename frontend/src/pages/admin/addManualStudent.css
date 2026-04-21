@@ -139,7 +139,7 @@
 
 /* Radio buttons */
 .ams-radio-group { display: flex; gap: 22px; align-items: center; }
-.ams-radio-label {
+.sad-ams-radio-label {
     display: flex;
     align-items: center;
     gap: 8px;

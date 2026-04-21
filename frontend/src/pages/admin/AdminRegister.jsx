@@ -122,11 +122,11 @@ const handleSubmit = async (e) => {
         <h1 className="adreg-title">Admin Registration</h1>
         <div className="adreg-divider" />
 
-        <form className="adreg-form" onSubmit={handleSubmit}>
+        <form className="ad-reg-form" onSubmit={handleSubmit}>
 
           {/* Username */}
           <div className="adreg-field-group">
-            <label htmlFor="username">Username</label>
+            <label className="ad-reg-label" htmlFor="username">Username</label>
             <div className="adreg-input-wrap">
               <UserIcon />
               <input
@@ -136,7 +136,7 @@ const handleSubmit = async (e) => {
                 placeholder="Enter university-provided username"
                 value={form.username}
                 onChange={handleChange}
-                className={form.username ? "adreg-has-value" : ""}
+                className={`ad-reg-input ${form.username ? "ad-reg-has-value" : ""}`}
                 autoComplete="username"
               />
             </div>
@@ -144,7 +144,7 @@ const handleSubmit = async (e) => {
 
           {/* Password */}
           <div className="adreg-field-group">
-            <label htmlFor="password">Password</label>
+            <label className="ad-reg-label" htmlFor="password">Password</label>
             <div className="adreg-input-wrap">
               <LockIcon />
               <input
@@ -154,7 +154,7 @@ const handleSubmit = async (e) => {
                 placeholder="Create a strong password"
                 value={form.password}
                 onChange={handleChange}
-                className={form.password ? "adreg-has-value" : ""}
+                className={`ad-reg-input ${form.password ? "adreg-has-value" : ""}`}
                 autoComplete="new-password"
               />
             </div>
@@ -162,7 +162,7 @@ const handleSubmit = async (e) => {
 
           {/* Full Name — 3 columns */}
           <div className="adreg-field-group">
-            <label>Full Name</label>
+            <label className="ad-reg-label">Full Name</label>
             <div className="adreg-row-3">
               {["firstName", "middleName", "lastName"].map((field, i) => (
                 <input
@@ -172,7 +172,7 @@ const handleSubmit = async (e) => {
                   placeholder={["First Name", "Middle Name", "Last Name"][i]}
                   value={form[field]}
                   onChange={handleChange}
-                  className={form[field] ? "adreg-has-value" : ""}
+                  className={`ad-reg-input ${form[field] ? "adreg-has-value" : ""}`}
                   style={{ paddingLeft: "14px" }}
                 />
               ))}
@@ -181,7 +181,7 @@ const handleSubmit = async (e) => {
 
           {/* Address */}
           <div className="adreg-field-group">
-            <label htmlFor="address">Address</label>
+            <label className="ad-reg-label" htmlFor="address">Address</label>
             <div className="adreg-input-wrap">
               <MapPinIcon />
               <textarea
@@ -190,14 +190,14 @@ const handleSubmit = async (e) => {
                 placeholder="Enter your full address"
                 value={form.address}
                 onChange={handleChange}
-                className={form.address ? "adreg-has-value" : ""}
+                className={`ad-reg-textarea ${form.address ? "ad-reg-has-value" : ""}`}
               />
             </div>
           </div>
 
           {/* Contact — 2 columns */}
           <div className="adreg-field-group">
-            <label>Contact Info</label>
+            <label className="ad-reg-label">Contact Info</label>
             <div className="adreg-row-2">
               <div className="adreg-input-wrap">
                 <PhoneIcon />
@@ -207,7 +207,7 @@ const handleSubmit = async (e) => {
                   placeholder="Phone number"
                   value={form.phone}
                   onChange={handleChange}
-                  className={form.phone ? "adreg-has-value" : ""}
+                  className={`ad-reg-input ${form.phone ? "adreg-has-value" : ""}`}
                 />
               </div>
               <div className="adreg-input-wrap">
@@ -218,7 +218,7 @@ const handleSubmit = async (e) => {
                   placeholder="Email address"
                   value={form.email}
                   onChange={handleChange}
-                  className={form.email ? "adreg-has-value" : ""}
+                  className={`ad-reg-input ${form.email ? "adreg-has-value" : ""}`}
                 />
               </div>
             </div>

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Faculty = require("../models/Faculty");
 const Users = require("../models/Users"); // Make sure this path is correct
+const bcrypt = require("bcrypt");
 
 // GET ALL FACULTY
 exports.getFaculty = async (req, res) => {
@@ -19,14 +20,19 @@ exports.addFaculty = async (req, res) => {
     const newFaculty = new Faculty(req.body);
     const savedFaculty = await newFaculty.save();
 
-    // 2. Save User next (No session needed)
+    // 2. HASH PASSWORD
+    const rawPassword = req.body.password || "SU1234";
+    const hashedPassword = await bcrypt.hash(rawPassword, 10);
+
+    // 3. Save User
     const newUser = new Users({
       userID: savedFaculty._id,
       onModel: "Faculty",
       role: "faculty",
       username: savedFaculty.email,
-      password: req.body.password || "SU1234"
+      password: hashedPassword // ✅ encrypted password
     });
+
     await newUser.save();
 
     res.status(201).json({
@@ -34,6 +40,7 @@ exports.addFaculty = async (req, res) => {
       message: "Faculty and User created successfully!",
       data: savedFaculty
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,

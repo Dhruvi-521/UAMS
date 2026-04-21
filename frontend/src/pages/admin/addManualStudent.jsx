@@ -314,7 +314,7 @@ export default function AddManualStudent() {
 
                 <div className="ams-radio-group">
                     {["Active", "Inactive"].map(s => (
-                        <label key={s} className="ams-radio-label">
+                        <label key={s} className="sad-ams-radio-label">
                             <input
                                 type="radio"
                                 value={s}
