@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
 import "./FacultyDashboard.css";
 
 const todayClasses = [
@@ -29,6 +30,33 @@ const quickActions = [
 
 export default function FacultyDashboard() {
     const [notifCount] = useState(2);
+    const { user } = useAuth();
+    const token = localStorage.getItem("token");
+    const [profile, setProfile] = useState(null);
+
+        useEffect(() => {
+
+    fetch(
+        "http://localhost:5000/api/users/profile",
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    )
+    .then(res => res.json())
+    .then(data => {
+
+        console.log("Profile Data:", data);
+
+        setProfile(data.profile);
+
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
+}, [token]);
 
     const today = new Date().toLocaleDateString("en-IN", {
         weekday: "short", day: "numeric", month: "short", year: "numeric",
@@ -60,14 +88,14 @@ export default function FacultyDashboard() {
                                 <div className="stu-basic-detail">
                     <p className="wc-student">
                         <span>Welcome, </span>
-                        <span>Prof . Virajsinh Vaghela</span>
+                        <span>{profile?.firstName}</span>
                     </p>
 
                     <p className="student-details">
                         <span className="st-dt-title">Faculty ID :-</span>
-                        <span> SUF252701001</span>
+                       <span>{profile?.facultyId}</span>
                         <span className="st-dt-title"> Department:- </span>
-                        <span>School of Computer Science</span>
+                        <span>{profile?.department}</span>
                     </p>
                 </div>
 

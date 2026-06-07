@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import "./StudentDashboard.css";
 
 const internalMarks = [
@@ -30,10 +31,37 @@ const quickActions = [
 
 export default function StudentDashboard() {
     const [notifCount] = useState(3);
+    const { user } = useAuth();
+    const token = localStorage.getItem("token");
+    const [profile, setProfile] = useState(null);
 
     const today = new Date().toLocaleDateString("en-IN", {
         weekday: "short", day: "numeric", month: "short", year: "numeric",
     });
+
+    useEffect(() => {
+
+    fetch(
+        "http://localhost:5000/api/users/profile",
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    )
+    .then(res => res.json())
+    .then(data => {
+
+        console.log("Profile Data:", data);
+
+        setProfile(data.profile);
+
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
+}, [token]);
 
     return (
         <div className="dashboard-wrapper">
@@ -44,14 +72,14 @@ export default function StudentDashboard() {
                 <div className="stu-basic-detail">
                     <p className="wc-student">
                         <span>Welcome, </span>
-                        <span>Virajsinh Vaghela</span>
+                        <span> {profile?.firstName}</span>
                     </p>
 
                     <p className="student-details">
                         <span className="st-dt-title">Student ID :-</span>
-                        <span> SU252701001</span>
+                        <span>{profile?.studentId}</span>
                         <span className="st-dt-title">  Roll number :- </span>
-                        <span>01</span>
+                        <span>{profile?.rollNumber}</span>
                     </p>
                 </div>
 

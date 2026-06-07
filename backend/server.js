@@ -11,6 +11,7 @@ app.use(express.json());
 // DB connection
 connectDB();
 
+
 // ✅ Admin Route (YOU MISSED THIS)
 const adminRoutes = require("./routes/adminRoutes");
 app.use("/api", adminRoutes);
@@ -24,8 +25,9 @@ app.use('/api', require('./routes/courseRoutes'));
 app.use('/api', require('./routes/facultyRoutes'));
 
 const authRoutes = require("./routes/authRoutes");
-
+const userRoutes = require("./routes/userRoutes")
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 // app.use("/api/faculty", facultyRoutes);
 
