@@ -17,47 +17,50 @@ const addProgram = ({ onClose }) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-const handleSubmit = async () => {
-  try {
-    // convert data for backend
-    const dataToSend = {
-      programName: formData.programName,
-      departmentName: formData.departmentName, // now this is _id
-      totalYearsProgram: parseInt(formData.totalYears),
-      totalCredit: Number(formData.totalCreditHour),
-      isActive: formData.status === "active"
-    };
+  const handleSubmit = async () => {
+    try {
+      // convert data for backend
+      const dataToSend = {
+        programName: formData.programName,
+        departmentName: formData.departmentName, // now this is _id
+        totalYearsProgram: parseInt(formData.totalYears),
+        totalCredit: Number(formData.totalCreditHour),
+        isActive: formData.status === "active",
+      };
 
-    // remove empty date
-    if (formData.startDate) {
-      dataToSend.StartDate = formData.startDate;
+      // remove empty date
+      if (formData.startDate) {
+        dataToSend.StartDate = formData.startDate;
+      }
+
+      const res = await axios.post(
+        "http://localhost:5000/api/programs",
+        dataToSend,
+      );
+
+      console.log(res.data);
+      alert("Program Added Successfully");
+
+      // Check if onClose exists before calling it
+      if (typeof onClose === "function") {
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error adding program");
     }
-
-    const res = await axios.post(
-      "http://localhost:5000/api/programs",
-      dataToSend
-    );
-
-    console.log(res.data);
-    alert("Program Added Successfully");
-
-   // Check if onClose exists before calling it
-    if (typeof onClose === "function") {
-      onClose();
-    }
-
-  } catch (error) {
-    console.log(error);
-    alert("Error adding program");
-  }
-};
+  };
 
   const [departments, setDepartments] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/departments")
-      .then(res => setDepartments(res.data))
-      .catch(err => console.log(err));
+    axios
+      .get("http://localhost:5000/api/departments")
+      .then((res) => {
+        console.log("Departments:", res.data);
+        setDepartments(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (

@@ -1,11 +1,36 @@
 import React from 'react';
 import './AdminDashboard.css';
+import AddStudent from "./addStudent";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { 
   Users, UserCheck, BookOpen, FileText, 
   PlusCircle, FilePlus, Send 
 } from 'lucide-react';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    students: 0,
+    faculty: 0,
+    courses: 0,
+  });
+  useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/dashboard/stats"
+      );
+
+      setStats(res.data);
+    } catch (err) {
+      console.error("Dashboard stats error:", err);
+    }
+  };
+
+  fetchStats();
+}, []);
   return (
     <div className="dashboard-wrapper">
       
@@ -19,8 +44,8 @@ const Dashboard = () => {
               <Users size={20} />
               <span>Total Students</span>
             </div>
-            <h2 className="stat-value">1,250</h2>
-            <p className="stat-footer">+ 45 this month</p>
+              <h2 className="stat-value">{stats.students}</h2>
+              {/* <p className="stat-footer">+ 45 this month</p> */}
           </div>
 
           <div className="stat-card green-bg">
@@ -28,8 +53,8 @@ const Dashboard = () => {
               <UserCheck size={20} />
               <span>Total Faculty</span>
             </div>
-            <h2 className="stat-value">85</h2>
-            <p className="stat-footer">10 Departments</p>
+            <h2 className="stat-value">{stats.faculty}</h2>
+            {/* <p className="stat-footer">10 Departments</p> */}
           </div>
 
           <div className="stat-card purple-bg">
@@ -37,8 +62,8 @@ const Dashboard = () => {
               <BookOpen size={20} />
               <span>Total Courses</span>
             </div>
-            <h2 className="stat-value">32</h2>
-            <p className="stat-footer">25 Active This Semester</p>
+            <h2 className="stat-value">{stats.courses}</h2>
+            {/* <p className="stat-footer">25 Active This Semester</p> */}
           </div>
 
           <div className="stat-card red-bg">
@@ -48,7 +73,7 @@ const Dashboard = () => {
             </div>
             <h2 className="stat-value">18</h2>
             <div className="stat-footer-flex">
-              <span>7 S, 6 F</span>
+              {/* <span>7 S, 6 F</span> */}
               {/* <button className="mini-view-btn">View All</button> */}
             </div>
           </div>
@@ -92,18 +117,23 @@ const Dashboard = () => {
           <div className="content-card">
             <h3>Quick Actions</h3>
             <div className="actions-grid">
-              <button className="btn btn-blue ">
+              <button className="btn btn-blue" onClick={() => 
+                navigate("/admin/students/add")}>
                 <PlusCircle size={18}/> Add Student
               </button>
-              <button className="btn btn-green">
-                <PlusCircle size={18}/> Add Faculty
+              <button
+                className="btn btn-green"
+                onClick={() => navigate("/admin/faculty/add")}
+              >
+                <PlusCircle size={18} />
+                Add Faculty
+            </button>
+            {/* <button className="btn btn-orange">
+                <PlusCircle size={18} /> Add Course
               </button>
               <button className="btn btn-purple">
                 <FilePlus size={18}/> Report
-              </button>
-              <button className="btn btn-orange">
-                <Send size={18}/> Notify
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

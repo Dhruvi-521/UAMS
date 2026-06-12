@@ -15,7 +15,9 @@ import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
 import Leaves from "../pages/admin/Leaves.jsx";
 import ManageCourses from "../pages/admin/ManageCourses.jsx";
 import ManageFaculty from "../pages/admin/ManageFaculty.jsx";
+import AddFaculty from "../pages/admin/AddFaculty.jsx";
 import ManageStudents from "../pages/admin/ManageStudent.jsx";
+import AddStudent from "../pages/admin/addStudent.jsx";
 import Payroll from "../pages/admin/Payroll.jsx";
 import Reports from "../pages/admin/Reports.jsx";
 import ReportsAnalysis from "../pages/admin/ReportsAnalysis.jsx";
@@ -62,7 +64,9 @@ const InnerRoutes = () => (
     <Route path="/admin" element={<ProtectedRoute allowedRole="admin"><AdminLayout /></ProtectedRoute>}>
       <Route path="dashboard" element={<AdminDashboard />} />
       <Route path="students" element={<ManageStudents />} />
+      <Route path="students/add" element={<AddStudent />} />
       <Route path="faculty" element={<ManageFaculty />} />
+      <Route path="faculty/add" element={<AddFaculty />} />
       <Route path="courses" element={<ManageCourses />} />
       <Route path="payroll" element={<Payroll title="Payroll" />} />
       <Route path="leaves" element={<Leaves title="Leave" />} />

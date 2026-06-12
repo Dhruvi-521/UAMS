@@ -23,7 +23,7 @@ const salaryData = [
 
 const quickActions = [
     { label: "+ Quick Attendance", cls: "btn-blue" },
-    { label: "+ New Mentoring Slot", cls: "btn-green" },
+    { label: "  Reports ", cls: "btn-green" },
     { label: "Upload Study Material", cls: "btn-purple" },
     { label: "Apply Leave", cls: "btn-orange" },
 ];

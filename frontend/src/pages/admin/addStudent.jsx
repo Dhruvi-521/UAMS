@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import AddExcelStudent from "./addExcelStudent";
 import AddManualStudent from "./addManualStudent";
@@ -6,11 +7,14 @@ import "./addStudent.css";
 
 export default function AddStudent({ onBack }) {
     const [activeTab, setActiveTab] = useState("excel");
-
+    const navigate = useNavigate(); 
     return (
         <div className="as-wrapper">
             <div className="as-header">
-                <button className="as-back-btn" onClick={onBack}>
+                <button
+                    className="as-back-btn"
+                    onClick={() => navigate("/admin/dashboard")}
+                >
                     <ArrowLeft size={16} /> Back
                 </button>
                 <h1 className="as-title">Add Student</h1>

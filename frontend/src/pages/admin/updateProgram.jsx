@@ -4,7 +4,6 @@ import { ChevronDown, Calendar } from "lucide-react";
 import "./updateProgram.css";
 
 const updateProgram = ({ onClose }) => {
-
   // 🔥 NEW STATES
   const [programs, setPrograms] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -22,23 +21,28 @@ const updateProgram = ({ onClose }) => {
 
   // ✅ FETCH PROGRAMS
   useEffect(() => {
-    axios.get("http://localhost:5000/api/programs")
-      .then(res => setPrograms(res.data))
-      .catch(err => console.log(err));
+    axios
+      .get("http://localhost:5000/api/programs")
+      .then((res) => setPrograms(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   // ✅ FETCH DEPARTMENTS
   useEffect(() => {
-    axios.get("http://localhost:5000/api/departments")
-      .then(res => setDepartments(res.data))
-      .catch(err => console.log(err));
+    axios
+      .get("http://localhost:5000/api/departments")
+      .then((res) => {
+        console.log("Departments:", res.data);
+        setDepartments(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   // 🔥 SELECT PROGRAM
   const handleProgramSelect = (id) => {
     setSelectedProgram(id);
 
-    const prog = programs.find(p => p._id === id);
+    const prog = programs.find((p) => p._id === id);
 
     if (prog) {
       setFormData({
@@ -46,7 +50,7 @@ const updateProgram = ({ onClose }) => {
         programName: prog.programName,
         totalYears: prog.totalYearsProgram + " Year",
         totalCreditHour: prog.totalCredit,
-        startDate: prog.StartDate?.substring(0,10),
+        startDate: prog.StartDate?.substring(0, 10),
         status: prog.isActive ? "active" : "inactive",
       });
     }
@@ -60,21 +64,17 @@ const updateProgram = ({ onClose }) => {
   // 🔥 SUBMIT (API CALL)
   const handleSubmit = async () => {
     try {
-      await axios.put(
-        `http://localhost:5000/api/programs/${selectedProgram}`,
-        {
-          programName: formData.programName,
-          departmentName: formData.departmentName,
-          totalYearsProgram: parseInt(formData.totalYears),
-          totalCredit: parseInt(formData.totalCreditHour),
-          StartDate: formData.startDate,
-          isActive: formData.status === "active"
-        }
-      );
+      await axios.put(`http://localhost:5000/api/programs/${selectedProgram}`, {
+        programName: formData.programName,
+        departmentName: formData.departmentName,
+        totalYearsProgram: parseInt(formData.totalYears),
+        totalCredit: parseInt(formData.totalCreditHour),
+        StartDate: formData.startDate,
+        isActive: formData.status === "active",
+      });
 
       alert("Program Updated Successfully");
       onClose();
-
     } catch (error) {
       console.log(error);
       // alert("Error updating program");
@@ -83,7 +83,6 @@ const updateProgram = ({ onClose }) => {
 
   return (
     <div className="up-form">
-
       {/* ✅ UPDATED PROGRAM DROPDOWN */}
       <div className="up-field">
         <label className="up-label">Select Program to Update</label>
