@@ -79,7 +79,7 @@ export default function AddExcelStudent() {
             return;
         }
 
-        const reader = new FileReader();
+        const reader = new FileReader();    
 
         reader.onload = (e) => {
             const data = new Uint8Array(e.target.result);

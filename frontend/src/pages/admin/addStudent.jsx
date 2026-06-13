@@ -7,13 +7,14 @@ import "./addStudent.css";
 
 export default function AddStudent({ onBack }) {
     const [activeTab, setActiveTab] = useState("excel");
-    const navigate = useNavigate(); 
+    //const navigate = useNavigate(); 
+    
     return (
         <div className="as-wrapper">
             <div className="as-header">
                 <button
                     className="as-back-btn"
-                    onClick={() => navigate("/admin/dashboard")}
+                    onClick={onBack}
                 >
                     <ArrowLeft size={16} /> Back
                 </button>
