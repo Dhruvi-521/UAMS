@@ -1,12 +1,14 @@
-import {
-  Eye, Pencil, Plus, Trash2, Search,
-} from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import "./ManageFaculty.css";
+import {
+  Eye, Pencil, Plus,
+  Search,
+  Trash2,
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import AddFaculty from "./AddFaculty";
-import UpdateFacultyForm from "./UpdateFacultyForm";
 import FacultyProfile from "./FacultyProfile";
+import "./ManageFaculty.css";
+import UpdateFacultyForm from "./UpdateFacultyForm";
 
 const allCourses = [
   { code: "CS-101", name: "Introduction to AI", credits: 3, semester: "Semester 1" },
@@ -40,6 +42,7 @@ function normalizeFaculty(f) {
 
   return {
     // Identity
+    _id: f._id,
     id: f.id ?? f.facultyId ?? "",
     facultyId: f.facultyId ?? f.id ?? "",
 
@@ -137,10 +140,12 @@ export default function FacultyManagement() {
   const [selectedFaculty, setSelectedFaculty] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [assignedCourses, setAssignedCourses] = useState(["CS-101", "CS-201", "CS-301", "CS-401"]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentFaculty, setCurrentFaculty] = useState(null);
+
+  const [allCourses, setAllCourses] = useState([]);
+  const [assignedCourses, setAssignedCourses] = useState([]);
 
   // ── Fetch list from backend (extracted so it can be called after updates)
   const fetchFaculty = useCallback(async () => {
@@ -157,7 +162,51 @@ export default function FacultyManagement() {
     }
   }, []);
 
-  useEffect(() => { fetchFaculty(); }, [fetchFaculty]);
+
+  const fetchCourses = async () => {
+    try {
+
+      const { data } = await axios.get(
+        "http://localhost:5000/api/all-courses"
+      );
+
+      const formatted = data.map(course => ({
+        id: course._id,
+        code: course.courseId,
+        name: course.courseName,
+        credits: course.totalCredits,
+        semester: `Semester ${course.semesterNumber}`
+      }));
+
+      setAllCourses(formatted);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchFacultyCourses = async (facultyId) => {
+    try {
+
+      const { data } = await axios.get(
+        `http://localhost:5000/api/faculty-course/${facultyId}`
+      );
+
+      const courseCodes = data.map(
+        course => course.courseId
+      );
+
+      setAssignedCourses(courseCodes);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFaculty();
+    fetchCourses();
+  }, [fetchFaculty]);
 
   // ── Called by UpdateFacultyForm right after a successful PUT
   // `savedForm` is the exact form state that was submitted.
@@ -241,7 +290,16 @@ export default function FacultyManagement() {
     f.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const openProfile = (faculty) => { setSelectedFaculty(faculty); setSidebarOpen(true); };
+  const openProfile = async (faculty) => {
+
+    setSelectedFaculty(faculty);
+
+    await fetchFacultyCourses(
+      faculty._id
+    );
+
+    setSidebarOpen(true);
+  };
   const closeSidebar = () => {
     setSidebarOpen(false);
     setTimeout(() => setSelectedFaculty(null), 400);
@@ -273,6 +331,34 @@ export default function FacultyManagement() {
     } catch (error) {
       console.error("Delete Error:", error.response?.data || error);
       alert("Error deleting faculty");
+    }
+  };
+
+  const saveFacultyCourses = async (
+    facultyId,
+    selectedCodes
+  ) => {
+
+    try {
+
+      const selectedCourseIds = allCourses
+        .filter(course =>
+          selectedCodes.includes(course.code)
+        )
+        .map(course => course.id);
+
+      await axios.post(
+        "http://localhost:5000/api/faculty-course/assign",
+        {
+          facultyId,
+          courseIds: selectedCourseIds
+        }
+      );
+
+      setAssignedCourses(selectedCodes);
+
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -425,7 +511,12 @@ export default function FacultyManagement() {
         index={selectedIndex}
         allCourses={allCourses}
         assignedCourseCodes={assignedCourses}
-        onUpdateCourses={setAssignedCourses}
+        onUpdateCourses={(courses) =>
+          saveFacultyCourses(
+            selectedFaculty._id,
+            courses
+          )
+        }
       />
     </div>
   );
