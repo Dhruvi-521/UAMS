@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { 
-  X, BookMarked, BookOpen, Plus, Search, Check 
+import {
+  BookMarked, BookOpen,
+  Check,
+  Plus, Search,
+  X
 } from "lucide-react";
+import { useState } from "react";
 import "./FacultyProfile.css";
 
 // Reusing your Avatar component logic
@@ -18,14 +21,14 @@ function StatusBadge({ status }) {
   return <span className={`fm-badge ${status === "Active" ? "fm-badge-active" : "fm-badge-leave"}`}>{status}</span>;
 }
 
-export default function FacultyProfile({ 
-  isOpen, 
-  onClose, 
-  faculty, 
-  index, 
-  allCourses, 
-  assignedCourseCodes, 
-  onUpdateCourses 
+export default function FacultyProfile({
+  isOpen,
+  onClose,
+  faculty,
+  index,
+  allCourses,
+  assignedCourseCodes,
+  onUpdateCourses
 }) {
   const [sidebarTab, setSidebarTab] = useState("personal");
   const [assignModalOpen, setAssignModalOpen] = useState(false);
@@ -41,16 +44,20 @@ export default function FacultyProfile({
     setAssignModalOpen(true);
   };
 
-  const toggleTemp = (code) => 
+  const toggleTemp = (code) =>
     setTempAssigned(prev => prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]);
 
-  const saveAssignment = () => {
-    onUpdateCourses([...tempAssigned]);
+  const saveAssignment = async () => {
+
+    await onUpdateCourses(
+      [...tempAssigned]
+    );
+
     setAssignModalOpen(false);
   };
 
-  const filteredCourses = allCourses.filter(c => 
-    c.name.toLowerCase().includes(courseSearch.toLowerCase()) || 
+  const filteredCourses = allCourses.filter(c =>
+    c.name.toLowerCase().includes(courseSearch.toLowerCase()) ||
     c.code.toLowerCase().includes(courseSearch.toLowerCase())
   );
 
@@ -87,9 +94,9 @@ export default function FacultyProfile({
 
           <div className="fm-sb-tabs">
             {[{ key: "personal", label: "Personal Details" }, { key: "courses", label: "Course Assignment" }].map(tab => (
-              <button 
-                key={tab.key} 
-                className={`fm-sb-tab${sidebarTab === tab.key ? " active" : ""}`} 
+              <button
+                key={tab.key}
+                className={`fm-sb-tab${sidebarTab === tab.key ? " active" : ""}`}
                 onClick={() => setSidebarTab(tab.key)}
               >
                 {tab.label}
@@ -130,7 +137,7 @@ export default function FacultyProfile({
               <div className="fm-notes-card">
                 <div className="fm-notes-row"><strong>Email</strong><span>{faculty.email}</span></div>
                 <div className="fm-notes-row"><strong>Joined</strong><span>{faculty.joinDate}</span></div>
-                
+
               </div>
             </div>
           )}
@@ -183,11 +190,11 @@ export default function FacultyProfile({
             </div>
             <div className="fm-modal-search-wrap">
               <Search size={14} className="fm-modal-search-icon" />
-              <input 
-                className="fm-modal-search" 
-                placeholder="Search course name or code..." 
-                value={courseSearch} 
-                onChange={e => setCourseSearch(e.target.value)} 
+              <input
+                className="fm-modal-search"
+                placeholder="Search course name or code..."
+                value={courseSearch}
+                onChange={e => setCourseSearch(e.target.value)}
               />
             </div>
             <div className="fm-modal-summary">
