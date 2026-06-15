@@ -391,9 +391,9 @@ export default function AddFaculty({ onBack }) {
               onChange={setField("designation")}
             >
               <option value="">Select Designation</option>
-              <option>Professor</option>
-              <option>Head of Department</option>
+              <option>Associate Professor</option>
               <option>Assistant Professor</option>
+              <option>Lecturer</option>
             </select>
           </div>
         </section>
