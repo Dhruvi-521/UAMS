@@ -393,6 +393,7 @@ export default function AddFaculty({ onBack }) {
               <option value="">Select Designation</option>
               <option>Associate Professor</option>
               <option>Assistant Professor</option>
+              <option>Professor</option>
               <option>Lecturer</option>
             </select>
           </div>

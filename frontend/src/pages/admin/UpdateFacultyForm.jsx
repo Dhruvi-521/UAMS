@@ -374,10 +374,10 @@ export default function UpdateFacultyForm({ faculty, onBack, onUpdateSuccess }) 
               onChange={(e) => update("designation", e.target.value)}
             >
               <option value="">Select Designation</option>
-              <option value="Professor">Professor</option>
-              <option value="Assistant Professor">Assistant Professor</option>
-              <option value="Associate Professor">Associate Professor</option>
-              <option value="Head of Department">Head of Department</option>
+              <option>Associate Professor</option>
+              <option>Assistant Professor</option>
+              <option>Professor</option>
+              <option>Lecturer</option>
             </select>
           </div>
         </div>

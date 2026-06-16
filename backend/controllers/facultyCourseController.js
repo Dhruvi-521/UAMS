@@ -75,3 +75,32 @@ exports.getAllCourses = async (req, res) => {
         });
     }
 };
+
+exports.getMyCourses = async (req, res) => {
+    try {
+
+        if (req.user.role !== "faculty") {
+            return res.status(403).json({
+                message: "Only faculty can access courses"
+            });
+        }
+
+        const facultyId = req.user.profileId;
+
+        const assignments =
+            await FacultyCourseAssignment
+                .find({ facultyId })
+                .populate("courseId");
+
+        const courses = assignments.map(
+            item => item.courseId
+        );
+
+        res.status(200).json(courses);
+
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        });
+    }
+};
