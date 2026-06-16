@@ -43,6 +43,11 @@ app.use("/api/students", studentRoutes);
 const facultyCourse = require("./routes/facultyCourseRoutes")
 app.use("/api",facultyCourse)
 
+app.use(
+  "/api/faculty",
+  require("./routes/facultyStudentRoutes")
+);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

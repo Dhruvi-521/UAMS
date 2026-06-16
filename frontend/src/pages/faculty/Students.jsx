@@ -13,81 +13,11 @@ import {
   LayoutGrid,
   Mail, Phone
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./Students.css";
 
-const students = [
-  {
-    id:1, name: "Sarah Mitchell", semester: "4", program: "BCA",
-    division: "A", contact: "1234567",
-    studentId: "SU250251", rollNumber: "37",
-    email: "smitchell@uams.edu", phone: "(501) 555-1234",
-    gpa: "3.65", usmle1: "234", usmle2: "245",
-  },
-  {
-    id:2, name: "James Carter", semester: "3", program: "BCA",
-    division: "A", contact: "1234558",
-    studentId: "SU250252", rollNumber: "14",
-    email: "jcarter@uams.edu", phone: "(501) 555-2345",
-    gpa: "3.72", usmle1: "241", usmle2: "238",
-  },
-  {
-    id: 3, name: "Emily Johnson", semester: "2", program: "MScit",
-    division: "B", contact: "1234569",
-    studentId: "SU250253", rollNumber: "1",
-    email: "ejohnson@uams.edu", phone: "(501) 555-3456",
-    gpa: "3.88", usmle1: "229", usmle2: "251",
-  },
-  {
-    id: 4, name: "Michael Adams", semester: "3", program: "MScit",
-    division: "A", contact: "1234570",
-    studentId: "SU250254", rollNumber: "36",
-    email: "madams@uams.edu", phone: "(501) 555-4567",
-    gpa: "3.45", usmle1: "218", usmle2: "226",
-  },
-  {
-    id: 5, name: "Jessica Patel", semester: "4", program: "IMScit",
-    division: "B", contact: "1234571",
-    studentId: "SU250255", rollNumber: "50",
-    email: "jpatel@uams.edu", phone: "(501) 555-5678",
-    gpa: "3.91", usmle1: "248", usmle2: "255",
-  },
-  {
-    id: 6, name: "Daniel White", semester: "3", program: "MScit",
-    division: "B", contact: "1234572",
-    studentId: "SU250256", rollNumber: "10",
-    email: "dwhite@uams.edu", phone: "(501) 555-6789",
-    gpa: "3.58", usmle1: "235", usmle2: "242",
-  },
-  {
-    id: 7, name: "Anna Green", semester: "2", program: "IMScit",
-    division: "A", contact: "1234573",
-    studentId: "SU250257", rollNumber: "9",
-    email: "agreen@uams.edu", phone: "(501) 555-7890",
-    gpa: "3.77", usmle1: "244", usmle2: "249",
-  },
-  {
-    id: 8, name: "Ryan Brooks", semester: "4", program: "BCA",
-    division: "B", contact: "1234574",
-    studentId: "SU250258", rollNumber: "40",
-    email: "rbrooks@uams.edu", phone: "(501) 555-8901",
-    gpa: "3.62", usmle1: "231", usmle2: "237",
-  },
-  {
-    id: 9, name: "Megan Lewis", semester: "3", program: "MScit",
-    division: "A", contact: "1234575",
-    studentId: "SU250259", rollNumber: "41",
-    email: "mlewis@uams.edu", phone: "(501) 555-9012",
-    gpa: "3.84", usmle1: "246", usmle2: "252",
-  },
-  {
-    id: 10, name: "Christopher Hall", semester: "4", program: "BCA",
-    division: "A", contact: "1234576",
-    studentId: "SU250260", rollNumber: "42",
-    email: "chall@uams.edu", phone: "(501) 555-1987",
-    gpa: "3.69", usmle1: "239", usmle2: "244",
-  },
-];
+
 
 const evaluationItems = [
   "Patient Interviews",
@@ -97,10 +27,73 @@ const evaluationItems = [
 ];
 
 function StudentList({ onSelectStudent }) {
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [semester, setSemester] = useState("All Semester");
   const [program, setProgram] = useState("All Programs");
   const [division, setDivision] = useState("All Divisions");
 
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        "http://localhost:5000/api/faculty/department-students",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const formattedStudents = response.data.students.map((student) => ({
+        id: student._id,
+
+        name: `${student.firstName} ${student.lastName}`,
+
+        semester: student.semester,
+
+        program:
+          student.program?.programName || "",
+
+        division: student.division,
+
+        contact: student.mobile,
+
+        studentId: student.studentId,
+
+        rollNumber: student.rollNumber,
+
+        email: student.universityEmail,
+
+        phone: student.mobile,
+
+        gpa: "N/A",
+
+        usmle1: "N/A",
+
+        usmle2: "N/A",
+      }));
+
+      setStudents(formattedStudents);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="page-container">
+        <h2>Loading students...</h2>
+      </div>
+    );
+  }
   const filtered = students.filter((s) => {
     return (
       (semester === "All Semester" || s.semester === semester) &&
@@ -121,9 +114,16 @@ function StudentList({ onSelectStudent }) {
           <div className="select-wrapper">
             <select value={semester} onChange={(e) => setSemester(e.target.value)} className="filter-select">
               <option>All Semester</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
+
+              {[
+                ...new Set(
+                  students.map((s) => String(s.semester))
+                ),
+              ].map((semester) => (
+                <option key={semester}>
+                  {semester}
+                </option>
+              ))}
             </select>
             <ChevronDown size={14} className="select-icon" />
           </div>
@@ -136,9 +136,16 @@ function StudentList({ onSelectStudent }) {
           <div className="select-wrapper">
             <select value={program} onChange={(e) => setProgram(e.target.value)} className="filter-select">
               <option>All Programs</option>
-              <option>BCA</option>
-              <option>MScit</option>
-              <option>IMScit</option>
+
+              {[
+                ...new Set(
+                  students.map((s) => s.program)
+                ),
+              ].map((programName) => (
+                <option key={programName}>
+                  {programName}
+                </option>
+              ))}
             </select>
             <ChevronDown size={14} className="select-icon" />
           </div>
@@ -151,8 +158,16 @@ function StudentList({ onSelectStudent }) {
           <div className="select-wrapper">
             <select value={division} onChange={(e) => setDivision(e.target.value)} className="filter-select">
               <option>All Divisions</option>
-              <option>A</option>
-              <option>B</option>
+
+              {[
+                ...new Set(
+                  students.map((s) => s.division)
+                ),  
+              ].map((division) => (
+                <option key={division}>
+                  {division}
+                </option>
+              ))}
             </select>
             <ChevronDown size={14} className="select-icon" />
           </div>
