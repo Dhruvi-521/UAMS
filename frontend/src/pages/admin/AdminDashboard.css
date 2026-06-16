@@ -20,9 +20,9 @@
 /* STATS GRID */
 /* ============================= */
 
-.stats-grid {
+.ad-stats-grid {
   display: grid;
-  grid-template-columns: 1fr;   /* MOBILE: single column */
+  grid-template-columns: repeat(3,1fr);   /* MOBILE: single column */
   gap: 15px;
 }
 

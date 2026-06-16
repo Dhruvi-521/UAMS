@@ -117,21 +117,21 @@ export default function FacultyDashboard() {
                         <div className="stat-sub">Students</div>
                     </div>
 
-                    <div className="stat-card red">
+                    {/* <div className="stat-card red">
                         <div className="stat-header">
                             <span className="stat-icon">📋</span> Pending Leaves
                         </div>
                         <div className="stat-value">2</div>
                         <div className="stat-sub">Pending</div>
-                    </div>
+                    </div> */}
 
-                    <div className="stat-card green">
+                    {/* <div className="stat-card green">
                         <div className="stat-header">
                             <span className="stat-icon">💰</span> Salary Summary
                         </div>
                         <div className="stat-value" style={{ fontSize: "1.3rem" }}>₹1,10,000</div>
                         <div className="stat-sub">Next Paycheck · Dec'24</div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* --- CONTENT GRID --- */}

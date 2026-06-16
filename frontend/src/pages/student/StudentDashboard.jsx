@@ -84,7 +84,7 @@ export default function StudentDashboard() {
                 </div>
 
                 {/* --- STATS --- */}
-                <div className="stats-grid">
+                <div className="st-stats-grid">
                     <div className="stat-card purple">
                         <div className="stat-label">
                             <span className="stat-icon">📚</span> Enrolled Courses
@@ -101,13 +101,13 @@ export default function StudentDashboard() {
                         <div className="stat-sub">Overall Attendance</div>
                     </div>
 
-                    <div className="stat-card red">
+                    {/* <div className="stat-card red">
                         <div className="stat-label">
                             <span className="stat-icon">💸</span> Pending Fees
                         </div>
                         <div className="stat-value" style={{ fontSize: "1.6rem" }}>₹25,000</div>
                         <div className="stat-sub">Due Next Month</div>
-                    </div>
+                    </div> */}
 
                     <div className="stat-card green">
                         <div className="stat-label">
