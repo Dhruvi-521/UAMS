@@ -70,7 +70,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 980px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem 4rem;
 }
@@ -110,6 +110,10 @@
   color: var(--fa-navy);
   letter-spacing: -.5px;
   line-height: 1.15;
+  padding-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fact-att-page-subtitle {
@@ -655,12 +659,12 @@
 
 /* ─── Row Borders on Click ──────────────────────────────────────────────────── */
 .fact-att-border-present {
-  border: 1px solid var(--fa-green) !important;
+  border: 2px solid var(--fa-green) !important;
   border-radius: var(--fa-radius-sm);
 }
 
 .fact-att-border-absent {
-  border: 1px solid var(--fa-red) !important;
+  border: 2px solid var(--fa-red) !important;
   border-radius: var(--fa-radius-sm);
 }
 

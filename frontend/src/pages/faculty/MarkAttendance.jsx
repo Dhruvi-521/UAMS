@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  BookOpen, Cpu, Calculator, Network, Briefcase, Code2,
-  Database, Radio, Settings, Users, ChevronRight, CheckCircle2,
-  XCircle, UserCircle2, ArrowLeft, Send, GraduationCap,
-  ClipboardList, BarChart3
+  BookOpen,
+  Cpu,
+  Calculator,
+  Network,
+  Briefcase,
+  Code2,
+  Database,
+  Radio,
+  Settings,
+  Users,
+  ChevronRight,
+  CheckCircle2,
+  XCircle,
+  UserCircle2,
+  ArrowLeft,
+  Send,
+  GraduationCap,
+  ClipboardList,
+  BarChart3,
 } from "lucide-react";
 import "./MarkAttendance.css";
-
-const SUBJECTS = [
-  { id: 1, name: "Robotics & AI", code: "EE505", semester: "Autumn 2023", program: "B.Tech (ECE)", icon: Cpu },
-  { id: 2, name: "Advanced Calculus", code: "MA302", semester: "Autumn 2023", program: "B.Tech (CSE)", icon: Calculator },
-  { id: 3, name: "Computer Networks", code: "CS401", semester: "Autumn 2023", program: "B.Tech (CSE)", icon: Network },
-  { id: 4, name: "Project Management", code: "MG201", semester: "Autumn 2023", program: "B.Tech (ECE)", icon: Briefcase },
-  { id: 5, name: "Software Engineering", code: "SE405", semester: "Autumn 2023", program: "B.Tech (ECE)", icon: Code2 },
-  { id: 6, name: "Data Structures", code: "CS301", semester: "Autumn 2023", program: "B.Tech (ECE)", icon: Database },
-  { id: 7, name: "Signals & Systems", code: "EE301", semester: "Autumn 2023", program: "B.Tech (ECE)", icon: Radio },
-  { id: 8, name: "Operating Systems", code: "CS302", semester: "Autumn 2023", program: "B.Tech (CSE)", icon: Settings },
-];
 
 const DIVISIONS = ["A", "B", "C", "D"];
 
@@ -53,13 +57,19 @@ function Breadcrumb({ step }) {
     <div className="fact-att-breadcrumb">
       {steps.map((s, i) => (
         <span key={s} className="fact-att-breadcrumb-item">
-          <span className={`fact-att-crumb ${i < step ? "fact-att-crumb-done" : i === step ? "fact-att-crumb-active" : "fact-att-crumb-idle"}`}>
-            {i < step
-              ? <CheckCircle2 size={13} />
-              : <span className="fact-att-crumb-num">{i + 1}</span>}
+          <span
+            className={`fact-att-crumb ${i < step ? "fact-att-crumb-done" : i === step ? "fact-att-crumb-active" : "fact-att-crumb-idle"}`}
+          >
+            {i < step ? (
+              <CheckCircle2 size={13} />
+            ) : (
+              <span className="fact-att-crumb-num">{i + 1}</span>
+            )}
             {s}
           </span>
-          {i < steps.length - 1 && <ChevronRight size={14} className="fact-att-crumb-arrow" />}
+          {i < steps.length - 1 && (
+            <ChevronRight size={14} className="fact-att-crumb-arrow" />
+          )}
         </span>
       ))}
     </div>
@@ -67,17 +77,18 @@ function Breadcrumb({ step }) {
 }
 
 // ─── Page 1: Subject Selection — click card → go directly ─────────────────────
-function SubjectSelection({ onSelect }) {
+function SubjectSelection({ onSelect, subjects, loading }) {
   const [hovered, setHovered] = useState(null);
 
   return (
     <div className="fact-att-page-wrapper">
-      <PageHeader title="Select Subject for Attendance" />
+      {/* <PageHeader title="Select Subject for Attendance" /> */}
+      <h1 className="fact-att-page-title">Select Subject for Attendance</h1>
       <Breadcrumb step={0} />
 
       <div className="fact-att-subject-grid">
-        {SUBJECTS.map((subj) => {
-          const Icon = subj.icon;
+        {subjects.map((subj) => {
+          const Icon = BookOpen;
           return (
             <div
               key={subj.id}
@@ -89,13 +100,29 @@ function SubjectSelection({ onSelect }) {
               <div className="fact-att-card-icon-wrap">
                 <Icon size={28} strokeWidth={1.6} />
               </div>
-              <h3 className="fact-att-card-title">{subj.name}</h3>
-              <p className="fact-att-card-code">{subj.code}</p>
+              <h3 className="fact-att-card-title">{subj.courseName}</h3>
+
+              <p className="fact-att-card-code">{subj.courseId}</p>
               <div className="fact-att-card-meta">
-                <div className="fact-att-meta-row"><BookOpen size={12} />{subj.name}</div>
-                <div className="fact-att-meta-row"><ClipboardList size={12} />{subj.code}</div>
-                <div className="fact-att-meta-row"><BarChart3 size={12} />{subj.semester}</div>
-                <div className="fact-att-meta-row"><GraduationCap size={12} />{subj.program}</div>
+                <div className="fact-att-meta-row">
+                  <BookOpen size={12} />
+                  {subj.courseName}
+                </div>
+
+                <div className="fact-att-meta-row">
+                  <ClipboardList size={12} />
+                  {subj.courseId}
+                </div>
+
+                <div className="fact-att-meta-row">
+                  <BarChart3 size={12} />
+                  Semester {subj.semesterNumber}
+                </div>
+
+                <div className="fact-att-meta-row">
+                  <GraduationCap size={12} />
+                  {subj.totalCredits} Credits
+                </div>
               </div>
             </div>
           );
@@ -109,13 +136,16 @@ function SubjectSelection({ onSelect }) {
 function DivisionSelection({ subject, onSelect, onBack }) {
   return (
     <div className="fact-att-page-wrapper">
-      <PageHeader title="Select Division" />
+      {/* <PageHeader title="Select Division" /> */}
+      <h1 className="fact-att-page-title">Select Division</h1>
       <Breadcrumb step={1} />
 
-      <div className="fact-att-context-pill">
+      {/* <div className="fact-att-context-pill">
         <BookOpen size={14} />
-        <span>Subject: <strong>{subject.name}</strong> — {subject.code}</span>
-      </div>
+        <span>
+          Subject: <strong>{subject.courseName}</strong> — {subject.courseId}
+        </span>
+      </div> */}
 
       <div className="fact-att-division-grid">
         {DIVISIONS.map((div) => (
@@ -128,7 +158,7 @@ function DivisionSelection({ subject, onSelect, onBack }) {
               <Users size={36} strokeWidth={1.4} />
             </div>
             <h2 className="fact-att-div-label">Division {div}</h2>
-            <p className="fact-att-div-sub">BTech-CSE-2023</p>
+            {/* <p className="fact-att-div-sub">BTech-CSE-2023</p> */}
           </div>
         ))}
       </div>
@@ -146,12 +176,12 @@ function DivisionSelection({ subject, onSelect, onBack }) {
 function AttendancePage({ subject, division, onBack }) {
   // default: everyone false (absent)
   const [attendance, setAttendance] = useState(() =>
-    Object.fromEntries(STUDENTS.map(s => [s.id, false]))
+    Object.fromEntries(STUDENTS.map((s) => [s.id, false])),
   );
   const [submitted, setSubmitted] = useState(false);
 
   const toggle = (id) =>
-    setAttendance(prev => ({ ...prev, [id]: !prev[id] }));
+    setAttendance((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const presentCount = Object.values(attendance).filter(Boolean).length;
   const absentCount = STUDENTS.length - presentCount;
@@ -160,10 +190,13 @@ function AttendancePage({ subject, division, onBack }) {
     return (
       <div className="fact-att-page-wrapper fact-att-center-content">
         <div className="fact-att-success-card">
-          <div className="fact-att-success-icon"><CheckCircle2 size={56} /></div>
+          <div className="fact-att-success-icon">
+            <CheckCircle2 size={56} />
+          </div>
           <h2 className="fact-att-success-title">Attendance Submitted!</h2>
           <p className="fact-att-success-msg">
-            Records saved for <strong>{subject.name}</strong> — Division <strong>{division}</strong>
+            Records saved for <strong>{subject.courseName}</strong> — Division{" "}
+            <strong>{division}</strong>
           </p>
           <div className="fact-att-success-stats">
             <div className="fact-att-stat fact-att-stat-present">
@@ -173,7 +206,11 @@ function AttendancePage({ subject, division, onBack }) {
               <span>{absentCount}</span>Absent
             </div>
           </div>
-          <button className="fact-att-btn-primary" onClick={onBack} style={{ marginTop: "1.5rem" }}>
+          <button
+            className="fact-att-btn-primary"
+            onClick={onBack}
+            style={{ marginTop: "1.5rem" }}
+          >
             Back to Subjects
           </button>
         </div>
@@ -183,15 +220,17 @@ function AttendancePage({ subject, division, onBack }) {
 
   return (
     <div className="fact-att-page-wrapper">
-      <PageHeader title="Take Attendance" />
+      {/* <PageHeader title="Take Attendance" /> */}
+      <h1 className="fact-att-page-title">Take Attendance</h1>
       <Breadcrumb step={2} />
 
-      <div className="fact-att-context-pill">
+      {/* <div className="fact-att-context-pill">
         <BookOpen size={14} />
         <span>
-          <strong>{subject.name}</strong> · Division <strong>{division}</strong> · BTech-CSE-2023
+          <strong>{subject.name}</strong> · Division <strong>{division}</strong>{" "}
+          · BTech-CSE-2023
         </span>
-      </div>
+      </div> */}
 
       <div className="fact-att-stats-bar">
         <div className="fact-att-stat-box fact-att-stat-box-present">
@@ -231,14 +270,28 @@ function AttendancePage({ subject, division, onBack }) {
               onClick={() => toggle(student.id)}
             >
               <div className="fact-att-student-info">
-                <div className={`fact-att-status-dot${isPresent ? " fact-att-dot-present" : " fact-att-dot-absent"}`} />
+                <div
+                  className={`fact-att-status-dot${isPresent ? " fact-att-dot-present" : " fact-att-dot-absent"}`}
+                />
                 <div className="fact-att-student-text">
                   <span className="fact-att-student-name">{student.name}</span>
-                  <span className="fact-att-student-roll">Roll: {student.roll}</span>
+                  <span className="fact-att-student-roll">
+                    Roll: {student.roll}
+                  </span>
                 </div>
               </div>
-              <div className={`fact-att-presence-badge${isPresent ? " fact-att-badge-present" : " fact-att-badge-absent"}`}>
-                {isPresent ? <><CheckCircle2 size={16} /> </> : <><XCircle size={16} /> </>}
+              <div
+                className={`fact-att-presence-badge${isPresent ? " fact-att-badge-present" : " fact-att-badge-absent"}`}
+              >
+                {isPresent ? (
+                  <>
+                    <CheckCircle2 size={16} />{" "}
+                  </>
+                ) : (
+                  <>
+                    <XCircle size={16} />{" "}
+                  </>
+                )}
               </div>
             </div>
           );
@@ -249,7 +302,10 @@ function AttendancePage({ subject, division, onBack }) {
         <button className="fact-att-btn-outline" onClick={onBack}>
           <ArrowLeft size={16} /> Back
         </button>
-        <button className="fact-att-btn-primary" onClick={() => setSubmitted(true)}>
+        <button
+          className="fact-att-btn-primary"
+          onClick={() => setSubmitted(true)}
+        >
           <Send size={16} /> Submit Attendance
         </button>
       </div>
@@ -261,19 +317,78 @@ export default function MarkAttendance() {
   const [page, setPage] = useState(0);
   const [subject, setSubject] = useState(null);
   const [division, setDivision] = useState(null);
+  const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  function handleSubject(subj) { setSubject(subj); setPage(1); }
-  function handleDivision(div) { setDivision(div); setPage(2); }
-  function handleBack() { setPage(p => Math.max(0, p - 1)); }
-  function handleReset() { setPage(0); setSubject(null); setDivision(null); }
+  useEffect(() => {
+    fetchMyCourses();
+  }, []);
+
+  const fetchMyCourses = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        "http://localhost:5000/api/faculty-course/my-courses",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+
+      setSubjects(data);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  function handleSubject(subj) {
+    setSubject(subj);
+    setPage(1);
+  }
+  function handleDivision(div) {
+    setDivision(div);
+    setPage(2);
+  }
+  function handleBack() {
+    setPage((p) => Math.max(0, p - 1));
+  }
+  function handleReset() {
+    setPage(0);
+    setSubject(null);
+    setDivision(null);
+  }
 
   return (
     <div className="fact-att-shell">
       <div className="fact-att-blob fact-att-blob-1" />
       <div className="fact-att-blob fact-att-blob-2" />
-      {page === 0 && <SubjectSelection onSelect={handleSubject} />}
-      {page === 1 && <DivisionSelection subject={subject} onSelect={handleDivision} onBack={handleBack} />}
-      {page === 2 && <AttendancePage subject={subject} division={division} onBack={handleReset} />}
+      {page === 0 && (
+        <SubjectSelection
+          onSelect={handleSubject}
+          subjects={subjects}
+          loading={loading}
+        />
+      )}
+      {page === 1 && (
+        <DivisionSelection
+          subject={subject}
+          onSelect={handleDivision}
+          onBack={handleBack}
+        />
+      )}
+      {page === 2 && (
+        <AttendancePage
+          subject={subject}
+          division={division}
+          onBack={handleReset}
+        />
+      )}
     </div>
   );
 }
