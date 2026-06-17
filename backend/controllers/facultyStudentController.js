@@ -18,7 +18,7 @@ const getDepartmentStudents = async (req, res) => {
       });
     }
 
-    console.log("User Found:", user);
+    // console.log("User Found:", user);
 
     // STEP 2: Find Faculty using user.userID
     const faculty = await Faculty.findById(user.userID);
@@ -30,7 +30,7 @@ const getDepartmentStudents = async (req, res) => {
       });
     }
 
-    console.log("Faculty Found:", faculty);
+    // console.log("Faculty Found:", faculty);
 
     // STEP 3: Find Department
     const department = await Department.findOne({
@@ -44,7 +44,7 @@ const getDepartmentStudents = async (req, res) => {
       });
     }
 
-    console.log("Department Found:", department);
+    // console.log("Department Found:", department);
 
     // STEP 4: Find Programs for Department
     let programs = await Program.find({
@@ -58,11 +58,11 @@ const getDepartmentStudents = async (req, res) => {
       });
     }
 
-    console.log("Programs Found:", programs.length);
+    // console.log("Programs Found:", programs.length);
 
     const programIds = programs.map((program) => program._id);
 
-    console.log("Program IDs:", programIds);
+    // console.log("Program IDs:", programIds);
 
     // STEP 5: Find Students
     let students = await Student.find({
@@ -76,7 +76,7 @@ const getDepartmentStudents = async (req, res) => {
       }).populate("program");
     }
 
-    console.log("Students Found:", students.length);
+    // console.log("Students Found:", students.length);
 
     return res.status(200).json({
       success: true,
