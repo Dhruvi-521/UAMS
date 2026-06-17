@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import * as XLSX from 'xlsx';
 import './AddMarks.css';
 
@@ -7,6 +8,23 @@ const AddMarks = () => {
   const [fileName, setFileName] = useState("");
   const [isPreview, setIsPreview] = useState(false);
   const [selection, setSelection] = useState({ dept: '', sem: '', exam: '' });
+  const [programs, setPrograms] = useState([]);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/programs"
+        );
+
+        setPrograms(response.data);
+      } catch (error) {
+        console.error("Error fetching programs:", error);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -33,11 +51,40 @@ const AddMarks = () => {
     }
   };
 
-  const handleConfirm = () => {
-    alert(`Success! ${fileData.length} student records have been uploaded to ${selection.dept} Semester ${selection.sem}.`);
-    setIsPreview(false);
-    setFileName("");
-    setFileData([]);
+  const handleConfirm = async () => {
+    try {
+
+      const response = await axios.post(
+        "http://localhost:5000/api/marks/upload",
+        {
+          programId: selection.dept,
+          semester: Number(selection.sem),
+          examType: selection.exam,
+          excelData: fileData,
+        }
+      );
+
+      alert("Marks Uploaded Successfully");
+
+      setIsPreview(false);
+      setFileName("");
+      setFileData([]);
+
+      setSelection({
+        dept: "",
+        sem: "",
+        exam: "",
+      });
+
+    } catch (error) {
+
+      console.error("Upload Error:", error);
+
+      alert(
+        error.response?.data?.message ||
+        "Failed to upload marks"
+      );
+    }
   };
 
   return (
@@ -45,24 +92,38 @@ const AddMarks = () => {
       {/* Dropdown Selectors */}
       <div className="selection-row">
         <div className="select-group">
-          <label>Department</label>
-          <select value={selection.dept} onChange={(e) => setSelection({...selection, dept: e.target.value})}>
-            <option value="">Select Dept</option>
-            <option value="BCA">BCA</option>
-            <option value="MScIT">MScIT</option>
-            <option value="BBA">BBA</option>
+          <label>Program</label>
+          <select
+            value={selection.dept}
+            onChange={(e) =>
+              setSelection({
+                ...selection,
+                dept: e.target.value,
+              })
+            }
+          >
+            <option value="">Select Program</option>
+
+            {programs.map((program) => (
+              <option
+                key={program._id}
+                value={program._id}
+              >
+                {program.programName}
+              </option>
+            ))}
           </select>
         </div>
         <div className="select-group">
           <label>Semester</label>
-          <select value={selection.sem} onChange={(e) => setSelection({...selection, sem: e.target.value})}>
+          <select value={selection.sem} onChange={(e) => setSelection({ ...selection, sem: e.target.value })}>
             <option value="">Select Sem</option>
-            {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={s}>{s}</option>)}
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
         <div className="select-group">
           <label>Exam Type</label>
-          <select value={selection.exam} onChange={(e) => setSelection({...selection, exam: e.target.value})}>
+          <select value={selection.exam} onChange={(e) => setSelection({ ...selection, exam: e.target.value })}>
             <option value="">Select Exam</option>
             <option value="Mid Sem">Mid Sem</option>
             <option value="Final">Final</option>
@@ -98,10 +159,23 @@ const AddMarks = () => {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Student Name</th>
-                  <th>Sub 1</th>
-                  <th>Sub 2</th>
-                  <th>Sub 3</th>
+
+                  {fileData.length > 0 &&
+                    Object.keys(fileData[0])
+                      .filter(
+                        key =>
+                          ![
+                            "studentID",
+                            "Total",
+                            "Percentage",
+                            "Grade",
+                            "Status"
+                          ].includes(key)
+                      )
+                      .map((subject, index) => (
+                        <th key={index}>{subject}</th>
+                      ))}
+
                   <th>Total</th>
                   <th>%</th>
                   <th>Grade</th>
@@ -111,17 +185,31 @@ const AddMarks = () => {
               <tbody>
                 {fileData.map((row, index) => (
                   <tr key={index}>
-                    <td><strong>{row["Student ID"]}</strong></td>
-                    <td>{row["Student Name"]}</td>
-                    <td>{row["Subject 1"]}</td>
-                    <td>{row["Subject 2"]}</td>
-                    <td>{row["Subject 3"]}</td>
-                    <td>{row["Total"]}</td>
-                    <td>{row["Percentage"]}</td>
-                    <td><span className="grade-txt">{row["Grade"]}</span></td>
                     <td>
-                      <span className={`badge ${row["Status"]?.toLowerCase()}`}>
-                        {row["Status"]}
+                      <strong>{row.studentID}</strong>
+                    </td>
+
+                    {Object.keys(row)
+                      .filter(
+                        key =>
+                          ![
+                            "studentID",
+                            "Total",
+                            "Percentage",
+                            "Grade",
+                            "Status"
+                          ].includes(key)
+                      )
+                      .map((subject, i) => (
+                        <td key={i}>{row[subject]}</td>
+                      ))}
+
+                    <td>{row.Total}</td>
+                    <td>{row.Percentage}</td>
+                    <td>{row.Grade}</td>
+                    <td>
+                      <span className={`badge ${row.Status?.toLowerCase()}`}>
+                        {row.Status}
                       </span>
                     </td>
                   </tr>
