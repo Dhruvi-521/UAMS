@@ -109,6 +109,19 @@
 }
 .cc-view-btn:hover { background: #2563eb; color: #fff; }
 
+.cc-delete-btn {
+  border: none;
+  background: #ef4444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cc-delete-btn:hover {
+  opacity: 0.9;
+}
+
 /* ---- PAGE 1: Program Grid ---- */
 .cc-program-grid {
   display: grid;

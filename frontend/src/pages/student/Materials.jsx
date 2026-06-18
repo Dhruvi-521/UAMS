@@ -236,18 +236,14 @@ export default function Materials() {
             key={course._id}
             className="sm-card"
             onClick={() =>
-              navigate(
-                `/student/materials/${course.courseId}`
-              )
+              navigate(`/student/materials/${course._id}`)
             }
             tabIndex={0}
             role="button"
             aria-label={`Open ${course.courseName}`}
             onKeyDown={(e) =>
               e.key === "Enter" &&
-              navigate(
-                `/student/materials/${course.courseId}`
-              )
+              navigate(`/student/materials/${course._id}`)
             }
           >
             {/* Banner */}

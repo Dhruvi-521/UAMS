@@ -60,6 +60,23 @@ app.use(
   attendanceRoutes
 );
 
+// Materials
+const path = require("path");
+app.use(
+  "/uploads",
+  express.static(
+    path.join(__dirname, "uploads")
+  )
+);
+const materialRoutes = require(
+  "./routes/materialRoutes"
+);
+
+app.use(
+  "/api/materials",
+  materialRoutes
+);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

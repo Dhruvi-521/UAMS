@@ -10,37 +10,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import "./Courses.css";
-
-const materialsData = [
-  {
-    id: 1,
-    type: "FILE",
-    name: "Unit 1",
-    desc: "Number systems & binary arithmetic",
-    status: "Done",
-  },
-  {
-    id: 2,
-    type: "FKS",
-    name: "Unit 2",
-    desc: "Boolean algebra & logic gates",
-    status: "Done",
-  },
-  {
-    id: 3,
-    type: "FKE",
-    name: "Unit 3",
-    desc: "CPU architecture & memory",
-    status: "Done",
-  },
-  {
-    id: 4,
-    type: "FKE",
-    name: "Unit 4",
-    desc: "I/O and storage systems",
-    status: "Done",
-  },
-];
+import axios from "axios";
 
 const cardColors = [
   "#6366f1",
@@ -55,9 +25,23 @@ export default function Courses() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showUpload, setShowUpload] = useState(false);
   const [search, setSearch] = useState("");
-
   const [coursesData, setCoursesData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [materials, setMaterials] =
+    useState([]);
+
+  const [materialTitle,
+    setMaterialTitle] =
+    useState("");
+
+  const [materialDescription,
+    setMaterialDescription] =
+    useState("");
+
+  const [selectedFile,
+    setSelectedFile] =
+    useState(null);
 
   useEffect(() => {
     fetchMyCourses();
@@ -65,9 +49,10 @@ export default function Courses() {
 
   const fetchMyCourses = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token");
 
-      const response = await fetch(
+      const response = await axios.get(
         "http://localhost:5000/api/faculty-course/my-courses",
         {
           headers: {
@@ -76,15 +61,136 @@ export default function Courses() {
         }
       );
 
-      const data = await response.json();
-
-      setCoursesData(data);
+      setCoursesData(response.data);
     } catch (error) {
-      console.error("Error fetching courses:", error);
+      console.error(
+        "Error fetching courses:",
+        error
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  const fetchMaterials = async (courseId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `http://localhost:5000/api/materials/course/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setMaterials(response.data);
+    } catch (error) {
+      console.error(
+        "Error fetching materials:",
+        error
+      );
+    }
+  };
+
+  const uploadMaterial = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const formData = new FormData();
+
+      formData.append(
+        "title",
+        materialTitle
+      );
+
+      formData.append(
+        "description",
+        materialDescription
+      );
+
+      formData.append(
+        "courseId",
+        selectedCourse._id
+      );
+
+      formData.append(
+        "file",
+        selectedFile
+      );
+
+      await axios.post(
+        "http://localhost:5000/api/materials/upload",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type":
+              "multipart/form-data",
+          },
+        }
+      );
+
+      alert(
+        "Material uploaded successfully"
+      );
+
+      setMaterialTitle("");
+      setMaterialDescription("");
+      setSelectedFile(null);
+
+      fetchMaterials(
+        selectedCourse._id
+      );
+
+      setShowUpload(false);
+    } catch (error) {
+      console.error(
+        "Upload Error:",
+        error
+      );
+
+      alert(
+        error.response?.data?.message ||
+        "Upload failed"
+      );
+    }
+  };
+
+  const deleteMaterial = async (
+    materialId
+  ) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const confirmDelete =
+        window.confirm(
+          "Delete this material?"
+        );
+
+      if (!confirmDelete) return;
+
+      await axios.delete(
+        `http://localhost:5000/api/materials/${materialId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      fetchMaterials(
+        selectedCourse._id
+      );
+    } catch (error) {
+      console.error(
+        "Delete Error:",
+        error
+      );
+    }
+  };
+
 
   // ===========================
   // MATERIAL PAGE
@@ -161,26 +267,46 @@ export default function Courses() {
             <input
               className="cc-input"
               placeholder="Material Title"
+              value={materialTitle}
+              onChange={(e) =>
+                setMaterialTitle(
+                  e.target.value
+                )
+              }
             />
 
             <input
               className="cc-input"
               placeholder="Description"
+              value={materialDescription}
+              onChange={(e) =>
+                setMaterialDescription(
+                  e.target.value
+                )
+              }
             />
 
             <input
               className="cc-input"
               type="file"
+              onChange={(e) =>
+                setSelectedFile(
+                  e.target.files[0]
+                )
+              }
             />
 
-            <button className="cc-submit-btn">
+            <button
+              className="cc-submit-btn"
+              onClick={uploadMaterial}
+            >
               Upload
             </button>
           </div>
         )}
 
         <div className="cc-mat-list">
-          {materialsData.map((mat) => (
+          {materials.map((mat) => (
             <div className="cc-mat-row" key={mat.id}>
               <div className="cc-mat-icon-wrap">
                 <FileText size={20} color="#2563eb" />
@@ -192,11 +318,11 @@ export default function Courses() {
                 </span>
 
                 <span className="cc-mat-name">
-                  {mat.name}
+                  {mat.title}
                 </span>
 
                 <span className="cc-mat-desc">
-                  {mat.desc}
+                  {mat.description}
                 </span>
               </div>
 
@@ -205,8 +331,23 @@ export default function Courses() {
                   <CheckCircle size={13} /> Done
                 </span>
 
-                <button className="cc-dl-btn">
-                  <Download size={13} /> Download
+                <a
+                  href={`http://localhost:5000/${mat.filePath}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="cc-dl-btn"
+                >
+                  <Download size={13} />
+                  Download
+                </a>
+
+                <button
+                  className="cc-delete-btn"
+                  onClick={() =>
+                    deleteMaterial(mat._id)
+                  }
+                >
+                  Delete
                 </button>
               </div>
             </div>
@@ -268,8 +409,11 @@ export default function Courses() {
             <div
               className="cc-course-card"
               key={course._id}
-              onClick={() => setSelectedCourse(course)}
-            >
+              onClick={() => {
+                setSelectedCourse(course);
+
+                fetchMaterials(course._id);
+              }}>
               <div
                 className="cc-course-thumb"
                 style={{
