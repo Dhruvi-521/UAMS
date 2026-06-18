@@ -1,6 +1,7 @@
 const Marks = require("../models/Marks");
 const Student = require("../models/Student");
 const Course = require("../models/Course");
+const PDFDocument = require("pdfkit");
 
 const uploadMarks = async (req, res) => {
   try {
@@ -21,9 +22,9 @@ const uploadMarks = async (req, res) => {
 
       processed++;
 
-    //   console.log("================================");
-    //   console.log("Processing Row:", processed);
-    //   console.log("Student ID:", row.studentId);
+      //   console.log("================================");
+      //   console.log("Processing Row:", processed);
+      //   console.log("Student ID:", row.studentId);
 
       const student = await Student.findOne({
         studentId: row.studentId
@@ -35,7 +36,7 @@ const uploadMarks = async (req, res) => {
         continue;
       }
 
-    //   console.log("Student Found:", student._id);
+      //   console.log("Student Found:", student._id);
 
       const subjects = [];
 
@@ -72,7 +73,7 @@ const uploadMarks = async (req, res) => {
         });
       }
 
-    //   console.log("Subjects Found:", subjects.length);
+      //   console.log("Subjects Found:", subjects.length);
 
       await Marks.create({
         studentId: student._id,
@@ -151,8 +152,208 @@ const getStudentMarks = async (req, res) => {
   }
 };
 
+const getMyMarks = async (req, res) => {
+  try {
+
+    const studentId = req.user.profileId;
+
+    const marks = await Marks.find({
+      studentId: studentId,
+    })
+      .populate("studentId")
+      .populate("programId")
+      .populate("subjects.courseId")
+      .sort({ createdAt: -1 });
+
+    if (!marks.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No marks found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      student: marks[0].studentId,
+      data: marks,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};
+
+// Update Marks 
+const updateMarks = async (req, res) => {
+  try {
+    // console.log("Marks ID:", req.params.marksId);
+    // console.log("Body:", req.body);
+    const updatedMarks =
+      await Marks.findByIdAndUpdate(
+        req.params.marksId,
+        {
+          subjects: req.body.subjects,
+          totalMarks: req.body.totalMarks,
+          percentage: req.body.percentage,
+          grade: req.body.grade,
+          status: req.body.status
+        },
+        {
+          new: true
+        }
+      );
+
+    if (!updatedMarks) {
+      return res.status(404).json({
+        success: false,
+        message: "Marks record not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: updatedMarks
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+};
+
+
+// Download PDF 
+const downloadReport = async (req, res) => {
+  try {
+
+    const marks = await Marks.findById(
+      req.params.markId
+    )
+      .populate("studentId")
+      .populate("subjects.courseId");
+
+    if (!marks) {
+      return res.status(404).json({
+        message: "Marks not found",
+      });
+    }
+
+    const doc = new PDFDocument();
+
+    res.setHeader(
+      "Content-Type",
+      "application/pdf"
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=result.pdf`
+    );
+
+    doc.pipe(res);
+
+    doc.fontSize(20).text(
+      "Student Result Report",
+      {
+        align: "center",
+      }
+    );
+
+    doc.moveDown();
+
+    doc.fontSize(12).text(
+      `Student Name: ${marks.studentId.firstName} ${marks.studentId.lastName}`
+    );
+
+    doc.text(
+      `Student ID: ${marks.studentId.studentId}`
+    );
+
+    doc.text(
+      `Semester: ${marks.semester}`
+    );
+
+    doc.text(
+      `Exam Type: ${marks.examType}`
+    );
+
+    doc.moveDown();
+
+    marks.subjects.forEach(subject => {
+      doc.text(
+        `${subject.courseName} : ${subject.marksObtained}`
+      );
+    });
+
+    doc.moveDown();
+
+    doc.text(
+      `Percentage : ${marks.percentage}%`
+    );
+
+    doc.text(
+      `Grade : ${marks.grade}`
+    );
+
+    doc.text(
+      `Status : ${marks.status}`
+    );
+
+    doc.end();
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const getMarksByFilter = async (req, res) => {
+  try {
+
+    const {
+      programId,
+      semester,
+      examType
+    } = req.query;
+
+    const marks = await Marks.find({
+      programId,
+      semester,
+      examType
+    })
+      .populate("studentId");
+
+    res.status(200).json({
+      success: true,
+      data: marks
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+};
+
 module.exports = {
   uploadMarks,
   getAllMarks,
   getStudentMarks,
+  getMyMarks,
+  downloadReport,
+  updateMarks,
+  getMarksByFilter
 };

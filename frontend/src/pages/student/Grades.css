@@ -249,3 +249,31 @@
         font-size: 0.85rem;
     }
 }
+
+.exam-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.exam-tab {
+  border: 1px solid #d1d5db;
+  /* background: white; */
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.exam-tab:hover {
+  background: #000000;
+}
+
+.active-tab {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
