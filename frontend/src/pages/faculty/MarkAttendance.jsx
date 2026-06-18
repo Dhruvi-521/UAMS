@@ -24,19 +24,6 @@ import "./MarkAttendance.css";
 
 const DIVISIONS = ["A", "B", "C", "D"];
 
-const STUDENTS = [
-  { id: 1, name: "Priya Sharma", roll: "1" },
-  { id: 2, name: "Vikram Singh", roll: "2" },
-  { id: 3, name: "Aisha Khan", roll: "3" },
-  { id: 4, name: "Amira Singh", roll: "4" },
-  { id: 5, name: "Sanlam Singh", roll: "5" },
-  { id: 6, name: "Rnnta Shan", roll: "6" },
-  { id: 7, name: "Arjun Patel", roll: "7" },
-  { id: 8, name: "Shara Sharma", roll: "8" },
-  { id: 9, name: "Dev Mehta", roll: "9" },
-  { id: 10, name: "Kavya Reddy", roll: "10" },
-];
-
 function PageHeader({ title }) {
   return (
     <div className="fact-att-page-header">
@@ -85,49 +72,52 @@ function SubjectSelection({ onSelect, subjects, loading }) {
       {/* <PageHeader title="Select Subject for Attendance" /> */}
       <h1 className="fact-att-page-title">Select Subject for Attendance</h1>
       <Breadcrumb step={0} />
+      {loading ? (
+        <p>Loading courses...</p>
+      ) : (
+        <div className="fact-att-subject-grid">
+          {subjects.map((subj) => {
+            const Icon = BookOpen;
+            return (
+              <div
+                key={subj._id}
+                className={`fact-att-subject-card${hovered === subj._id ? " fact-att-subject-card-hovered" : ""}`}
+                onClick={() => onSelect(subj)}
+                onMouseEnter={() => setHovered(subj._id)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                <div className="fact-att-card-icon-wrap">
+                  <Icon size={28} strokeWidth={1.6} />
+                </div>
+                <h3 className="fact-att-card-title">{subj.courseName}</h3>
 
-      <div className="fact-att-subject-grid">
-        {subjects.map((subj) => {
-          const Icon = BookOpen;
-          return (
-            <div
-              key={subj.id}
-              className={`fact-att-subject-card${hovered === subj.id ? " fact-att-subject-card-hovered" : ""}`}
-              onClick={() => onSelect(subj)}
-              onMouseEnter={() => setHovered(subj.id)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <div className="fact-att-card-icon-wrap">
-                <Icon size={28} strokeWidth={1.6} />
+                <p className="fact-att-card-code">{subj.courseId}</p>
+                <div className="fact-att-card-meta">
+                  <div className="fact-att-meta-row">
+                    <BookOpen size={12} />
+                    {subj.courseName}
+                  </div>
+
+                  <div className="fact-att-meta-row">
+                    <ClipboardList size={12} />
+                    {subj.courseId}
+                  </div>
+
+                  <div className="fact-att-meta-row">
+                    <BarChart3 size={12} />
+                    Semester {subj.semesterNumber}
+                  </div>
+
+                  <div className="fact-att-meta-row">
+                    <GraduationCap size={12} />
+                    {subj.totalCredits} Credits
+                  </div>
+                </div>
               </div>
-              <h3 className="fact-att-card-title">{subj.courseName}</h3>
-
-              <p className="fact-att-card-code">{subj.courseId}</p>
-              <div className="fact-att-card-meta">
-                <div className="fact-att-meta-row">
-                  <BookOpen size={12} />
-                  {subj.courseName}
-                </div>
-
-                <div className="fact-att-meta-row">
-                  <ClipboardList size={12} />
-                  {subj.courseId}
-                </div>
-
-                <div className="fact-att-meta-row">
-                  <BarChart3 size={12} />
-                  Semester {subj.semesterNumber}
-                </div>
-
-                <div className="fact-att-meta-row">
-                  <GraduationCap size={12} />
-                  {subj.totalCredits} Credits
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -173,19 +163,40 @@ function DivisionSelection({ subject, onSelect, onBack }) {
 }
 
 // ─── Page 3: Attendance — default absent, click row to toggle present ──────────
-function AttendancePage({ subject, division, onBack }) {
+function AttendancePage({
+  subject,
+  division,
+  students,
+  studentsLoading,
+  onBack,
+}) {
   // default: everyone false (absent)
-  const [attendance, setAttendance] = useState(() =>
-    Object.fromEntries(STUDENTS.map((s) => [s.id, false])),
-  );
+  const [attendance, setAttendance] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  useEffect(() => {
+    if (students.length) {
+      const initialAttendance = {};
+
+      students.forEach((student) => {
+        initialAttendance[student._id] = false;
+      });
+
+      setAttendance(initialAttendance);
+    }
+  }, [students]);
 
   const toggle = (id) =>
     setAttendance((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const presentCount = Object.values(attendance).filter(Boolean).length;
-  const absentCount = STUDENTS.length - presentCount;
-
+  const absentCount = students.length - presentCount;
+  if (studentsLoading) {
+    return (
+      <div className="fact-att-page-wrapper">
+        <h2>Loading students...</h2>
+      </div>
+    );
+  }
   if (submitted) {
     return (
       <div className="fact-att-page-wrapper fact-att-center-content">
@@ -217,7 +228,42 @@ function AttendancePage({ subject, division, onBack }) {
       </div>
     );
   }
+  const submitAttendance = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
+      const attendanceRecords = students.map((student) => ({
+        studentId: student._id,
+        status: attendance[student._id] ? "Present" : "Absent",
+      }));
+
+      const response = await fetch(
+        "http://localhost:5000/api/attendance/mark",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            courseId: subject._id,
+            division,
+            attendanceDate: new Date(),
+            attendanceRecords,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to save attendance");
+      }
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to submit attendance");
+    }
+  };
   return (
     <div className="fact-att-page-wrapper">
       {/* <PageHeader title="Take Attendance" /> */}
@@ -250,7 +296,7 @@ function AttendancePage({ subject, division, onBack }) {
         <div className="fact-att-stat-box fact-att-stat-box-total">
           <Users size={20} />
           <div>
-            <span className="fact-att-stat-count">{STUDENTS.length}</span>
+            <span className="fact-att-stat-count">{students.length}</span>
             <span className="fact-att-stat-label">Total</span>
           </div>
         </div>
@@ -261,22 +307,24 @@ function AttendancePage({ subject, division, onBack }) {
           <span>Student</span>
           <span>Click row to mark Present / Absent</span>
         </div>
-        {STUDENTS.map((student) => {
-          const isPresent = attendance[student.id];
+        {students.map((student) => {
+          const isPresent = attendance[student._id];
           return (
             <div
-              key={student.id}
+              key={student._id}
               className={`fact-att-student-row fact-att-row-clickable${isPresent ? " fact-att-row-present fact-att-border-present" : " fact-att-row-absent fact-att-border-absent"}`}
-              onClick={() => toggle(student.id)}
+              onClick={() => toggle(student._id)}
             >
               <div className="fact-att-student-info">
                 <div
                   className={`fact-att-status-dot${isPresent ? " fact-att-dot-present" : " fact-att-dot-absent"}`}
                 />
                 <div className="fact-att-student-text">
-                  <span className="fact-att-student-name">{student.name}</span>
+                  <span className="fact-att-student-name">
+                    {student.firstName} {student.lastName}
+                  </span>
                   <span className="fact-att-student-roll">
-                    Roll: {student.roll}
+                    Roll: {student.rollNumber}
                   </span>
                 </div>
               </div>
@@ -302,10 +350,7 @@ function AttendancePage({ subject, division, onBack }) {
         <button className="fact-att-btn-outline" onClick={onBack}>
           <ArrowLeft size={16} /> Back
         </button>
-        <button
-          className="fact-att-btn-primary"
-          onClick={() => setSubmitted(true)}
-        >
+        <button className="fact-att-btn-primary" onClick={submitAttendance}>
           <Send size={16} /> Submit Attendance
         </button>
       </div>
@@ -319,6 +364,8 @@ export default function MarkAttendance() {
   const [division, setDivision] = useState(null);
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [students, setStudents] = useState([]);
+  const [studentsLoading, setStudentsLoading] = useState(false);
 
   useEffect(() => {
     fetchMyCourses();
@@ -346,13 +393,39 @@ export default function MarkAttendance() {
       setLoading(false);
     }
   };
+  const fetchStudents = async (courseId, division) => {
+    try {
+      setStudentsLoading(true);
 
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        `http://localhost:5000/api/attendance/course/${courseId}/students/${division}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+
+      setStudents(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.log("Error fetching students:", error);
+    } finally {
+      setStudentsLoading(false);
+    }
+  };
   function handleSubject(subj) {
     setSubject(subj);
     setPage(1);
   }
-  function handleDivision(div) {
+  async function handleDivision(div) {
     setDivision(div);
+
+    await fetchStudents(subject._id, div);
+
     setPage(2);
   }
   function handleBack() {
@@ -386,6 +459,8 @@ export default function MarkAttendance() {
         <AttendancePage
           subject={subject}
           division={division}
+          students={students}
+          studentsLoading={studentsLoading}
           onBack={handleReset}
         />
       )}
