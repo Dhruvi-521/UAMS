@@ -93,3 +93,22 @@ exports.getStudentAttendance = async (req, res) => {
     });
   }
 };
+
+exports.getCourseAttendance = async (req, res) => {
+  try {
+    const studentId = req.user.profileId;
+
+    const records = await Attendance.find({
+      student: studentId,
+      course: req.params.courseId,
+    })
+      .populate("course", "courseName courseId")
+      .sort({ attendanceDate: -1 });
+
+    res.json(records);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};  

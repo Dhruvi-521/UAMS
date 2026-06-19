@@ -42,12 +42,13 @@ const StudentAttendance = () => {
       const grouped = {};
 
       data.forEach((record) => {
+        const courseName = record.course.courseName;
         const courseId = record.course._id;
 
         if (!grouped[courseId]) {
           grouped[courseId] = {
             id: courseId,
-            name: record.course.courseName,
+            name: courseName,
             total: 0,
             present: 0,
           };
@@ -96,7 +97,7 @@ const StudentAttendance = () => {
     );
   }
   return (
-    <div className="dashboard-containe  r">
+    <div className="dashboard-container">
       <h2 className="page-title">Student Attendance</h2>
 
       {/* Row 1: Summary Cards */}
@@ -163,7 +164,13 @@ const StudentAttendance = () => {
               {subjects.map((sub) => (
                 <tr
                   key={sub.id}
-                  onClick={() => navigate(`/student/attendance/${sub.id}`)}
+                  onClick={() =>
+                    navigate(`/student/attendance/${sub.id}`, {
+                      state: {
+                        courseName: sub.name,
+                      },
+                    })
+                  }
                   className="clickable-row"
                 >
                   <td data-label="Subject">

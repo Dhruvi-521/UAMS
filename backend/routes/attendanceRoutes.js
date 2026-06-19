@@ -24,6 +24,12 @@ router.get(
   attendanceController.getStudentAttendance
 );
 
+router.get(
+  "/student/course/:courseId",
+  authMiddleware,
+  attendanceController.getCourseAttendance
+);
+
 router.post("/mark", authMiddleware, attendanceController.markAttendance);
 
 module.exports = router;
