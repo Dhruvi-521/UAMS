@@ -2,7 +2,9 @@ import {
   ArrowLeft,
   BookOpen,
   CheckCircle2,
-  ChevronDown, ChevronLeft, ChevronRight,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ChevronsUpDown,
   ClipboardList,
   Filter,
@@ -11,13 +13,12 @@ import {
   IdCard,
   Layers,
   LayoutGrid,
-  Mail, Phone
+  Mail,
+  Phone,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Students.css";
-
-
 
 const evaluationItems = [
   "Patient Interviews",
@@ -47,38 +48,21 @@ function StudentList({ onSelectStudent }) {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       const formattedStudents = response.data.students.map((student) => ({
         id: student._id,
-
         name: `${student.firstName} ${student.lastName}`,
-
-        semester: student.semester,
-
-        program:
-          student.program?.programName || "",
-
+        semester: String(student.semester), // <-- convert here
+        program: student.program?.programName || "",
         division: student.division,
-
         contact: student.mobile,
-
         studentId: student.studentId,
-
         rollNumber: student.rollNumber,
-
         email: student.universityEmail,
-
         phone: student.mobile,
-
-        gpa: "N/A",
-
-        usmle1: "N/A",
-
-        usmle2: "N/A",
       }));
-
       setStudents(formattedStudents);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -94,14 +78,16 @@ function StudentList({ onSelectStudent }) {
       </div>
     );
   }
-  const filtered = students.filter((s) => {
-    return (
-      (semester === "All Semester" || s.semester === semester) &&
-      (program === "All Programs" || s.program === program) &&
-      (division === "All Divisions" || s.division === division)
-    );
-  });
+const selectedSemester = semester.trim();
 
+const filtered = students.filter((s) => {
+  return (
+    (selectedSemester === "All Semester" ||
+      String(s.semester).trim() === selectedSemester) &&
+    (program === "All Programs" || s.program === program) &&
+    (division === "All Divisions" || s.division === division)
+  );
+});
   return (
     <div className="page-container">
       <h1 className="st-page-title">Students</h1>
@@ -112,18 +98,23 @@ function StudentList({ onSelectStudent }) {
             <LayoutGrid size={14} /> Semester
           </label>
           <div className="select-wrapper">
-            <select value={semester} onChange={(e) => setSemester(e.target.value)} className="filter-select">
-              <option>All Semester</option>
+            <select
+              value={semester}
+              onChange={(e) => {
+                console.log("Selected:", e.target.value);
+                setSemester(e.target.value);
+              }}
+              className="filter-select"
+            >
+              <option value="All Semester">All Semester</option>
 
-              {[
-                ...new Set(
-                  students.map((s) => String(s.semester))
+              {[...new Set(students.map((s) => String(s.semester)))].map(
+                (sem) => (
+                  <option key={sem} value={sem}>
+                    {sem}
+                  </option>
                 ),
-              ].map((semester) => (
-                <option key={semester}>
-                  {semester}
-                </option>
-              ))}
+              )}
             </select>
             <ChevronDown size={14} className="select-icon" />
           </div>
@@ -134,18 +125,18 @@ function StudentList({ onSelectStudent }) {
             <GraduationCap size={14} /> Program
           </label>
           <div className="select-wrapper">
-            <select value={program} onChange={(e) => setProgram(e.target.value)} className="filter-select">
+            <select
+              value={program}
+              onChange={(e) => setProgram(e.target.value)}
+              className="filter-select"
+            >
               <option>All Programs</option>
 
-              {[
-                ...new Set(
-                  students.map((s) => s.program)
+              {[...new Set(students.map((s) => s.program))].map(
+                (programName) => (
+                  <option key={programName}>{programName}</option>
                 ),
-              ].map((programName) => (
-                <option key={programName}>
-                  {programName}
-                </option>
-              ))}
+              )}
             </select>
             <ChevronDown size={14} className="select-icon" />
           </div>
@@ -156,33 +147,33 @@ function StudentList({ onSelectStudent }) {
             <LayoutGrid size={14} /> Division
           </label>
           <div className="select-wrapper">
-            <select value={division} onChange={(e) => setDivision(e.target.value)} className="filter-select">
+            <select
+              value={division}
+              onChange={(e) => setDivision(e.target.value)}
+              className="filter-select"
+            >
               <option>All Divisions</option>
 
-              {[
-                ...new Set(
-                  students.map((s) => s.division)
-                ),  
-              ].map((division) => (
-                <option key={division}>
-                  {division}
-                </option>
+              {[...new Set(students.map((s) => s.division))].map((division) => (
+                <option key={division}>{division}</option>
               ))}
             </select>
             <ChevronDown size={14} className="select-icon" />
           </div>
         </div>
 
-        <button className="filter-btn">
+        {/* <button className="filter-btn">
           <Filter size={14} /> Filter
-        </button>
+        </button> */}
       </div>
 
       <div className="table-wrapper">
         <table className="students-table">
           <thead>
             <tr>
-              <th className="col-hash"><Hash size={13} /></th>
+              <th className="col-hash">
+                <Hash size={13} />
+              </th>
               <th className="col-name">
                 Name <ChevronsUpDown size={12} className="sort-icon" />
               </th>
@@ -196,10 +187,15 @@ function StudentList({ onSelectStudent }) {
             {filtered.map((student, idx) => (
               <tr key={student.id} className="table-row">
                 <td className="col-hash">
-                  <span className="row-icon"><IdCard size={13} /></span>
+                  <span className="row-icon">
+                    <IdCard size={13} />
+                  </span>
                 </td>
                 <td className="col-name">
-                  <button className="student-link" onClick={() => onSelectStudent(student)}>
+                  <button
+                    className="student-link"
+                    onClick={() => onSelectStudent(student)}
+                  >
                     {student.name}
                   </button>
                 </td>
@@ -214,13 +210,21 @@ function StudentList({ onSelectStudent }) {
       </div>
 
       <div className="pagination">
-        <span className="pagination-count">1–{filtered.length} of {filtered.length}</span>
+        <span className="pagination-count">
+          1–{filtered.length} of {filtered.length}
+        </span>
         <div className="pagination-controls">
-          <button className="page-btn"><ChevronLeft size={14} /></button>
+          <button className="page-btn">
+            <ChevronLeft size={14} />
+          </button>
           <span className="page-range">1–3</span>
-          <button className="page-btn"><ChevronLeft size={14} /></button>
+          <button className="page-btn">
+            <ChevronLeft size={14} />
+          </button>
           <button className="page-btn active">1</button>
-          <button className="page-btn"><ChevronRight size={14} /></button>
+          <button className="page-btn">
+            <ChevronRight size={14} />
+          </button>
         </div>
       </div>
     </div>
@@ -245,9 +249,15 @@ function StudentProfile({ student, onBack }) {
           {/* <span className="profile-id-badge">{student.rollNumber}</span> */}
         </div>
         <div className="profile-meta">
-          <span><GraduationCap size={14} /> {student.semester}</span>
-          <span><BookOpen size={14} /> {student.program}</span>
-          <span><Layers size={14} /> {student.division}</span>
+          <span>
+            <GraduationCap size={14} /> {student.semester}
+          </span>
+          <span>
+            <BookOpen size={14} /> {student.program}
+          </span>
+          <span>
+            <Layers size={14} /> {student.division}
+          </span>
         </div>
       </div>
 
@@ -274,11 +284,13 @@ function StudentProfile({ student, onBack }) {
                 </div>
                 <div className="card-divider" />
                 <div className="card-row">
-                  <Mail size={13} className="row-icon-muted" /> {student.studentId}
+                  <Mail size={13} className="row-icon-muted" />{" "}
+                  {student.studentId}
                 </div>
                 <div className="card-divider" />
                 <div className="card-row">
-                  <IdCard size={13} className="row-icon-muted" /> Roll Number {student.rollNumber}
+                  <IdCard size={13} className="row-icon-muted" /> Roll Number{" "}
+                  {student.rollNumber}
                 </div>
               </div>
 
@@ -289,7 +301,9 @@ function StudentProfile({ student, onBack }) {
                 <div className="card-divider" />
                 <div className="card-row">
                   <Mail size={13} className="row-icon-muted" />
-                  <a href={`mailto:${student.email}`} className="email-link">{student.email}</a>
+                  <a href={`mailto:${student.email}`} className="email-link">
+                    {student.email}
+                  </a>
                 </div>
                 <div className="card-divider" />
                 <div className="card-row">
@@ -304,9 +318,9 @@ function StudentProfile({ student, onBack }) {
             <div className="cards-grid">
               <div className="info-card">
                 <div className="card-row">
-                  <GraduationCap size={13} className="row-icon-muted" /> GPA: {student.gpa}
+                  <GraduationCap size={13} className="row-icon-muted" /> GPA:{" "}
+                  {student.gpa}
                 </div>
-
               </div>
 
               <div className="info-card">
@@ -321,8 +335,6 @@ function StudentProfile({ student, onBack }) {
                 ))}
               </div>
             </div>
-
-
           </section>
         </div>
       )}
@@ -344,7 +356,10 @@ export default function Students() {
       {selectedStudent === null ? (
         <StudentList onSelectStudent={setSelectedStudent} />
       ) : (
-        <StudentProfile student={selectedStudent} onBack={() => setSelectedStudent(null)} />
+        <StudentProfile
+          student={selectedStudent}
+          onBack={() => setSelectedStudent(null)}
+        />
       )}
     </div>
   );

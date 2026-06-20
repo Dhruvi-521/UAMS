@@ -1,31 +1,21 @@
 import axios from "axios";
-import {
-  Eye, Pencil, Plus,
-  Search,
-  Trash2,
-} from "lucide-react";
+import { Eye, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AddFaculty from "./AddFaculty";
 import FacultyProfile from "./FacultyProfile";
 import "./ManageFaculty.css";
 import UpdateFacultyForm from "./UpdateFacultyForm";
 
-const allCourses = [
-  { code: "CS-101", name: "Introduction to AI", credits: 3, semester: "Semester 1" },
-  { code: "CS-201", name: "Data Structures & Algorithms", credits: 4, semester: "Semester 2" },
-  { code: "CS-301", name: "Machine Learning", credits: 3, semester: "Semester 3" },
-  { code: "CS-401", name: "Advanced Algorithms", credits: 4, semester: "Semester 4" },
-  { code: "CS-501", name: "Deep Learning", credits: 3, semester: "Semester 5" },
-  { code: "CS-601", name: "Computer Vision", credits: 3, semester: "Semester 6" },
-  { code: "CS-701", name: "Natural Language Processing", credits: 3, semester: "Semester 7" },
-  { code: "CS-801", name: "Cloud Computing", credits: 4, semester: "Semester 8" },
-  { code: "CS-901", name: "Cybersecurity Fundamentals", credits: 3, semester: "Semester 5" },
-  { code: "CS-111", name: "Database Management Systems", credits: 4, semester: "Semester 3" },
-];
-
 const avatarColors = [
-  "#4f46e5", "#7c3aed", "#0891b2", "#059669",
-  "#d97706", "#dc2626", "#9333ea", "#0d9488", "#2563eb",
+  "#4f46e5",
+  "#7c3aed",
+  "#0891b2",
+  "#059669",
+  "#d97706",
+  "#dc2626",
+  "#9333ea",
+  "#0d9488",
+  "#2563eb",
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -55,7 +45,9 @@ function normalizeFaculty(f) {
     dob: f.dob ?? "",
 
     // Address — nested object OR flat keys
-    address: addressObj.fullAddress ?? (typeof f.address === "string" ? f.address : ""),
+    address:
+      addressObj.fullAddress ??
+      (typeof f.address === "string" ? f.address : ""),
     city: addressObj.city ?? f.city ?? "",
     state: addressObj.state ?? f.state ?? "",
     country: addressObj.country ?? f.country ?? "India",
@@ -76,7 +68,9 @@ function normalizeFaculty(f) {
     specializations: Array.isArray(f.specializations)
       ? f.specializations
       : f.specialization
-        ? (Array.isArray(f.specialization) ? f.specialization : [f.specialization])
+        ? Array.isArray(f.specialization)
+          ? f.specialization
+          : [f.specialization]
         : [],
     specialization: Array.isArray(f.specialization)
       ? (f.specialization[0] ?? "")
@@ -99,7 +93,11 @@ function normalizeFaculty(f) {
     currentLoad: f.currentLoad ?? "",
     avatar:
       f.avatar ??
-      ([firstName, lastName].filter(Boolean).map((w) => w[0].toUpperCase()).join("") || "??"),
+      ([firstName, lastName]
+        .filter(Boolean)
+        .map((w) => w[0].toUpperCase())
+        .join("") ||
+        "??"),
   };
 }
 
@@ -124,7 +122,9 @@ function Avatar({ initials, index, size = 36 }) {
 
 function StatusBadge({ status }) {
   return (
-    <span className={`fm-badge ${status === "Active" ? "fm-badge-active" : "fm-badge-leave"}`}>
+    <span
+      className={`fm-badge ${status === "Active" ? "fm-badge-active" : "fm-badge-leave"}`}
+    >
       {status}
     </span>
   );
@@ -143,10 +143,10 @@ export default function FacultyManagement() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentFaculty, setCurrentFaculty] = useState(null);
-
   const [allCourses, setAllCourses] = useState([]);
   const [assignedCourses, setAssignedCourses] = useState([]);
-
+  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [designationFilter, setDesignationFilter] = useState("");
   // ── Fetch list from backend (extracted so it can be called after updates)
   const fetchFaculty = useCallback(async () => {
     try {
@@ -162,24 +162,19 @@ export default function FacultyManagement() {
     }
   }, []);
 
-
   const fetchCourses = async () => {
     try {
+      const { data } = await axios.get("http://localhost:5000/api/all-courses");
 
-      const { data } = await axios.get(
-        "http://localhost:5000/api/all-courses"
-      );
-
-      const formatted = data.map(course => ({
+      const formatted = data.map((course) => ({
         id: course._id,
         code: course.courseId,
         name: course.courseName,
         credits: course.totalCredits,
-        semester: `Semester ${course.semesterNumber}`
+        semester: `Semester ${course.semesterNumber}`,
       }));
 
       setAllCourses(formatted);
-
     } catch (error) {
       console.error(error);
     }
@@ -187,17 +182,13 @@ export default function FacultyManagement() {
 
   const fetchFacultyCourses = async (facultyId) => {
     try {
-
       const { data } = await axios.get(
-        `http://localhost:5000/api/faculty-course/${facultyId}`
+        `http://localhost:5000/api/faculty-course/${facultyId}`,
       );
 
-      const courseCodes = data.map(
-        course => course.courseId
-      );
+      const courseCodes = data.map((course) => course.courseId);
 
       setAssignedCourses(courseCodes);
-
     } catch (error) {
       console.error(error);
     }
@@ -210,93 +201,122 @@ export default function FacultyManagement() {
 
   // ── Called by UpdateFacultyForm right after a successful PUT
   // `savedForm` is the exact form state that was submitted.
-  const handleUpdateSuccess = useCallback((savedForm) => {
-    const targetId = savedForm.facultyId ?? savedForm.id;
+  const handleUpdateSuccess = useCallback(
+    (savedForm) => {
+      const targetId = savedForm.facultyId ?? savedForm.id;
 
-    // Optimistic patch — update local state instantly
-    setFacultyData((prev) =>
-      prev.map((f) => {
-        if (f.id !== targetId) return f;
+      // Optimistic patch — update local state instantly
+      setFacultyData((prev) =>
+        prev.map((f) => {
+          if (f.id !== targetId) return f;
 
-        const updated = {
-          ...f,
-          firstName: savedForm.firstName ?? f.firstName,
-          middleName: savedForm.middleName ?? f.middleName,
-          lastName: savedForm.lastName ?? f.lastName,
-          gender: savedForm.gender ?? f.gender,
-          dob: savedForm.dob ?? f.dob,
-          address: savedForm.address ?? f.address,
-          city: savedForm.city ?? f.city,
-          state: savedForm.state ?? f.state,
-          country: savedForm.country ?? f.country,
-          pincode: savedForm.pincode ?? f.pincode,
-          department: savedForm.department ?? f.department,
-          designation: savedForm.designation ?? f.designation,
-          degree: savedForm.degree ?? f.degree,
-          qualification: savedForm.degree ?? f.qualification,
-          experience: savedForm.experience ?? f.experience,
-          joinDate: savedForm.dateOfJoining ?? f.joinDate,
-          joiningDate: savedForm.dateOfJoining ?? f.joiningDate,
-          dateOfJoining: savedForm.dateOfJoining ?? f.dateOfJoining,
-          specialization: savedForm.specialization ?? f.specialization,
-          specializations: savedForm.specialization
-            ? [savedForm.specialization]
-            : f.specializations,
-          email: savedForm.universityEmail ?? f.email,
-          universityEmail: savedForm.universityEmail ?? f.universityEmail,
-          personalEmail: savedForm.personalEmail ?? f.personalEmail,
-          contactNumber: savedForm.contactNumber ?? f.contactNumber,
-          phone: savedForm.contactNumber ?? f.phone,
-          familyContact: savedForm.familyContact ?? f.familyContact,
-          familyPhone: savedForm.familyContact ?? f.familyPhone,
-        };
+          const updated = {
+            ...f,
+            firstName: savedForm.firstName ?? f.firstName,
+            middleName: savedForm.middleName ?? f.middleName,
+            lastName: savedForm.lastName ?? f.lastName,
+            gender: savedForm.gender ?? f.gender,
+            dob: savedForm.dob ?? f.dob,
+            address: savedForm.address ?? f.address,
+            city: savedForm.city ?? f.city,
+            state: savedForm.state ?? f.state,
+            country: savedForm.country ?? f.country,
+            pincode: savedForm.pincode ?? f.pincode,
+            department: savedForm.department ?? f.department,
+            designation: savedForm.designation ?? f.designation,
+            degree: savedForm.degree ?? f.degree,
+            qualification: savedForm.degree ?? f.qualification,
+            experience: savedForm.experience ?? f.experience,
+            joinDate: savedForm.dateOfJoining ?? f.joinDate,
+            joiningDate: savedForm.dateOfJoining ?? f.joiningDate,
+            dateOfJoining: savedForm.dateOfJoining ?? f.dateOfJoining,
+            specialization: savedForm.specialization ?? f.specialization,
+            specializations: savedForm.specialization
+              ? [savedForm.specialization]
+              : f.specializations,
+            email: savedForm.universityEmail ?? f.email,
+            universityEmail: savedForm.universityEmail ?? f.universityEmail,
+            personalEmail: savedForm.personalEmail ?? f.personalEmail,
+            contactNumber: savedForm.contactNumber ?? f.contactNumber,
+            phone: savedForm.contactNumber ?? f.phone,
+            familyContact: savedForm.familyContact ?? f.familyContact,
+            familyPhone: savedForm.familyContact ?? f.familyPhone,
+          };
 
-        // Rebuild derived display fields
-        const fullName = `${updated.firstName} ${updated.lastName}`.trim();
-        updated.name = fullName;
-        updated.avatar = [updated.firstName, updated.lastName]
-          .filter(Boolean).map((w) => w[0].toUpperCase()).join("") || "??";
+          // Rebuild derived display fields
+          const fullName = `${updated.firstName} ${updated.lastName}`.trim();
+          updated.name = fullName;
+          updated.avatar =
+            [updated.firstName, updated.lastName]
+              .filter(Boolean)
+              .map((w) => w[0].toUpperCase())
+              .join("") || "??";
 
-        return updated;
-      })
-    );
+          return updated;
+        }),
+      );
 
-    // Also re-fetch from server to stay in sync with DB
-    fetchFaculty();
+      // Also re-fetch from server to stay in sync with DB
+      fetchFaculty();
 
-    // Navigate back to the table
-    setIsEditing(false);
-    setCurrentFaculty(null);
-  }, [fetchFaculty]);
+      // Navigate back to the table
+      setIsEditing(false);
+      setCurrentFaculty(null);
+    },
+    [fetchFaculty],
+  );
 
   // ── Sub-page routing
   if (showAddForm) {
-    return <AddFaculty onBack={() => { setShowAddForm(false); fetchFaculty(); }} />;
+    return (
+      <AddFaculty
+        onBack={() => {
+          setShowAddForm(false);
+          fetchFaculty();
+        }}
+      />
+    );
   }
 
   if (isEditing && currentFaculty) {
     return (
       <UpdateFacultyForm
         faculty={currentFaculty}
-        onBack={() => { setIsEditing(false); setCurrentFaculty(null); }}
-        onUpdateSuccess={handleUpdateSuccess}   // ← key prop
+        onBack={() => {
+          setIsEditing(false);
+          setCurrentFaculty(null);
+        }}
+        onUpdateSuccess={handleUpdateSuccess} // ← key prop
       />
     );
   }
+  const departments = [
+    ...new Set(facultyData.map((f) => f.department).filter(Boolean)),
+  ];
 
-  const filtered = facultyData.filter((f) =>
-    f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    f.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-    f.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const designations = [
+    ...new Set(facultyData.map((f) => f.designation).filter(Boolean)),
+  ];
+
+  const filtered = facultyData.filter((f) => {
+    const matchesSearch =
+      f.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      f.id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+      f.email?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesDepartment =
+      !departmentFilter || f.department === departmentFilter;
+
+    const matchesDesignation =
+      !designationFilter || f.designation === designationFilter;
+
+    return matchesSearch && matchesDepartment && matchesDesignation;
+  });
 
   const openProfile = async (faculty) => {
-
     setSelectedFaculty(faculty);
 
-    await fetchFacultyCourses(
-      faculty._id
-    );
+    await fetchFacultyCourses(faculty._id);
 
     setSidebarOpen(true);
   };
@@ -311,52 +331,38 @@ export default function FacultyManagement() {
 
   const handleDelete = async (faculty) => {
     try {
-      const confirmDelete = window.confirm(
-        `Delete ${faculty.name}?`
-      );
+      const confirmDelete = window.confirm(`Delete ${faculty.name}?`);
 
       if (!confirmDelete) return;
 
       await axios.delete(
-        `http://localhost:5000/api/faculty/${faculty.facultyId}`
+        `http://localhost:5000/api/faculty/${faculty.facultyId}`,
       );
 
       // remove from UI
-      setFacultyData(prev =>
-        prev.filter(f => f.facultyId !== faculty.facultyId)
+      setFacultyData((prev) =>
+        prev.filter((f) => f.facultyId !== faculty.facultyId),
       );
 
       alert("Faculty deleted successfully");
-
     } catch (error) {
       console.error("Delete Error:", error.response?.data || error);
       alert("Error deleting faculty");
     }
   };
 
-  const saveFacultyCourses = async (
-    facultyId,
-    selectedCodes
-  ) => {
-
+  const saveFacultyCourses = async (facultyId, selectedCodes) => {
     try {
-
       const selectedCourseIds = allCourses
-        .filter(course =>
-          selectedCodes.includes(course.code)
-        )
-        .map(course => course.id);
+        .filter((course) => selectedCodes.includes(course.code))
+        .map((course) => course.id);
 
-      await axios.post(
-        "http://localhost:5000/api/faculty-course/assign",
-        {
-          facultyId,
-          courseIds: selectedCourseIds
-        }
-      );
+      await axios.post("http://localhost:5000/api/faculty-course/assign", {
+        facultyId,
+        courseIds: selectedCourseIds,
+      });
 
       setAssignedCourses(selectedCodes);
-
     } catch (error) {
       console.error(error);
     }
@@ -365,22 +371,24 @@ export default function FacultyManagement() {
   return (
     <div className="fm-wrapper">
       <div className={`fm-page${sidebarOpen ? " shifted" : ""}`}>
-
         {/* Header */}
         <div className="fm-header">
           <h1 className="fm-title">Faculty Management</h1>
           <div className="fm-header-actions">
-            <button className="fm-btn-primary" onClick={() => setShowAddForm(true)}>
+            <button
+              className="fm-btn-primary"
+              onClick={() => setShowAddForm(true)}
+            >
               <Plus size={15} /> Add New Faculty
             </button>
-            <button className="fm-btn-secondary">
+            {/* <button className="fm-btn-secondary">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
               Export Data
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -395,16 +403,39 @@ export default function FacultyManagement() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <select className="fm-select">
-            <option>All Departments</option><option>Computer Science</option><option>Mathematics</option>
+          <select
+            className="fm-select"
+            value={departmentFilter}
+            onChange={(e) => setDepartmentFilter(e.target.value)}
+          >
+            <option value="">All Departments</option>
+            {departments.map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
+            ))}
           </select>
-          <select className="fm-select">
-            <option>All Designations</option><option>Professor</option><option>Associate Professor</option>
+
+          <select
+            className="fm-select"
+            value={designationFilter}
+            onChange={(e) => setDesignationFilter(e.target.value)}
+          >
+            <option value="">All Designations</option>
+            {designations.map((designation) => (
+              <option key={designation} value={designation}>
+                {designation}
+              </option>
+            ))}
           </select>
         </div>
 
-        {loading && <div className="fm-status-msg">Loading faculty data...</div>}
-        {!loading && error && <div className="fm-status-msg error">{error}</div>}
+        {loading && (
+          <div className="fm-status-msg">Loading faculty data...</div>
+        )}
+        {!loading && error && (
+          <div className="fm-status-msg error">{error}</div>
+        )}
 
         {/* Desktop Table */}
         {!loading && !error && (
@@ -413,18 +444,26 @@ export default function FacultyManagement() {
               <table className="fm-table">
                 <thead>
                   <tr>
-                    <th>Faculty ID</th><th>Name</th><th>Department</th>
-                    <th>Designation</th><th>Status</th><th>Actions</th>
+                    <th>Faculty ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((f, i) => (
                     <tr
                       key={f.id}
-                      className={selectedFaculty?.id === f.id ? "fm-row-selected" : ""}
+                      className={
+                        selectedFaculty?.id === f.id ? "fm-row-selected" : ""
+                      }
                       onClick={() => openProfile(f)}
                     >
-                      <td><span className="fm-id-text">{f.id}</span></td>
+                      <td>
+                        <span className="fm-id-text">{f.id}</span>
+                      </td>
                       <td>
                         <div className="fm-name-cell">
                           <Avatar initials={f.avatar} index={i} size={34} />
@@ -433,15 +472,26 @@ export default function FacultyManagement() {
                       </td>
                       <td>{f.department}</td>
                       <td>{f.designation}</td>
-                      <td><StatusBadge status={f.status} /></td>
                       <td>
-                        <div className="fm-action-btns" onClick={(e) => e.stopPropagation()}>
-                          <button className="fm-act-btn fm-act-view" onClick={() => openProfile(f)}>
+                        <StatusBadge status={f.status} />
+                      </td>
+                      <td>
+                        <div
+                          className="fm-action-btns"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <button
+                            className="fm-act-btn fm-act-view"
+                            onClick={() => openProfile(f)}
+                          >
                             <Eye size={13} />
                           </button>
                           <button
                             className="fm-act-btn fm-act-edit"
-                            onClick={() => { setCurrentFaculty(f); setIsEditing(true); }}
+                            onClick={() => {
+                              setCurrentFaculty(f);
+                              setIsEditing(true);
+                            }}
                           >
                             <Pencil size={13} />
                           </button>
@@ -479,13 +529,22 @@ export default function FacultyManagement() {
                   </div>
                   <StatusBadge status={f.status} />
                 </div>
-                <div className="fm-card-actions" onClick={(e) => e.stopPropagation()}>
-                  <button className="fm-card-view-btn" onClick={() => openProfile(f)}>
+                <div
+                  className="fm-card-actions"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className="fm-card-view-btn"
+                    onClick={() => openProfile(f)}
+                  >
                     <Eye size={14} /> View Profile
                   </button>
                   <button
                     className="fm-card-icon-btn edit"
-                    onClick={() => { setCurrentFaculty(f); setIsEditing(true); }}
+                    onClick={() => {
+                      setCurrentFaculty(f);
+                      setIsEditing(true);
+                    }}
                   >
                     <Pencil size={14} color="#64748b" />
                   </button>
@@ -502,7 +561,9 @@ export default function FacultyManagement() {
         )}
       </div>
 
-      <button className="fm-fab" onClick={() => setShowAddForm(true)}><Plus size={24} /></button>
+      <button className="fm-fab" onClick={() => setShowAddForm(true)}>
+        <Plus size={24} />
+      </button>
 
       <FacultyProfile
         isOpen={sidebarOpen}
@@ -512,10 +573,7 @@ export default function FacultyManagement() {
         allCourses={allCourses}
         assignedCourseCodes={assignedCourses}
         onUpdateCourses={(courses) =>
-          saveFacultyCourses(
-            selectedFaculty._id,
-            courses
-          )
+          saveFacultyCourses(selectedFaculty._id, courses)
         }
       />
     </div>

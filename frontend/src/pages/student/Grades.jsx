@@ -272,7 +272,7 @@ const Grades = () => {
                 >
                   Download Report
                 </button>
-                <button className="btn btn-outline">Contact Advisor</button>
+                {/* <button className="btn btn-outline">Contact Advisor</button> */}
               </div>
             </div>
           </aside>
