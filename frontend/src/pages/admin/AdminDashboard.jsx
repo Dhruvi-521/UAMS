@@ -1,16 +1,35 @@
-import React from 'react';
-import './AdminDashboard.css';
+import React from "react";
+import "./AdminDashboard.css";
 import AddStudent from "./addStudent";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import AttendanceChart from "./AttendanceChart";
+
 import {
-  Users, UserCheck, BookOpen, FileText,
-  PlusCircle, FilePlus, Send
-} from 'lucide-react';
+  Users,
+  UserCheck,
+  BookOpen,
+  FileText,
+  PlusCircle,
+  FilePlus,
+  Send,
+} from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  const [attendanceAnalytics, setAttendanceAnalytics] = useState({
+    overallAttendance: 0,
+    programAttendance: [],
+  });
+
+  const [todayAttendance, setTodayAttendance] = useState({
+    totalStudents: 0,
+    presentStudents: 0,
+    absentStudents: 0,
+    attendancePercentage: 0,
+  });
   const [stats, setStats] = useState({
     students: 0,
     faculty: 0,
@@ -20,7 +39,7 @@ const Dashboard = () => {
     const fetchStats = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/dashboard/stats"
+          "http://localhost:5000/api/dashboard/stats",
         );
 
         setStats(res.data);
@@ -29,14 +48,39 @@ const Dashboard = () => {
       }
     };
 
+    const fetchProgramAnalytics = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/attendance/program-analytics",
+        );
+
+        setAttendanceAnalytics(res.data);
+      } catch (err) {
+        console.error("Program analytics error:", err);
+      }
+    };
+
+    const fetchTodayAttendance = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/attendance/today",
+        );
+
+        setTodayAttendance(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+
     fetchStats();
+    fetchProgramAnalytics();
+    fetchTodayAttendance();
   }, []);
+
   return (
     <div className="dashboard-wrapper">
-
       <div className="dashboard-container">
-
-
         {/* ===== Stats Section ===== */}
         <div className="ad-stats-grid">
           <div className="stat-card blue-bg">
@@ -63,20 +107,7 @@ const Dashboard = () => {
               <span>Total Courses</span>
             </div>
             <h2 className="stat-value">{stats.courses}</h2>
-            {/* <p className="stat-footer">25 Active This Semester</p> */}
           </div>
-
-          {/* <div className="stat-card red-bg"> */}
-            {/* <div className="stat-header">
-              <FileText size={20} />
-              <span>Pending Leaves</span>
-            </div> */}
-            {/* <h2 className="stat-value">18</h2> */}
-            {/* <div className="stat-footer-flex"> */}
-              {/* <span>7 S, 6 F</span> */}
-              {/* <button className="mini-view-btn">View All</button> */}
-            {/* </div> */}
-          {/* </div> */}
         </div>
 
         {/* ===== Attendance Section ===== */}
@@ -90,35 +121,44 @@ const Dashboard = () => {
           </div>
 
           <div className="analytics-summary">
-            <p>Overall Attendance: <strong>87%</strong></p>
-            <p>Students: <span className="text-blue">85%</span></p>
-            <p>Faculty: <span className="text-green">92%</span></p>
+            <p>
+              Attendance Today:
+              <strong>{todayAttendance.attendancePercentage}%</strong>
+            </p>
+
+            <p>
+              Present:
+              <span className="text-blue">
+                {todayAttendance.presentStudents}
+              </span>
+            </p>
+
+            <p>
+              Absent:
+              <span className="text-red">{todayAttendance.absentStudents}</span>
+            </p>
+
+            <p>
+              Total Students:
+              <span>{todayAttendance.totalStudents}</span>
+            </p>
           </div>
 
           <div className="chart-area">
-            <p>Chart Visualization Area</p>
+            <AttendanceChart data={attendanceAnalytics.programAttendance} />
           </div>
         </div>
 
         {/* ===== Bottom Section ===== */}
         <div className="bottom-layout">
-          {/* <div className="content-card">
-            <h3>Monthly Payroll Summary</h3>
-            <div className="payroll-row">
-              <span className="pay-amount">₹12,50,000</span>
-              <span className="pay-status paid">Paid</span>
-            </div>
-            <div className="payroll-row">
-              <span className="pay-amount">₹1,80,000</span>
-              <span className="pay-status pending">Pending</span>
-            </div>
-          </div> */}
 
           <div className="content-card">
             <h3>Quick Actions</h3>
             <div className="actions-grid">
-              <button className="btn btn-blue" onClick={() =>
-                navigate("/admin/students/add")}>
+              <button
+                className="btn btn-blue"
+                onClick={() => navigate("/admin/students/add")}
+              >
                 <PlusCircle size={18} /> Add Student
               </button>
               <button
@@ -128,16 +168,9 @@ const Dashboard = () => {
                 <PlusCircle size={18} />
                 Add Faculty
               </button>
-              {/* <button className="btn btn-orange">
-                <PlusCircle size={18} /> Add Course
-              </button>
-              <button className="btn btn-purple">
-                <FilePlus size={18}/> Report
-              </button> */}
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

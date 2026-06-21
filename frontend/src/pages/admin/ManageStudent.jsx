@@ -21,8 +21,6 @@ export default function StudentManagement() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
 
-  console.log("Current view:", view);
-
   const calculateAge = (dobString) => {
     if (!dobString) return null;
     const birthDate = new Date(dobString);
@@ -139,9 +137,6 @@ export default function StudentManagement() {
 
     fetchPrograms();
   }, []);
-console.log(
-  studentData.map((s) => s.program)
-);
   // ── Filtering ─────────────────────────────────────────────────────────────
 
   const filtered = studentData.filter((s) => {
@@ -162,19 +157,9 @@ console.log(
       semesterFilter === "All Semesters" ||
       Number(s.semester) === Number(semesterFilter);
 
-    console.log({
-      studentSemester: s.semester,
-      studentType: typeof s.semester,
-      selectedSemester: semesterFilter,
-      selectedType: typeof semesterFilter,
-      matchesSemester,
-    });
-
     const matchesStatus =
       statusFilter === "All Status" || s.status === statusFilter;
-    
-    console.log("Selected Program:", programFilter);
-
+  
     return matchesSearch && matchesProgram && matchesSemester && matchesStatus;
   });
 
@@ -194,7 +179,6 @@ console.log(
         setStudentData((prev) => prev.filter((s) => s.id !== studentId));
       }
     } catch (err) {
-      console.error(err);
       alert(err.response?.data?.message || "Failed to delete student");
     }
   };

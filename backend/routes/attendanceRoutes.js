@@ -30,6 +30,21 @@ router.get(
   attendanceController.getCourseAttendance
 );
 
+router.get(
+  "/analytics",
+  attendanceController.getAttendanceAnalytics
+);
+
+router.get(
+  "/today",
+  attendanceController.getTodayAttendance
+);
+
+router.get(
+  "/program-analytics",
+  attendanceController.getProgramAttendanceAnalytics
+);
+
 router.post("/mark", authMiddleware, attendanceController.markAttendance);
 
 module.exports = router;
