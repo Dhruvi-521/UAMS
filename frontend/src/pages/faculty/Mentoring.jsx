@@ -1,56 +1,68 @@
-import { useState, useEffect } from "react";
+import axios from "axios";
 import {
+  AlertCircle,
   Calendar,
-  Clock,
+  CheckCircle,
   ChevronDown,
   ChevronUp,
-  X,
-  CheckCircle,
+  Clock,
   Layers,
-  UserCircle2,
-  AlertCircle,
+  X
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import "./Mentoring.css";
 
-const PROGRAMS = ["BCA", "MScIT", "MBA", "BBA", "BSc CS"];
-const SEMESTERS_CREATE = ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6"];
-const SEMESTERS_VIEW   = ["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6"];
 
-// Normalize "Sem 2" → "Semester 2" so filters match stored slots
-const normalizeSem = (s) => s.replace(/^Sem\s+/, "Semester ");
+const SEMESTERS_CREATE = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+const SEMESTERS_VIEW = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-const MOCK_STUDENTS = [
-  { name: "John Doe",     id: "2026IT001" },
-  { name: "Jane Smith",   id: "2026CS005" },
-  { name: "Alex Jones",   id: "2026IT012" },
-  { name: "Maria Garcia", id: "2026BUS303" },
-  { name: "David Chen",   id: "2026ENG404" },
-];
+
 
 function StatusBadge({ status }) {
   const cls =
-    status === "BOOKED"      ? "badge badge-booked"
-  : status === "RESCHEDULED" ? "badge badge-rescheduled"
-  : status === "OPEN"        ? "badge badge-open"
-  :                            "badge badge-cancelled";
+    status === "BOOKED" ? "badge badge-booked"
+      : status === "RESCHEDULED" ? "badge badge-rescheduled"
+        : status === "OPEN" ? "badge badge-open"
+          : "badge badge-cancelled";
   return <span className={cls}>{status}</span>;
 }
 
 /* ── CreateSlotForm ─────────────────────────────────── */
 function CreateSlotForm({ onSlotsOpened }) {
-  const [program,     setProgram]     = useState("BCA");
-  const [semester,    setSemester]    = useState("Sem 2");
-  const [date,        setDate]        = useState("2026-10-26");
-  const [slotOpen,    setSlotOpen]    = useState(true);
-  const [startTime,   setStartTime]   = useState("09:00");
-  const [endTime,     setEndTime]     = useState("09:30");
-  const [slots,       setSlots]       = useState([]);
-  const [openedSlots, setOpenedSlots] = useState([]);
+  const [programs, setPrograms] = useState([]);
+  const [program, setProgram] = useState("");
+  const [semester, setSemester] = useState("");
+  const [date, setDate] = useState("2026-10-26");
+  const [slotOpen, setSlotOpen] = useState(true);
+  const [startTime, setStartTime] = useState("09:00");
+  const [endTime, setEndTime] = useState("09:30");
+  const [slots, setSlots] = useState([]);
+
+  useEffect(() => {
+    fetchPrograms();
+  }, []);
+
+  const fetchPrograms = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/programs"
+      );
+
+      setPrograms(response.data);
+
+      if (response.data.length > 0) {
+        setProgram(response.data[0]._id);
+      }
+
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    }
+  };
 
   const formatDate = (iso) => {
     if (!iso) return "";
     const [y, m, d] = iso.split("-");
-    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return `${months[parseInt(m) - 1]} ${parseInt(d)}, ${y}`;
   };
 
@@ -65,24 +77,66 @@ function CreateSlotForm({ onSlotsOpened }) {
 
   const handleAddSlot = () => {
     if (!date || !startTime || !endTime) return;
+    const selectedProgram = programs.find(
+      p => p._id === program
+    );
+
     setSlots(prev => [...prev, {
       id: Date.now(),
-      date: formatDate(date),
-      start: to12h(startTime),
-      end: to12h(endTime),
-      program,
-      semester: normalizeSem(semester),
+
+      program, // keep ID for backend
+
+      programName: selectedProgram?.programName || "",
+
+      semester,
+      date,
+      startTime,
+      endTime,
+
+      displayDate: formatDate(date),
+      displayTime: `${to12h(startTime)} - ${to12h(endTime)}`
     }]);
   };
 
   const handleRemoveSlot = (id) => setSlots(prev => prev.filter(s => s.id !== id));
 
-  const handleOpenSlot = () => {
-    if (slots.length === 0) return;
-    const newOpened = slots.map(s => ({ ...s, studentName: null, studentId: null, status: "OPEN" }));
-    setOpenedSlots(prev => [...prev, ...newOpened]);
-    onSlotsOpened(newOpened);
-    setSlots([]);
+  const handleOpenSlot = async () => {
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://localhost:5000/api/mentoring/create-slots",
+        {
+          slots: slots.map(slot => ({
+            program: slot.program,
+            semester: Number(slot.semester),
+            date: slot.date,
+            startTime: slot.startTime,
+            endTime: slot.endTime
+          }))
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      alert(response.data.message);
+
+      setSlots([]);
+
+      onSlotsOpened();
+
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ||
+        "Error creating slots"
+      );
+    }
   };
 
   return (
@@ -93,8 +147,21 @@ function CreateSlotForm({ onSlotsOpened }) {
           <div className="form-group">
             <label>Program</label>
             <div className="select-wrap">
-              <select className="select-field" value={program} onChange={e => setProgram(e.target.value)}>
-                {PROGRAMS.map(p => <option key={p}>{p}</option>)}
+              <select
+                className="select-field"
+                value={program}
+                onChange={(e) => setProgram(e.target.value)}
+              >
+                <option value="">Select Program</option>
+
+                {programs.map((prog) => (
+                  <option
+                    key={prog._id}
+                    value={prog._id}
+                  >
+                    {prog.programName}
+                  </option>
+                ))}
               </select>
               <ChevronDown className="chevron-icon" size={15} />
             </div>
@@ -164,8 +231,8 @@ function CreateSlotForm({ onSlotsOpened }) {
                 {slots.map(slot => (
                   <tr key={slot.id}>
                     <td>{slot.date}</td>
-                    <td>{slot.start} – {slot.end}</td>
-                    <td>{slot.program}</td>
+                    <td>{slot.startTime} – {slot.endTime}</td>
+                    <td>{slot.programName}</td>
                     <td>{slot.semester}</td>
                     <td><button className="icon-btn" onClick={() => handleRemoveSlot(slot.id)}><X size={16} /></button></td>
                   </tr>
@@ -179,47 +246,30 @@ function CreateSlotForm({ onSlotsOpened }) {
         </div>
       )}
 
-      {openedSlots.length > 0 && (
-        <div className="card opened-slots-card">
-          <div className="opened-slots-header">
-            <div className="opened-slots-title-row">
-              <Layers size={20} color="#1e3a8a" />
-              <span className="card-title" style={{ marginBottom: 0 }}>OPENED SLOTS SUMMARY</span>
-            </div>
-            <div className="slot-count-badge">{openedSlots.length} Slot{openedSlots.length !== 1 ? "s" : ""} Open</div>
-          </div>
-          <div className="slot-pills-grid">
-            {openedSlots.map((slot, idx) => (
-              <div className="slot-pill" key={slot.id}>
-                <div className="slot-pill-number">#{idx + 1}</div>
-                <div className="slot-pill-body">
-                  <div className="slot-pill-time"><Clock size={13} color="#2563eb" />{slot.start} – {slot.end}</div>
-                  <div className="slot-pill-meta">{slot.date} &nbsp;·&nbsp; {slot.program} &nbsp;·&nbsp; {slot.semester}</div>
-                </div>
-                <span className="slot-pill-status">OPEN</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
 /* ── ViewBookingsTable ──────────────────────────────── */
-function ViewBookingsTable({ openedSlots, onRemoveSlot }) {
-  const [filterProgram,  setFilterProgram]  = useState("All");
+function ViewBookingsTable({ programs, openedSlots, onRemoveSlot }) {
+  const [filterProgram, setFilterProgram] = useState("All");
   const [filterSemester, setFilterSemester] = useState("All");
+  // const [programs, setPrograms] = useState([]);
+  const [program, setProgram] = useState("");
+
+
 
   // Filter rows based on selected program & semester
   const filteredRows = openedSlots.filter(row => {
-    const programMatch  = filterProgram  === "All" || row.program  === filterProgram;
+    const programMatch =
+      filterProgram === "All" ||
+      row.program?.programName === filterProgram;
     const semesterMatch = filterSemester === "All" || row.semester === filterSemester;
     return programMatch && semesterMatch;
   });
 
   const bookedCount = filteredRows.filter(r => r.status === "BOOKED").length;
-  const openCount   = filteredRows.filter(r => r.status === "OPEN").length;
+  const openCount = filteredRows.filter(r => r.status === "OPEN").length;
 
   const clearFilters = () => { setFilterProgram("All"); setFilterSemester("All"); };
   const hasFilters = filterProgram !== "All" || filterSemester !== "All";
@@ -234,9 +284,21 @@ function ViewBookingsTable({ openedSlots, onRemoveSlot }) {
           <div className="filter-group">
             <label>Program</label>
             <div className="select-wrap">
-              <select className="select-field" value={filterProgram} onChange={e => setFilterProgram(e.target.value)}>
-                <option value="All">All Programs</option>
-                {PROGRAMS.map(p => <option key={p}>{p}</option>)}
+              <select
+                className="select-field"
+                value={filterProgram}
+                onChange={(e) => setFilterProgram(e.target.value)}
+              >
+                <option value="">Select Program</option>
+
+                {programs.map(program => (
+                  <option
+                    key={program._id}
+                    value={program.programName}
+                  >
+                    {program.programName}
+                  </option>
+                ))}
               </select>
               <ChevronDown className="chevron-icon" size={15} />
             </div>
@@ -320,25 +382,29 @@ function ViewBookingsTable({ openedSlots, onRemoveSlot }) {
                   </tr>
                 ) : (
                   filteredRows.map(row => (
-                    <tr key={row.id} className={row.status === "OPEN" ? "row-open" : ""}>
-                      <td style={{ whiteSpace: "nowrap" }}>{row.date}</td>
-                      <td style={{ whiteSpace: "nowrap" }}>{row.start} – {row.end}</td>
+                    <tr key={row._id} className={row.status === "OPEN" ? "row-open" : ""}>
+                      <td style={{ whiteSpace: "nowrap" }}>{new Date(row.date).toISOString().split("T")[0]}</td>
+                      <td style={{ whiteSpace: "nowrap" }}>{row.startTime} – {row.endTime}</td>
                       <td>
-                        {row.studentName
-                          ? <span className="student-name-cell"><UserCircle2 size={15} color="#2563eb" />{row.studentName}</span>
-                          : <span className="awaiting-text">— Awaiting Booking —</span>}
+                        {
+                          row.student
+                            ? `${row.student.firstName} ${row.student.lastName}`
+                            : "Awaiting Booking"
+                        }
                       </td>
                       <td>
-                        {row.studentId
-                          ? <span className="student-id-pill">{row.studentId}</span>
-                          : <span className="awaiting-text">—</span>}
+                        {
+                          row.student
+                            ? row.student.studentId
+                            : "-"
+                        }
                       </td>
-                      <td>{row.program}</td>
-                      <td>{row.semester}</td>
+                      <td>{row.program?.programName}</td>
+                      <td>Semester {row.semester}</td>
                       <td><StatusBadge status={row.status} /></td>
                       <td>
                         <div className="action-cell">
-                          <button className="icon-btn" title="Remove slot" onClick={() => onRemoveSlot(row.id)}>
+                          <button className="icon-btn" title="Remove slot" onClick={() => onRemoveSlot(row._id)}>
                             <X size={15} />
                           </button>
                         </div>
@@ -357,36 +423,70 @@ function ViewBookingsTable({ openedSlots, onRemoveSlot }) {
 
 /* ── Root ───────────────────────────────────────────── */
 export default function Mentoring() {
-  const [activeTab,   setActiveTab]   = useState("create");
+  const [activeTab, setActiveTab] = useState("create");
   const [openedSlots, setOpenedSlots] = useState([]);
+  const [programs, setPrograms] = useState([]);
 
-  const handleSlotsOpened = (newSlots) => {
-    setOpenedSlots(prev => [...prev, ...newSlots]);
+  useEffect(() => {
+
+    const fetchPrograms = async () => {
+
+      const response = await axios.get(
+        "http://localhost:5000/api/programs"
+      );
+
+      setPrograms(response.data);
+    };
+
+    fetchPrograms();
+
+  }, []);
+
+  const fetchFacultySlots = async () => {
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        "http://localhost:5000/api/mentoring/my-slots",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      setOpenedSlots(response.data.slots);
+
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
-    const unbookedSlots = openedSlots.filter(s => s.status === "OPEN" && !s.studentName);
-    if (unbookedSlots.length === 0) return;
+    fetchFacultySlots();
+  }, []);
 
-    const timers = unbookedSlots.map(slot => {
-      const delay = 3000 + Math.random() * 5000;
-      return setTimeout(() => {
-        const student = MOCK_STUDENTS[Math.floor(Math.random() * MOCK_STUDENTS.length)];
-        setOpenedSlots(prev =>
-          prev.map(s =>
-            s.id === slot.id
-              ? { ...s, studentName: student.name, studentId: student.id, status: "BOOKED" }
-              : s
-          )
-        );
-      }, delay);
-    });
 
-    return () => timers.forEach(clearTimeout);
-  }, [openedSlots.length]);
+  const handleRemoveSlot = async (slotId) => {
+    try {
 
-  const handleRemoveSlot = (slotId) => {
-    setOpenedSlots(prev => prev.filter(s => s.id !== slotId));
+      const token = localStorage.getItem("token");
+
+      await axios.delete(
+        `http://localhost:5000/api/mentoring/${slotId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      fetchFacultySlots();
+
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -402,8 +502,14 @@ export default function Mentoring() {
       </div>
 
       {activeTab === "create"
-        ? <CreateSlotForm onSlotsOpened={handleSlotsOpened} />
-        : <ViewBookingsTable openedSlots={openedSlots} onRemoveSlot={handleRemoveSlot} />}
+        ? <CreateSlotForm
+          onSlotsOpened={fetchFacultySlots}
+        />
+        : <ViewBookingsTable
+          programs={programs}
+          openedSlots={openedSlots}
+          onRemoveSlot={handleRemoveSlot}
+        />}
     </div>
   );
 }

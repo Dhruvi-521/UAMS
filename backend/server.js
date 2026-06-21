@@ -77,6 +77,10 @@ app.use(
   materialRoutes
 );
 
+// Mentoring 
+const mentoringRoutes = require("./routes/mentoringRoutes");
+app.use("/api/mentoring", mentoringRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

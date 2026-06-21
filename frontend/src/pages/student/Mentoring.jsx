@@ -1,66 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./Mentoring.css";
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
-const FACULTY_LIST = [
-    {
-        id: 1,
-        name: "Dr. Bhavin Shah",
-        topic: "Data Structures",
-        experience: "8 years of experience",
-        style: "Structured & Supportive",
-        dates: ["12/12/2026", "13/12/2026", "14/12/2026"],
-        slots: [
-            { time: "8:00 – 8:30", disabled: false },
-            { time: "8:30 – 9:00", disabled: true },
-            { time: "9:00 – 9:30", disabled: false },
-            { time: "9:30 – 10:00", disabled: false },
-            { time: "10:00 – 10:30", disabled: true },
-            { time: "10:30 – 11:00", disabled: false },
-        ],
-    },
-    {
-        id: 2,
-        name: "Dr. Rahul Vaghela",
-        topic: "Algorithms",
-        experience: "11 years of experience",
-        style: "Interactive & Problem-Solving",
-        dates: ["12/12/2026", "13/12/2026", "14/12/2026"],
-        slots: [
-            { time: "8:00 – 8:30", disabled: true },
-            { time: "8:30 – 9:00", disabled: false },
-            { time: "9:00 – 9:30", disabled: false },
-            { time: "9:30 – 10:00", disabled: true },
-            { time: "10:00 – 10:30", disabled: false },
-            { time: "10:30 – 11:00", disabled: false },
-        ],
-    },
-    {
-        id: 3,
-        name: "Dr. Meera Patel",
-        topic: "Operating Systems",
-        experience: "17 years of experience",
-        style: "Analytical & Theory-Focused",
-        dates: ["12/12/2026", "13/12/2026", "14/12/2026"],
-        slots: [
-            { time: "8:00 – 8:30", disabled: false },
-            { time: "8:30 – 9:00", disabled: false },
-            { time: "9:00 – 9:30", disabled: true },
-            { time: "9:30 – 10:00", disabled: false },
-            { time: "10:00 – 10:30", disabled: false },
-            { time: "10:30 – 11:00", disabled: true },
-        ],
-    },
-];
-
-const INITIAL_BOOKINGS = [
-    { id: 1, faculty: "Dr. Bhavin Shah", date: "12/02/2026", time: "9:00 – 9:30", status: "Booked" },
-    { id: 2, faculty: "Dr. Rahul Vaghela", date: "12/03/2026", time: "10:00 – 10:30", status: "Pending" },
-];
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
-
 function CalIcon() {
     return (
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -125,81 +68,95 @@ function ConfirmDialog({ booking, onConfirm, onCancel }) {
 
 // ─── FacultyCard ──────────────────────────────────────────────────────────────
 
-function FacultyCard({ faculty, isOpen, onToggle, onBook }) {
-    const [selDate, setSelDate] = useState(faculty.dates[0]);
-    const [selSlot, setSelSlot] = useState(null);
+function FacultyCard({ slot, onBooked }) {
 
-    const pickDate = (d) => { setSelDate(d); setSelSlot(null); };
+    const [loading, setLoading] = useState(false);
 
-    const handleBook = () => {
-        if (!selSlot) { alert("Please select a time slot first."); return; }
-        onBook({ faculty: faculty.name, date: selDate, time: selSlot });
-        setSelSlot(null);
+    const handleBook = async () => {
+        try {
+
+            setLoading(true);
+
+            const token = localStorage.getItem("token");
+
+            const response = await axios.post(
+                "http://localhost:5000/api/mentoring/book-slot",
+                {
+                    slotId: slot._id
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            alert(response.data.message);
+
+            onBooked();
+
+        } catch (error) {
+
+            alert(
+                error.response?.data?.message ||
+                "Booking failed"
+            );
+
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="mentoring-page">
+        <div className="fcard fcard--open">
 
-            <div className={`fcard${isOpen ? " fcard--open" : ""}`}>
+            <div className="fcard__hdr">
+                <div className="fcard__hdr-info">
 
-                {/* Card header — toggles accordion */}
-                <div className="fcard__hdr">
-                    <div className="fcard__hdr-info">
-                        <span className="fcard__name">{faculty.name}</span>
-                        <span className="fcard__meta">Topic: {faculty.topic}</span>
-                        <span className="fcard__meta">{faculty.experience}</span>
-                    </div>
+                    <span className="fcard__name">
+                        {slot.faculty?.firstName} {slot.faculty?.lastName}
+                    </span>
+
+                    <span className="fcard__meta">
+                        Program : {slot.program?.programName}
+                    </span>
+
+                    <span className="fcard__meta">
+                        Semester : {slot.semester}
+                    </span>
+
+                </div>
+            </div>
+
+            <div className="fcard__panel">
+
+                <div className="fcard__selected-label">
+                    Date :
+                    <span className="fcard__selected-val">
+                        {" "}
+                        {new Date(slot.date)
+                            .toISOString()
+                            .split("T")[0]}
+                    </span>
                 </div>
 
-                {/* Expanded panel */}
-                <div className="fcard__panel">
-
-                    {/* DATE SELECTION */}
-                    <div className="fcard__block">
-                        <p className="fcard__block-label">Select Date</p>
-                        <div className="pill-row">
-                            {faculty.dates.map((d) => (
-                                <button key={d} onClick={() => pickDate(d)}
-                                    className={`pill pill--date${selDate === d ? " pill--on" : ""}`}>
-                                    {d}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* TIME SLOT SELECTION */}
-                    <div className="fcard__block">
-                        <p className="fcard__block-label">Select Slot</p>
-                        <div className="pill-row">
-                            {faculty.slots.map((s) => (
-                                <button key={s.time} disabled={s.disabled}
-                                    onClick={() => !s.disabled && setSelSlot(s.time)}
-                                    className={`pill${s.disabled ? " pill--off" : ""}${selSlot === s.time ? " pill--on" : ""}`}>
-                                    {s.time}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* MENTORING STYLE */}
-                    <p className="fcard__style">
-                        <strong>Mentoring Style:</strong> {faculty.style}
-                    </p>
-
-                    {/* SLOT SUMMARY */}
-                    <div className="fcard__selected-label">
-                        Slot&nbsp;
-                        {selSlot
-                            ? <span className="fcard__selected-val">{selDate} &nbsp;|&nbsp; {selSlot}</span>
-                            : <span className="fcard__selected-placeholder">—</span>
-                        }
-                    </div>
-
-                    {/* BOOK BUTTON */}
-                    <button className="fcard__book-btn" onClick={handleBook}>
-                        <CalIcon /> BOOK SLOT
-                    </button>
+                <div className="fcard__selected-label">
+                    Time :
+                    <span className="fcard__selected-val">
+                        {" "}
+                        {slot.startTime} - {slot.endTime}
+                    </span>
                 </div>
+
+                <button
+                    className="fcard__book-btn"
+                    onClick={handleBook}
+                    disabled={loading}
+                >
+                    <CalIcon />
+                    {loading ? "BOOKING..." : "BOOK SLOT"}
+                </button>
+
             </div>
         </div>
     );
@@ -222,33 +179,21 @@ function BookingsTable({ bookings, onCancelRequest }) {
                             <th>Date <span>⇅</span></th>
                             <th>Time <span>⇅</span></th>
                             <th>Status <span>⇅</span></th>
-                            <th>Action</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                         {bookings.map((b) => (
-                            <tr key={b.id} className={b.status === "Cancelled" ? "row--cancelled" : ""}>
-                                <td>{b.faculty}</td>
-                                <td>{b.date}</td>
-                                <td>{b.time}</td>
+                            <tr key={b._id} className={b.status === "Cancelled" ? "row--cancelled" : ""}>
+                                <td>{b.faculty?.firstName} {b.faculty?.lastName}</td>
+                                <td> {new Date(b.date)
+                                    .toISOString()
+                                    .split("T")[0]}</td>
+                                <td>{b.startTime} - {b.endTime}</td>
                                 <td>
                                     <span className={`sbadge sbadge--${b.status.toLowerCase()}`}>
                                         {b.status}
                                     </span>
-                                </td>
-                                <td>
-                                    {/* Only show Cancel button if slot is not already cancelled */}
-                                    {b.status !== "Cancelled" ? (
-                                        <button
-                                            className="cancel-btn"
-                                            onClick={() => onCancelRequest(b)}
-                                            title="Cancel this booking"
-                                        >
-                                            <TrashIcon /> Cancel
-                                        </button>
-                                    ) : (
-                                        <span className="cancelled-label">—</span>
-                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -259,8 +204,21 @@ function BookingsTable({ bookings, onCancelRequest }) {
             {/* Mobile cards */}
             <div className="bsec__mob">
                 {bookings.map((b) => (
-                    <div className={`bsec__mob-card${b.status === "Cancelled" ? " bsec__mob-card--cancelled" : ""}`} key={b.id}>
-                        {[["Faculty", b.faculty], ["Date", b.date], ["Time", b.time]].map(([k, v]) => (
+                    <div className={`bsec__mob-card${b.status === "Cancelled" ? " bsec__mob-card--cancelled" : ""}`} key={b._id}>
+                       {[
+  [
+    "Faculty",
+    `${b.faculty?.firstName || ""} ${b.faculty?.lastName || ""}`
+  ],
+  [
+    "Date",
+    new Date(b.date).toISOString().split("T")[0]
+  ],
+  [
+    "Time",
+    `${b.startTime} - ${b.endTime}`
+  ]
+].map(([k, v]) => (
                             <div className="bsec__mob-row" key={k}>
                                 <span className="bsec__mob-key">{k}</span>
                                 <span className="bsec__mob-val">{v}</span>
@@ -289,7 +247,59 @@ function BookingsTable({ bookings, onCancelRequest }) {
 
 export default function Mentoring() {
     const [openId, setOpenId] = useState(null);
-    const [bookings, setBookings] = useState(INITIAL_BOOKINGS);
+    const [slots, setSlots] = useState([]);
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchSlots = async () => {
+        try {
+            setLoading(true);
+
+            const token = localStorage.getItem("token");
+
+            const response = await axios.get(
+                "http://localhost:5000/api/mentoring/student/available-slots",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            setSlots(response.data.slots);
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchSlots();
+        fetchBookings();
+    }, []);
+
+    const fetchBookings = async () => {
+        try {
+
+            const token = localStorage.getItem("token");
+
+            const response = await axios.get(
+                "http://localhost:5000/api/mentoring/student/my-bookings",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            setBookings(response.data.slots);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     // cancelTarget holds the booking object being confirmed, or null when dialog is hidden
     const [cancelTarget, setCancelTarget] = useState(null);
@@ -340,12 +350,17 @@ export default function Mentoring() {
 
                     {/* 3-column faculty card grid */}
                     <div className="mp__grid">
-                        {FACULTY_LIST.map((f) => (
+                        {slots.length === 0 && (
+                            <p>No mentoring slots available.</p>
+                        )}
+                        {slots.map((slot) => (
                             <FacultyCard
-                                key={f.id}
-                                faculty={f}
-                                isOpen={true}
-                                onBook={handleBook}
+                                key={slot._id}
+                                slot={slot}
+                                onBooked={() => {
+                                    fetchSlots();
+                                    fetchBookings();
+                                }}
                             />
                         ))}
                     </div>
