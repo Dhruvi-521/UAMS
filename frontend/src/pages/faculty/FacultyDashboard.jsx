@@ -55,7 +55,7 @@ const quickActions = [
 export default function FacultyDashboard() {
   const [notifCount] = useState(2);
   const { user } = useAuth();
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {

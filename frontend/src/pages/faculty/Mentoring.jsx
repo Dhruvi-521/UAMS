@@ -103,7 +103,7 @@ function CreateSlotForm({ onSlotsOpened }) {
   const handleOpenSlot = async () => {
     try {
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await axios.post(
         "http://localhost:5000/api/mentoring/create-slots",
@@ -445,7 +445,7 @@ export default function Mentoring() {
   const fetchFacultySlots = async () => {
     try {
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await axios.get(
         "http://localhost:5000/api/mentoring/my-slots",
@@ -471,7 +471,7 @@ export default function Mentoring() {
   const handleRemoveSlot = async (slotId) => {
     try {
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       await axios.delete(
         `http://localhost:5000/api/mentoring/${slotId}`,

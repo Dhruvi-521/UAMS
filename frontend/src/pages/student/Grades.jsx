@@ -15,7 +15,7 @@ const Grades = () => {
   useEffect(() => {
     const fetchMarks = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
 
         const response = await axios.get(
           "http://localhost:5000/api/marks/my-marks",
@@ -90,7 +90,7 @@ const Grades = () => {
   const handleDownloadReport = async () => {
     try {
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await axios.get(
         `http://localhost:5000/api/marks/download-report/${marksInfo._id}`,

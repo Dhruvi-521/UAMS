@@ -38,7 +38,7 @@ const UpdateMarks = () => {
   const loadMarks = async () => {
     try {
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await axios.get(
         "http://localhost:5000/api/marks/filter",
@@ -164,7 +164,7 @@ const UpdateMarks = () => {
     try {
 
       const token =
-        localStorage.getItem("token");
+        sessionStorage.getItem("token");
 
       await axios.put(
         `http://localhost:5000/api/marks/${student._id}`,

@@ -32,7 +32,7 @@ const quickActions = [
 export default function StudentDashboard() {
     const [notifCount] = useState(3);
     const { user } = useAuth();
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const [profile, setProfile] = useState(null);
 
     const today = new Date().toLocaleDateString("en-IN", {

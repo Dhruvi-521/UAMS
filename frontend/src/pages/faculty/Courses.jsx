@@ -50,7 +50,7 @@ export default function Courses() {
   const fetchMyCourses = async () => {
     try {
       const token =
-        localStorage.getItem("token");
+        sessionStorage.getItem("token");
 
       const response = await axios.get(
         "http://localhost:5000/api/faculty-course/my-courses",
@@ -74,7 +74,7 @@ export default function Courses() {
 
   const fetchMaterials = async (courseId) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await axios.get(
         `http://localhost:5000/api/materials/course/${courseId}`,
@@ -96,7 +96,7 @@ export default function Courses() {
 
   const uploadMaterial = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const formData = new FormData();
 
@@ -162,7 +162,7 @@ export default function Courses() {
     materialId
   ) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const confirmDelete =
         window.confirm(

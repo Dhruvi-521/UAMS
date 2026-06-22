@@ -230,7 +230,7 @@ function AttendancePage({
   }
   const submitAttendance = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const attendanceRecords = students.map((student) => ({
         studentId: student._id,
@@ -373,7 +373,7 @@ export default function MarkAttendance() {
 
   const fetchMyCourses = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await fetch(
         "http://localhost:5000/api/faculty-course/my-courses",
@@ -397,7 +397,7 @@ export default function MarkAttendance() {
     try {
       setStudentsLoading(true);
 
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await fetch(
         `http://localhost:5000/api/attendance/course/${courseId}/students/${division}`,

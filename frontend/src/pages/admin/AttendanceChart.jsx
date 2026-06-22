@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const AttendanceChart = ({ data }) => {
+const AttendanceChart = ({ data }) => { 
   const COLORS = [
     "#3b82f6", // Blue
     "#10b981", // Green

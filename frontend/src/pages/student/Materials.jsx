@@ -93,7 +93,7 @@ export default function Materials() {
       // Get logged in student's profile
       const profileResponse = await fetch("http://localhost:5000/api/users/profile", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
 
@@ -110,7 +110,7 @@ export default function Materials() {
         `http://localhost:5000/api/courses/${programId}/${semesterNumber}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       );

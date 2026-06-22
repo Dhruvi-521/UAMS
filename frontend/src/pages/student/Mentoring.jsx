@@ -77,7 +77,7 @@ function FacultyCard({ slot, onBooked }) {
 
             setLoading(true);
 
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
 
             const response = await axios.post(
                 "http://localhost:5000/api/mentoring/book-slot",
@@ -255,7 +255,7 @@ export default function Mentoring() {
         try {
             setLoading(true);
 
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
 
             const response = await axios.get(
                 "http://localhost:5000/api/mentoring/student/available-slots",
@@ -283,7 +283,7 @@ export default function Mentoring() {
     const fetchBookings = async () => {
         try {
 
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
 
             const response = await axios.get(
                 "http://localhost:5000/api/mentoring/student/my-bookings",

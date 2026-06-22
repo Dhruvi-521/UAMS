@@ -68,7 +68,7 @@ export default function MaterialDetails() {
   const fetchMaterials = async () => {
     try {
       const token =
-        localStorage.getItem("token");
+        sessionStorage.getItem("token");
 
       const response =
         await axios.get(
