@@ -1,41 +1,42 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import "./ForgotPassword.css";
 
 /* ─────────────────────────────────────────────
    STEP CONSTANTS
 ───────────────────────────────────────────── */
 const STEP_EMAIL = "email";
-const STEP_OTP   = "otp";
+const STEP_OTP = "otp";
 const STEP_RESET = "reset";
-const STEP_DONE  = "done";
+const STEP_DONE = "done";
 
 /* ─────────────────────────────────────────────
    MAIN COMPONENT
 ───────────────────────────────────────────── */
 export default function ForgotPassword({ onClose }) {
-    const [step, setStep]               = useState(STEP_EMAIL);
-    const [animating, setAnimating]     = useState(false);
+    const [step, setStep] = useState(STEP_EMAIL);
+    const [animating, setAnimating] = useState(false);
 
     /* Email step */
-    const [email, setEmail]             = useState("");
-    const [emailError, setEmailError]   = useState("");
+    const [email, setEmail] = useState("");
+    const [emailError, setEmailError] = useState("");
     const [emailLoading, setEmailLoading] = useState(false);
 
     /* OTP step */
-    const [otp, setOtp]                 = useState(["", "", "", ""]);
-    const [otpError, setOtpError]       = useState("");
-    const [otpLoading, setOtpLoading]   = useState(false);
+    const [otp, setOtp] = useState(["", "", "", ""]);
+    const [otpError, setOtpError] = useState("");
+    const [otpLoading, setOtpLoading] = useState(false);
     const [resendTimer, setResendTimer] = useState(30);
-    const [canResend, setCanResend]     = useState(false);
-    const otpRefs                       = [useRef(), useRef(), useRef(), useRef()];
+    const [canResend, setCanResend] = useState(false);
+    const otpRefs = [useRef(), useRef(), useRef(), useRef()];
 
     /* Reset step */
-    const [newPassword, setNewPassword]       = useState("");
+    const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [showNew, setShowNew]               = useState(false);
-    const [showConfirm, setShowConfirm]       = useState(false);
-    const [resetError, setResetError]         = useState("");
-    const [resetLoading, setResetLoading]     = useState(false);
+    const [showNew, setShowNew] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [resetError, setResetError] = useState("");
+    const [resetLoading, setResetLoading] = useState(false);
 
     /* ── Resend countdown ── */
     useEffect(() => {
@@ -64,18 +65,42 @@ export default function ForgotPassword({ onClose }) {
     const validateEmail = (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
 
     /* ── STEP 1: Get OTP ── */
-    const handleGetOtp = (e) => {
+    const handleGetOtp = async (e) => {
         e.preventDefault();
+
         if (!validateEmail(email)) {
             setEmailError("Please enter a valid college email address.");
             return;
         }
-        setEmailError("");
-        setEmailLoading(true);
-        setTimeout(() => {
+
+        try {
+
+            setEmailLoading(true);
+            setEmailError("");
+
+            const response = await axios.post(
+                "http://localhost:5000/api/users/forgot-password/send-otp",
+                {
+                    email
+                }
+            );
+
+            if (response.data.success) {
+                goTo(STEP_OTP);
+            }
+
+        } catch (err) {
+
+            setEmailError(
+                err.response?.data?.message ||
+                "Failed to send OTP"
+            );
+
+        } finally {
+
             setEmailLoading(false);
-            goTo(STEP_OTP);
-        }, 1800);
+
+        }
     };
 
     /* ── STEP 2: OTP input handlers ── */
@@ -105,34 +130,81 @@ export default function ForgotPassword({ onClose }) {
         otpRefs[lastFilled].current?.focus();
     };
 
-    const handleVerifyOtp = (e) => {
+    const handleVerifyOtp = async (e) => {
+
         e.preventDefault();
-        const entered = otp.join("");
-        if (entered.length < 4) {
-            setOtpError("Please enter the complete 4-digit OTP.");
+
+        const enteredOtp = otp.join("");
+
+        if (enteredOtp.length < 4) {
+
+            setOtpError(
+                "Please enter the complete 4-digit OTP."
+            );
+
             return;
         }
-        setOtpLoading(true);
-        setTimeout(() => {
+
+        try {
+
+            setOtpLoading(true);
+            setOtpError("");
+
+            const response = await axios.post(
+                "http://localhost:5000/api/users/forgot-password/verify-otp",
+                {
+                    email,
+                    otp: enteredOtp
+                }
+            );
+
+            if (response.data.success) {
+                goTo(STEP_RESET);
+            }
+
+        } catch (err) {
+
+            setOtpError(
+                err.response?.data?.message ||
+                "Invalid OTP"
+            );
+
+        } finally {
+
             setOtpLoading(false);
-            /* In production: validate OTP against backend */
-            goTo(STEP_RESET);
-        }, 1800);
+
+        }
     };
 
-    const handleResend = () => {
+    const handleResend = async () => {
+
         if (!canResend) return;
-        setOtp(["", "", "", ""]);
-        setOtpError("");
-        setResendTimer(30);
-        setCanResend(false);
-        const interval = setInterval(() => {
-            setResendTimer(t => {
-                if (t <= 1) { clearInterval(interval); setCanResend(true); return 0; }
-                return t - 1;
-            });
-        }, 1000);
-        otpRefs[0].current?.focus();
+
+        try {
+
+            await axios.post(
+                "http://localhost:5000/api/users/forgot-password/send-otp",
+                {
+                    email
+                }
+            );
+
+            setOtp(["", "", "", ""]);
+            setOtpError("");
+
+            setResendTimer(30);
+            setCanResend(false);
+
+            otpRefs[0].current?.focus();
+
+        } catch (err) {
+
+            setOtpError(
+                err.response?.data?.message ||
+                "Failed to resend OTP"
+            );
+
+        }
     };
 
     /* ── STEP 3: Password validation ── */
@@ -140,22 +212,58 @@ export default function ForgotPassword({ onClose }) {
     const passwordsMatch = newPassword && confirmPassword && newPassword === confirmPassword;
     const resetValid = passwordRules(newPassword) && passwordsMatch;
 
-    const handleReset = (e) => {
+    const handleReset = async (e) => {
+
         e.preventDefault();
+
         if (!passwordRules(newPassword)) {
-            setResetError("Password must be at least 8 characters.");
+
+            setResetError(
+                "Password must be at least 8 characters."
+            );
+
             return;
         }
+
         if (newPassword !== confirmPassword) {
-            setResetError("Passwords do not match.");
+
+            setResetError(
+                "Passwords do not match."
+            );
+
             return;
         }
-        setResetError("");
-        setResetLoading(true);
-        setTimeout(() => {
+
+        try {
+
+            setResetLoading(true);
+            setResetError("");
+
+            const response = await axios.post(
+                "http://localhost:5000/api/users/forgot-password/reset",
+                {
+                    email,
+                    otp: otp.join(""),
+                    newPassword
+                }
+            );
+
+            if (response.data.success) {
+                goTo(STEP_DONE);
+            }
+
+        } catch (err) {
+
+            setResetError(
+                err.response?.data?.message ||
+                "Password reset failed"
+            );
+
+        } finally {
+
             setResetLoading(false);
-            goTo(STEP_DONE);
-        }, 1800);
+
+        }
     };
 
     /* ── Step progress indicator ── */
